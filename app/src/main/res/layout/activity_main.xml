@@ -10,7 +10,7 @@
     <CalendarView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/calView"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
@@ -30,7 +30,20 @@
         tools:layout_editor_absoluteY="354dp" />
 
     <TextView
-        android:id="@+id/expend_text"
+        android:id="@+id/income_text"
+        android:layout_width="190dp"
+        android:layout_height="49dp"
+        android:layout_gravity="center_horizontal|center"
+        android:gravity="center"
+        android:text="수입 내역"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="598dp" />
+
+    <TextView
+        android:id="@+id/expend_text2"
         android:layout_width="190dp"
         android:layout_height="49dp"
         android:layout_gravity="center_horizontal|center"
@@ -42,27 +55,41 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="400dp" />
 
-    <Button
-        android:id="@+id/plus_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/plus_btn_shape"
-        android:text="+"
-        android:textColor="@color/black"
-        tools:layout_editor_absoluteX="302dp"
-        tools:layout_editor_absoluteY="700dp"
-        tools:ignore="MissingConstraints">
+    <ScrollView
+        android:layout_width="391dp"
+        android:layout_height="136dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="449dp">
 
-    </Button>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/expend_re"
+            android:layout_width="397dp"
+            android:layout_height="340dp"
+            tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="454dp"
+            tools:listitem="@layout/expend_list" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="397dp"
-        android:layout_height="341dp"
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="391dp"
+        android:layout_height="136dp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="454dp">
+        tools:layout_editor_absoluteY="659dp">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/income_re"
+            android:layout_width="397dp"
+            android:layout_height="340dp"
+            tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="454dp"
+            tools:listitem="@layout/expend_list" />
+
+    </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"

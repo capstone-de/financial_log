@@ -6,11 +6,15 @@
         />
     <item
         android:id="@+id/financial"
-        android:title="가계부"
+        android:title="통계"
+        />
+    <item
+        android:id="@+id/add"
+        android:title="추가"
         />
     <item
         android:id="@+id/diary"
-        android:title="일기"
+        android:title="탐색"
         />
     <item
         android:id="@+id/settings"
