@@ -1,40 +1,37 @@
 package com.example.financiallog
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.CalendarView
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var cal : CalendarView;
-    lateinit var datetext : TextView;
-    lateinit var expendtext : TextView;
-    lateinit var plusbtn: Button;
+    lateinit var mainlog: ImageView;
+    lateinit var text1 : TextView;
+    lateinit var text2 : TextView;
+    lateinit var startbtn: Button;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.main_home)
 
-        cal = findViewById<CalendarView>(R.id.calView)
-        datetext = findViewById<TextView>(R.id.date_text)
-        expendtext = findViewById<TextView>(R.id.expend_text)
-        plusbtn = findViewById<Button>(R.id.plus_btn)
+        mainlog = findViewById<ImageView>(R.id.logo_image)
+        text1 = findViewById<TextView>(R.id.textView5)
+        text2 = findViewById<TextView>(R.id.textView4)
+        startbtn = findViewById<Button>(R.id.start_btn)
 
-        val bottom = findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
+        //시작 버튼 이벤트
+        startbtn.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, HomeMain::class.java)
+            startActivity(intent)
+        })
 
-
-        /*val formatter: DateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
-        val date = Date(cal.getDate())
-        datetext.setText(formatter.format(date))
-
-        cal.setOnDateChangeListener(OnDateChangeListener { view, year, month, dayOfMonth ->
-            val day: String
-            day = year.toString() + "년" + (month + 1) + "월" + dayOfMonth + "일"
-            datetext.setText(day)
-        })*/
 
 
     }

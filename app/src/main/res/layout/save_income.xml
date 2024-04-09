@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FAF4E9"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageButton
@@ -11,123 +12,145 @@
         android:layout_height="48dp"
         android:padding="0dp"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/left_check"
+        app:srcCompat="@drawable/btn_x"
         tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="6dp" />
-
-    <EditText
-        android:id="@+id/money_ed"
-        android:layout_width="272dp"
-        android:layout_height="49dp"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="87dp"
-        tools:layout_editor_absoluteY="150dp" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="100dp"
-        android:layout_height="48dp"
-        android:text="수입"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="39dp"
-        tools:layout_editor_absoluteY="93dp" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="100dp"
-        android:layout_height="48dp"
-        android:text="지출"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="143dp"
-        tools:layout_editor_absoluteY="93dp" />
-
-    <TextView
-        android:id="@+id/memo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="메모"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="39dp"
-        tools:layout_editor_absoluteY="357dp" />
-
-    <EditText
-        android:id="@+id/memo_ed"
-        android:layout_width="275dp"
-        android:layout_height="48dp"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="87dp"
-        tools:layout_editor_absoluteY="357dp" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:layout_width="307dp"
-        android:layout_height="58dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="52dp"
-        tools:layout_editor_absoluteY="269dp">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/pay_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="월급" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/extra_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="부수입" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/financial_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="금융수익" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/etc_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="기타" />
-
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <EditText
-        android:id="@+id/category_ed"
-        android:layout_width="275dp"
-        android:layout_height="48dp"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="87dp"
-        tools:layout_editor_absoluteY="209dp" />
+        tools:layout_editor_absoluteX="329dp"
+        tools:layout_editor_absoluteY="16dp" />
 
     <TextView
         android:id="@+id/money"
         android:layout_width="51dp"
         android:layout_height="22dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="금액"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="26dp"
-        tools:layout_editor_absoluteY="150dp" />
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="177dp" />
 
+    <EditText
+        android:id="@+id/money_ed"
+        android:layout_width="272dp"
+        android:layout_height="49dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:background="@drawable/ed_pay"
+        android:enabled="true"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+        tools:layout_editor_absoluteX="78dp"
+        tools:layout_editor_absoluteY="160dp" />
+
+    <android.widget.Button
+        android:id="@+id/button"
+        android:layout_width="100dp"
+        android:layout_height="48dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="수입"
+        android:background="@drawable/btn_income"
+        android:textColor="@color/black"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="39dp"
+        tools:layout_editor_absoluteY="93dp" />
+
+    <android.widget.Button
+        android:id="@+id/button2"
+        android:layout_width="100dp"
+        android:layout_height="48dp"
+        android:background="@drawable/btn_inex"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="지출"
+        android:textColor="@color/black"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="143dp"
+        tools:layout_editor_absoluteY="93dp" />
+
+    <EditText
+        android:id="@+id/memo_ed"
+        android:layout_width="275dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ed_memo"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:enabled="true"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+        tools:layout_editor_absoluteX="54dp"
+        tools:layout_editor_absoluteY="432dp" />
 
     <TextView
         android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="카테고리"
+        android:fontFamily="@font/gmarketsansttfmedium"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="218dp" />
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="264dp" />
 
-    <Button
+    <TextView
+        android:id="@+id/memo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="메모"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="39dp"
+        tools:layout_editor_absoluteY="403dp" />
+
+    <android.widget.Button
         android:id="@+id/save_expend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:background="@drawable/btn_save"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="저장"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="152dp"
-        tools:layout_editor_absoluteY="495dp" />
+        tools:layout_editor_absoluteY="526dp" />
 
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="307dp"
+        android:layout_height="58dp"
+        android:id="@+id/income_group"
+        tools:ignore="InvalidId,MissingConstraints"
+        tools:layout_editor_absoluteX="52dp"
+        tools:layout_editor_absoluteY="300dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/pay_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:chipStrokeColor="#000000"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:checkedIconVisible="true"
+            android:text="월급" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/extra_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:checkedIconVisible="true"
+            android:text="부수입" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/financial_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:checkedIconVisible="true"
+            android:text="금융수익" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/etc_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:checkedIconVisible="true"
+            android:text="기타" />
+
+
+    </com.google.android.material.chip.ChipGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

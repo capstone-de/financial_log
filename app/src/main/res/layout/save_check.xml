@@ -3,33 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FAF4E9">
 
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfbold"
         android:text="저장 완료!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.543" />
+        android:textSize="20dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="149dp"
+        tools:layout_editor_absoluteY="422dp" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="소비일기도 작성해보세요:)"
+        android:textSize="20dp"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="118dp"
-        tools:layout_editor_absoluteY="516dp" />
+        tools:layout_editor_absoluteX="81dp"
+        tools:layout_editor_absoluteY="498dp" />
 
     <CheckedTextView
         android:id="@+id/checkedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="지금 작성하러 가기 ->"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="138dp"
@@ -37,25 +41,23 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="31dp"
-        android:layout_marginBottom="52dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        android:layout_width="140dp"
+        android:layout_height="165dp"
         app:srcCompat="@drawable/check"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="126dp"
+        tools:layout_editor_absoluteY="232dp" />
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="56dp"
-        android:layout_height="58dp"
-        app:srcCompat="@drawable/left_check"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="6dp"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="0dp"
         android:scaleType="centerCrop"
-        android:padding="0dp"/>
+        app:srcCompat="@drawable/btn_x"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+        tools:layout_editor_absoluteX="330dp"
+        tools:layout_editor_absoluteY="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

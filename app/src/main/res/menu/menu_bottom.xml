@@ -1,24 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/home"
         android:title="홈"
+        android:enabled="true"
+        android:icon="@drawable/home_btn"
         />
     <item
         android:id="@+id/financial"
         android:title="통계"
+        android:enabled="true"
+        android:icon="@drawable/analyze_btn"
         />
+
     <item
         android:id="@+id/add"
         android:title="추가"
-        />
+        android:enabled="true"
+        android:icon="@drawable/plus_btn">
+        <menu>
+            <item
+                android:id="@+id/add_income"
+                android:title="수입 추가하기"
+                />
+            <item
+                android:id="@+id/add_expend"
+                android:title="지출 추가하기"
+                />
+            <item
+                android:id="@+id/add_diary"
+                android:title="일기 작성하기"
+                />
+        </menu>
+
+    </item>
+
     <item
         android:id="@+id/diary"
         android:title="탐색"
+        android:enabled="true"
+        android:icon="@drawable/feed_btn"
         />
     <item
         android:id="@+id/settings"
         android:title="설정"
+        android:enabled="true"
+        android:icon="@drawable/my_btn"
         />
 
 </menu>

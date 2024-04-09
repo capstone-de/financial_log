@@ -20,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00"
+        android:fontFamily="@font/gmarketsansttfmedium"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="43dp"
         tools:layout_editor_absoluteY="16dp" />
@@ -29,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00"
+        android:fontFamily="@font/gmarketsansttfmedium"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="59dp"
         tools:layout_editor_absoluteY="16dp" />
@@ -38,6 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00"
+        android:fontFamily="@font/gmarketsansttfmedium"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="16dp" />
@@ -46,6 +49,7 @@
         android:id="@+id/diary_wirte"
         android:layout_width="193dp"
         android:layout_height="45dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="일기 내용을 적어주세요"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="25dp"
@@ -56,6 +60,7 @@
         android:layout_width="41dp"
         android:layout_height="46dp"
         android:text="#"
+        android:fontFamily="@font/gmarketsansttfmedium"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="51dp"
         tools:layout_editor_absoluteY="124dp" />
@@ -65,6 +70,7 @@
         android:layout_width="78dp"
         android:layout_height="38dp"
         android:text="건대입구역"
+        android:fontFamily="@font/gmarketsansttfmedium"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="66dp"
         tools:layout_editor_absoluteY="124dp" />
@@ -84,6 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="나는 개똥벌레"
+        android:fontFamily="@font/gmarketsansttfmedium"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="271dp"
         tools:layout_editor_absoluteY="16dp" />

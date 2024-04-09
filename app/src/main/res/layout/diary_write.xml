@@ -3,96 +3,80 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FAF4E9">
 
     <ImageButton
         android:id="@+id/imageButton3"
         android:layout_width="48dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="12dp"
-        android:padding="0dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/date_View"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/left_check"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints" />
+        android:layout_height="48dp"
+        app:srcCompat="@drawable/btn_x"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+        tools:layout_editor_absoluteX="329dp"
+        tools:layout_editor_absoluteY="16dp" />
 
     <TextView
         android:id="@+id/date_View"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="66dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:textSize="20sp"
         android:text="날짜 및 요일"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="143dp"
+        tools:layout_editor_absoluteY="27dp"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/diary_re"
+        android:layout_width="352dp"
+        android:layout_height="125dp"
+        tools:ignore="MissingConstraints"
+        android:background="@drawable/re_expend"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="108dp"
+        tools:listitem="@layout/expend_list" />
 
     <TextView
         android:id="@+id/today_expend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="124dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:background="@drawable/text_view"
         android:text="오늘의 소비"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.146"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="385dp"
-        android:layout_height="164dp"
-        android:id="@+id/diary_re"
+        android:textSize="15sp"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="7dp"
-        tools:layout_editor_absoluteY="155dp"
-        tools:listitem="@layout/expend_list"/>
+        tools:layout_editor_absoluteX="28dp"
+        tools:layout_editor_absoluteY="75dp" />
 
     <EditText
         android:id="@+id/diary_ed"
         android:layout_width="361dp"
         android:layout_height="316dp"
+        android:background="@drawable/ed_diary"
+        android:fontFamily="@font/gmarketsansttfmedium"
         tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="374dp" />
-
-    <ImageButton
-        android:id="@+id/camera_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/camera"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="24dp"
-        tools:layout_editor_absoluteY="758dp" />
-
-    <Button
-        android:id="@+id/save_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="저장"
-        tools:layout_editor_absoluteX="285dp"
-        tools:layout_editor_absoluteY="322dp"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"/>
+        tools:layout_editor_absoluteX="18dp"
+        tools:layout_editor_absoluteY="303dp" />
 
     <com.google.android.material.chip.ChipGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="233dp"
-        tools:layout_editor_absoluteY="700dp">
+        tools:layout_editor_absoluteX="241dp"
+        tools:layout_editor_absoluteY="255dp">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/open_chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
             android:text="공개" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/private_chip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
             android:text="비공개" />
 
     </com.google.android.material.chip.ChipGroup>
@@ -101,19 +85,100 @@
         android:id="@+id/tag_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="#"
-        android:textSize="25dp"
-        tools:layout_editor_absoluteX="29dp"
-        tools:layout_editor_absoluteY="695dp"
-        tools:ignore="MissingConstraints" />
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="해시태크: "
+        android:textSize="15sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="639dp" />
 
     <com.google.android.material.chip.Chip
         android:id="@+id/chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="잠실역"
-        tools:layout_editor_absoluteX="57dp"
-        tools:layout_editor_absoluteY="688dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="127dp"
+        tools:layout_editor_absoluteY="619dp" />
+
+    <TextView
+        android:id="@+id/toget_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="함께한 사람 "
+        android:textSize="15sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="695dp" />
+
+    <EditText
+        android:id="@+id/ed_toget"
+        android:layout_width="256dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ed_memo"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+        tools:layout_editor_absoluteX="117dp"
+        tools:layout_editor_absoluteY="678dp" />
+
+    <TextView
+        android:id="@+id/today_diary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="나의 일기"
+        android:textSize="15sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="278dp" />
+
+    <android.widget.Button
+        android:id="@+id/save_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_save"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="저장"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+        tools:layout_editor_absoluteX="152dp"
+        tools:layout_editor_absoluteY="767dp" />
+
+    <ImageButton
+        android:id="@+id/camera_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:srcCompat="@drawable/btn_image"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+        tools:layout_editor_absoluteX="314dp"
+        tools:layout_editor_absoluteY="561dp" />
+
+    <ImageView
+        android:id="@+id/diary_image1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/btn_image"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="51dp"
+        tools:layout_editor_absoluteY="573dp" />
+
+    <ImageView
+        android:id="@+id/diary_image2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/btn_image"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="80dp"
+        tools:layout_editor_absoluteY="573dp" />
+
+    <ImageView
+        android:id="@+id/diary_image3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/btn_image"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="108dp"
+        tools:layout_editor_absoluteY="573dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

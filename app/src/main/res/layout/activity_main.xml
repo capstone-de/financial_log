@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    android:background="#FAF4E9"
     android:orientation="vertical">
 
     <CalendarView
@@ -20,14 +20,14 @@
         android:id="@+id/date_text"
         android:layout_width="190dp"
         android:layout_height="49dp"
-        android:layout_gravity="center_horizontal|center"
         android:gravity="center"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="현재 날짜"
         android:textColor="@color/black"
         android:textSize="30sp"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="354dp" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="351dp" />
 
     <TextView
         android:id="@+id/income_text"
@@ -35,28 +35,30 @@
         android:layout_height="49dp"
         android:layout_gravity="center_horizontal|center"
         android:gravity="center"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="수입 내역"
-        android:textColor="@color/black"
-        android:textSize="25sp"
+        android:textColor="#2F8FFF"
+        android:textSize="20dp"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="598dp" />
+        tools:layout_editor_absoluteX="-20dp"
+        tools:layout_editor_absoluteY="585dp" />
 
     <TextView
-        android:id="@+id/expend_text2"
+        android:id="@+id/expend_tt"
         android:layout_width="190dp"
         android:layout_height="49dp"
         android:layout_gravity="center_horizontal|center"
         android:gravity="center"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="지출 내역"
-        android:textColor="@color/black"
-        android:textSize="25sp"
+        android:textColor="#F19492"
+        android:textSize="20dp"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteX="-12dp"
         tools:layout_editor_absoluteY="400dp" />
 
     <ScrollView
-        android:layout_width="391dp"
+        android:layout_width="389dp"
         android:layout_height="136dp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp"
@@ -77,8 +79,8 @@
         android:layout_width="391dp"
         android:layout_height="136dp"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="659dp">
+        tools:layout_editor_absoluteX="3dp"
+        tools:layout_editor_absoluteY="634dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/income_re"
@@ -93,15 +95,15 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_width="384dp"
+        android:layout_height="74dp"
+        app:itemIconTint="#2196F3"
+        app:itemTextColor="@color/black"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_bottom"
-        app:labelVisibilityMode="labeled"
-        app:itemTextColor="@color/black"
-        app:itemIconTint="#2196F3">
+        app:menu="@menu/menu_bottom">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
