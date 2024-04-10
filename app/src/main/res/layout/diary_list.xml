@@ -1,49 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@drawable/diarylist_back">
 
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="108dp"
-        android:layout_height="102dp"
+        android:layout_width="113dp"
+        android:layout_height="114dp"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="254dp"
-        tools:layout_editor_absoluteY="60dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="35dp"
         tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/month_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="43dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <TextView
-        android:id="@+id/day_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="59dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <TextView
-        android:id="@+id/year_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="27dp"
-        tools:layout_editor_absoluteY="16dp" />
 
     <TextView
         android:id="@+id/diary_wirte"
@@ -52,28 +23,30 @@
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="일기 내용을 적어주세요"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="25dp"
-        tools:layout_editor_absoluteY="70dp" />
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="55dp" />
 
     <TextView
         android:id="@+id/tag_dr"
         android:layout_width="41dp"
         android:layout_height="46dp"
-        android:text="#"
         android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="#"
+        android:textColor="#624E19"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="51dp"
-        tools:layout_editor_absoluteY="124dp" />
+        tools:layout_editor_absoluteX="174dp"
+        tools:layout_editor_absoluteY="123dp" />
 
     <TextView
         android:id="@+id/tag_1"
         android:layout_width="78dp"
         android:layout_height="38dp"
-        android:text="건대입구역"
         android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="건대입구역"
+        android:textColor="#624E19"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="66dp"
-        tools:layout_editor_absoluteY="124dp" />
+        tools:layout_editor_absoluteX="187dp"
+        tools:layout_editor_absoluteY="123dp" />
 
     <View
         android:layout_width="0dp"
@@ -89,11 +62,11 @@
         android:id="@+id/nickname_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="나는 개똥벌레"
         android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="나는 개똥벌레"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="271dp"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="18dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

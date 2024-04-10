@@ -7,6 +7,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
+        android:id="@+id/year_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2024."
+        android:textSize="14sp"
+        tools:layout_editor_absoluteX="158dp"
+        tools:layout_editor_absoluteY="135dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/month_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00."
+        tools:layout_editor_absoluteX="197dp"
+        tools:layout_editor_absoluteY="135dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/day_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        tools:layout_editor_absoluteX="218dp"
+        tools:layout_editor_absoluteY="135dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +51,7 @@
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="100"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="211dp"
+        tools:layout_editor_absoluteX="218dp"
         tools:layout_editor_absoluteY="78dp" />
 
     <TextView
@@ -43,7 +71,7 @@
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="100"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="325dp"
+        tools:layout_editor_absoluteX="317dp"
         tools:layout_editor_absoluteY="78dp" />
 
     <TextView
@@ -56,28 +84,18 @@
         tools:layout_editor_absoluteX="40dp"
         tools:layout_editor_absoluteY="61dp" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="follower"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="117dp" />
-
 
     <ScrollView
         android:layout_width="395dp"
         android:layout_height="605dp"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="188dp">
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="163dp">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mypage_re"
             android:layout_width="392dp"
             android:layout_height="777dp"
-            android:id="@+id/mypage_re"
             tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="10dp"
@@ -103,10 +121,9 @@
         android:id="@+id/view2"
         android:layout_width="392dp"
         android:layout_height="3dp"
-        tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="177dp"
-        tools:ignore="MissingConstraints" />
-
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="119dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

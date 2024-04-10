@@ -1,9 +1,12 @@
 package com.example.financiallog
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.CalendarView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -44,37 +47,48 @@ class HomeMain: AppCompatActivity() {
 
         // 하단바 버튼
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
-        /*  bottomNavigation.setOnItemSelectedListener { item ->
-           when(item.itemId){
-               R.id.home -> {
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when(item.itemId){
+                R.id.home -> {
+                    val intent = Intent(this, HomeMain::class.java)
+                    startActivity(intent)
+                    Toast.makeText(applicationContext, "home", Toast.LENGTH_SHORT).show()
+                }
+                R.id.financial -> {
+                    Toast.makeText(applicationContext, "financial", Toast.LENGTH_SHORT).show()
+                }
+                R.id.add -> {
+                    when(item.itemId){
+                        R.id.add_income -> {
+                            val intent = Intent(this, IncomeAct::class.java)
+                            startActivity(intent)
+                        }
+                        R.id.add_expend -> {
+                            val intent = Intent(this, ExpendAct::class.java)
+                            startActivity(intent)
+                        }
+                        R.id.add_diary -> {
+                            val intent = Intent(this, DiaryWriteAct::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                }
+                R.id.diary -> {
+                    val intent = Intent(this, DiarySns::class.java)
+                    startActivity(intent)
+                    Toast.makeText(applicationContext, "sns_feed", Toast.LENGTH_SHORT).show()
 
-               }
-               R.id.financial -> {
-                   val intent = Intent(this,)
-               }
-               R.id.add -> {
-                   if(R.id.add_save){
-                       val intent = Intent(this, ExpendAct::class.java)
-                   }
-                   else{
-                       val intent = Intent(this, DiaryWriteAct::class.java)
-                   }
+                }
+                R.id.settings -> {
+                    Toast.makeText(applicationContext, "mypage", Toast.LENGTH_SHORT).show()
 
-               }
-               R.id.diary -> {
+                }
+                else -> {
+                    Toast.makeText(applicationContext, "else", Toast.LENGTH_SHORT).show()
 
-               }
-               R.id.settings -> {
-
-               }
-
-               else -> {
-                   Toast.makeText(applicationContext,"else", Toast.LENGTH_SHORT).show()
-               }
-           }
-
-       }*/
-
+                }
+            }; true
+        }
 
 
 

@@ -117,7 +117,6 @@
             android:id="@+id/pay_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:chipStrokeColor="#000000"
             android:fontFamily="@font/gmarketsansttfmedium"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             app:checkedIconVisible="true"

@@ -40,13 +40,15 @@
         android:id="@+id/today_expend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gmarketsansttfmedium"
         android:background="@drawable/text_view"
+        android:fontFamily="@font/gmarketsansttfmedium"
         android:text="오늘의 소비"
         android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/diary_re"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.711"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="75dp" />
+        tools:layout_editor_absoluteX="26dp" />
 
     <EditText
         android:id="@+id/diary_ed"
@@ -93,7 +95,7 @@
         tools:layout_editor_absoluteY="639dp" />
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/chip"
+        android:id="@+id/tagchip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/gmarketsansttfmedium"

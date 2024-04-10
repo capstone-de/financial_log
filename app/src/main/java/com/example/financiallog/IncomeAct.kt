@@ -3,12 +3,14 @@ package com.example.financiallog
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.chip.ChipGroup
 
@@ -40,16 +42,39 @@ class IncomeAct : AppCompatActivity() {
         ed_memo =findViewById<EditText>(R.id.memo_ed)
         group_income = findViewById<ChipGroup>(R.id.income_group)
         btn_save = findViewById<Button>(R.id.save_expend)
+        
+        //카테고리 선택 시
+
+
+
 
         // 저장 버튼 시
+        btn_save.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, SaveDiary::class.java)
+            startActivity(intent)
+        })
+
 
 
         // 수입 버튼
+        btn_incom.setOnClickListener(View.OnClickListener {
 
+            val intent = Intent(this, IncomeAct::class.java)
+            startActivity(intent)
+        })
 
 
         // 지출 버튼
+        btn_expend.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, ExpendAct::class.java)
+            startActivity(intent)
+        })
 
+        // X 버튼
+        btn_x.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, HomeMain::class.java)
+            startActivity(intent)
+        })
 
 
 

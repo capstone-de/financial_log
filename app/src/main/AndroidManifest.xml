@@ -42,6 +42,10 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".SaveDiary"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".DiaryWriteAct"
             android:exported="true">
         </activity>
