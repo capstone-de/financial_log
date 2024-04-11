@@ -12,40 +12,54 @@
         android:id="@+id/logo_image"
         android:layout_width="264dp"
         android:layout_height="253dp"
+        android:layout_marginTop="148dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/main_logo"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="73dp"
-        tools:layout_editor_absoluteY="148dp" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="491dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="소비기록"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="169dp"
-        tools:layout_editor_absoluteY="491dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <android.widget.Button
         android:id="@+id/start_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="578dp"
+        android:layout_marginBottom="105dp"
         android:background="@drawable/btn_shape"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="시작하기"
         android:textColor="#000000"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="120dp"
-        tools:layout_editor_absoluteY="578dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="464dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="나의 소비를 일기로 담다"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="125dp"
-        tools:layout_editor_absoluteY="464dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>
