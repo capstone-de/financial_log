@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAF4E9"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="InvalidId">
 
     <ImageButton
         android:id="@+id/imageButton2"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="34dp"
         android:padding="0dp"
         android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/btn_x"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="329dp"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints" />
 
     <android.widget.Button
         android:id="@+id/save_expend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="51dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/btn_save"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="저장"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="152dp"
-        tools:layout_editor_absoluteY="651dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        tools:ignore="MissingConstraints" />
 
     <com.google.android.material.chip.ChipGroup
+        android:id="@+id/expend_group"
         android:layout_width="377dp"
         android:layout_height="108dp"
-        android:id="@+id/expend_group"
-        tools:ignore="InvalidId,MissingConstraints"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="269dp">
+        android:layout_marginTop="269dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="InvalidId,MissingConstraints">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/food_ex"
@@ -44,8 +54,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/expend_ca1"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="식비" />
+            android:text="식비"
+            app:checkedIconVisible="true" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/cultual"
@@ -53,8 +63,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="문화생활" />
+            android:text="문화생활"
+            app:checkedIconVisible="true" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/traffic"
@@ -62,8 +72,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="교통/차량" />
+            android:text="교통/차량"
+            app:checkedIconVisible="true" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/tax_ex"
@@ -71,8 +81,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="세금" />
+            android:text="세금"
+            app:checkedIconVisible="true" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/living"
@@ -80,8 +90,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="주거/통신" />
+            android:text="주거/통신"
+            app:checkedIconVisible="true" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/education"
@@ -89,8 +99,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="교육" />
+            android:text="교육"
+            app:checkedIconVisible="true" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/dues"
@@ -98,8 +108,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="경조사/회비" />
+            android:text="경조사/회비"
+            app:checkedIconVisible="true" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/medical_ex"
@@ -107,8 +117,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="병원/약국" />
+            android:text="병원/약국"
+            app:checkedIconVisible="true" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/shopping"
@@ -116,8 +126,8 @@
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="쇼핑" />
+            android:text="쇼핑"
+            app:checkedIconVisible="true" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/etc"
@@ -125,8 +135,8 @@
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/gmarketsansttfmedium"
-            app:checkedIconVisible="true"
-            android:text="기타" />
+            android:text="기타"
+            app:checkedIconVisible="true" />
 
     </com.google.android.material.chip.ChipGroup>
 
@@ -134,45 +144,53 @@
         android:id="@+id/button2"
         android:layout_width="100dp"
         android:layout_height="48dp"
+        android:layout_marginTop="73dp"
+        android:layout_marginEnd="170dp"
         android:background="@drawable/btn_expend"
-        android:textColor="@color/black"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="지출"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="141dp"
-        tools:layout_editor_absoluteY="73dp" />
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
 
     <TextView
         android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="235dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="카테고리"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="235dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <SeekBar
         android:id="@+id/seekBar"
-        android:layout_width="209dp"
-        android:layout_height="34dp"
+        android:layout_width="238dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="568dp"
+        android:layout_marginEnd="68dp"
         android:background="@drawable/ed_memo"
         android:max="100"
         android:progress="10"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="131dp"
-        tools:layout_editor_absoluteY="566dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/ex_satis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="575dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="소비만족도"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="575dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/progressTv"
@@ -180,11 +198,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/seekBar"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="284dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="0"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="144dp"
-        tools:layout_editor_absoluteY="600dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/seekBar"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/totalTv"
@@ -193,97 +213,115 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/seekBar"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="81dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="100"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="316dp"
-        tools:layout_editor_absoluteY="600dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/seekBar"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/together"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="511dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="함께한 사람"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="511dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/together_ed"
         android:layout_width="174dp"
         android:layout_height="48dp"
-        android:fontFamily="@font/gmarketsansttfmedium"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="494dp"
         android:background="@drawable/ed_memo"
         android:enabled="true"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="104dp"
-        tools:layout_editor_absoluteY="494dp" />
+        android:fontFamily="@font/gmarketsansttfmedium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints" />
 
     <CheckBox
         android:id="@+id/checkBox"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="70dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="494dp"
+        android:layout_marginEnd="44dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="혼자"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="297dp"
-        tools:layout_editor_absoluteY="494dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/money_ed"
         android:layout_width="272dp"
         android:layout_height="48dp"
+        android:layout_marginTop="167dp"
+        android:layout_marginEnd="57dp"
         android:background="@drawable/ed_pay"
-        android:fontFamily="@font/gmarketsansttfmedium"
         android:enabled="true"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="82dp"
-        tools:layout_editor_absoluteY="167dp" />
+        android:fontFamily="@font/gmarketsansttfmedium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints" />
 
     <TextView
         android:id="@+id/money"
         android:layout_width="51dp"
         android:layout_height="22dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="176dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="금액"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="176dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
 
     <TextView
         android:id="@+id/name_shop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="435dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="상호명"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="435dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
 
     <EditText
         android:id="@+id/name_shop_ed"
         android:layout_width="275dp"
         android:layout_height="48dp"
-        android:fontFamily="@font/gmarketsansttfmedium"
+        android:layout_marginTop="420dp"
+        android:layout_marginEnd="52dp"
         android:background="@drawable/ed_memo"
         android:enabled="true"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        tools:layout_editor_absoluteX="82dp"
-        tools:layout_editor_absoluteY="420dp" />
+        android:fontFamily="@font/gmarketsansttfmedium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck,MissingConstraints" />
 
     <android.widget.Button
         android:id="@+id/button"
         android:layout_width="100dp"
         android:layout_height="48dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="73dp"
         android:background="@drawable/btn_inex"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="수입"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="73dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
