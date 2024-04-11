@@ -86,11 +86,11 @@
 
 
     <ScrollView
-        android:layout_width="395dp"
-        android:layout_height="605dp"
+        android:layout_width="392dp"
+        android:layout_height="514dp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="163dp">
+        tools:layout_editor_absoluteY="154dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mypage_re"

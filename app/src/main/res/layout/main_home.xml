@@ -14,8 +14,8 @@
         android:layout_height="253dp"
         app:srcCompat="@drawable/main_logo"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="64dp"
-        tools:layout_editor_absoluteY="167dp" />
+        tools:layout_editor_absoluteX="73dp"
+        tools:layout_editor_absoluteY="148dp" />
 
     <TextView
         android:id="@+id/textView5"
