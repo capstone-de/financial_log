@@ -16,22 +16,14 @@ import com.google.android.material.chip.ChipGroup
 
 class ExpendAct : AppCompatActivity() {
 
-    lateinit var btn_exsave : Button;
-    lateinit var income_btn : Button;
-    lateinit var expend_btn : Button;
-    lateinit var x_btn :ImageButton;
-    lateinit var pay_tv : TextView;
-    lateinit var categ_tv:TextView;
-    lateinit var shop_name :TextView;
-    lateinit var toget_tv :TextView;
-    lateinit var ed_pay:EditText;
-    lateinit var ed_shop:EditText;
-    lateinit var ed_toget:EditText;
-    lateinit var tv_exsat:TextView;
-    lateinit var alone_chip: CheckBox;
-    lateinit var group_expend:ChipGroup;
-    lateinit var seek_bar:SeekBar;
-    lateinit var seek_zero : TextView;
+    lateinit var btn_exsave : Button; lateinit var income_btn : Button;
+    lateinit var expend_btn : Button; lateinit var x_btn :ImageButton;
+    lateinit var pay_tv : TextView; lateinit var categ_tv:TextView;
+    lateinit var shop_name :TextView; lateinit var toget_tv :TextView;
+    lateinit var ed_pay:EditText; lateinit var ed_shop:EditText;
+    lateinit var ed_toget:EditText; lateinit var tv_exsat:TextView;
+    lateinit var alone_chip: CheckBox; lateinit var group_expend:ChipGroup;
+    lateinit var seek_bar:SeekBar; lateinit var seek_zero : TextView;
     lateinit var seek_per :TextView;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,6 +75,12 @@ class ExpendAct : AppCompatActivity() {
 
         //저장 버튼
         btn_exsave.setOnClickListener(View.OnClickListener {
+            val Exmoney = ed_pay.toString()
+            val Excate = group_expend.toString()
+            val Exshop = ed_shop.toString()
+
+            val exadapter = ExpendAdapter()
+            exadapter.addItem(ExpendAdapter.Exlist(Excate, Exshop, Exmoney))
 
             val intent = Intent(this, SaveCheck::class.java)
             startActivity(intent)

@@ -16,16 +16,11 @@ import com.google.android.material.chip.ChipGroup
 
 class IncomeAct : AppCompatActivity() {
 
-    lateinit var btn_x :ImageButton;
-    lateinit var btn_incom : Button;
-    lateinit var btn_expend : Button;
-    lateinit var tv_pay : TextView;
-    lateinit var ed_pay : EditText;
-    lateinit var tv_cate : TextView;
-    lateinit var tv_memo : TextView;
-    lateinit var ed_memo :EditText;
-    lateinit var group_income : ChipGroup;
-    lateinit var btn_save: Button;
+    lateinit var btn_x :ImageButton; lateinit var btn_incom : Button;
+    lateinit var btn_expend : Button; lateinit var tv_pay : TextView;
+    lateinit var ed_pay : EditText; lateinit var tv_cate : TextView;
+    lateinit var tv_memo : TextView; lateinit var ed_memo :EditText;
+    lateinit var group_income : ChipGroup; lateinit var btn_save: Button;
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +45,8 @@ class IncomeAct : AppCompatActivity() {
 
         // 저장 버튼 시
         btn_save.setOnClickListener(View.OnClickListener {
+
+
             val intent = Intent(this, SaveDiary::class.java)
             startActivity(intent)
         })

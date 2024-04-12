@@ -14,12 +14,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeMain: AppCompatActivity() {
 
-    lateinit var cal : CalendarView;
-    lateinit var datetext : TextView;
-    lateinit var expendtext : TextView;
-    lateinit var incometext: TextView;
-    lateinit var re_expend: RecyclerView;
-    lateinit var re_income : RecyclerView;
+    lateinit var cal : CalendarView; lateinit var datetext : TextView;
+    lateinit var expendtext : TextView; lateinit var incometext: TextView;
+    lateinit var re_expend: RecyclerView; lateinit var re_income : RecyclerView;
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,11 +37,16 @@ class HomeMain: AppCompatActivity() {
 
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
-       // re_expend.layoutManager = LinearLayoutManager(this)
+        re_expend.layoutManager = LinearLayoutManager(this)
+        val adapter_1 = ExpendAdapter()
+        re_expend.adapter = adapter_1
+
 
         // 수입 내역 화면에 보여주기
         re_income = findViewById<RecyclerView>(R.id.income_re)
-        //re_income.layoutManager = LinearLayoutManager(this)
+        re_income.layoutManager = LinearLayoutManager(this)
+        val adapter_2 = ExpendAdapter()
+        re_expend.adapter = adapter_2
 
 
         // 하단바 버튼
