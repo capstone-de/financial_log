@@ -1,96 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAF4E9"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="#FAF4E9">
 
     <TextView
-        android:id="@+id/year_text"
+        android:id="@+id/follow_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="2024."
-        android:textSize="14sp"
-        tools:layout_editor_absoluteX="158dp"
-        tools:layout_editor_absoluteY="135dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginEnd="164dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/month_text"
+        android:id="@+id/follower_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00."
-        tools:layout_editor_absoluteX="197dp"
-        tools:layout_editor_absoluteY="135dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="150dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="팔로워"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/day_text"
+        android:id="@+id/follower_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00"
-        tools:layout_editor_absoluteX="218dp"
-        tools:layout_editor_absoluteY="135dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginEnd="68dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="81dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="나는 개똥벌레"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="298dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="152dp"
+        android:accessibilityHeading="false"
+        android:background="#989797"
+        android:backgroundTint="#989797"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="60dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="팔로잉"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="211dp"
-        tools:layout_editor_absoluteY="39dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/follow_num"
+        android:id="@+id/month_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="100"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="218dp"
-        tools:layout_editor_absoluteY="78dp" />
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="165dp"
+        android:text="00."
+        app:layout_constraintStart_toEndOf="@+id/year_text"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/follower_tv"
+        android:id="@+id/day_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="팔로워"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="310dp"
-        tools:layout_editor_absoluteY="39dp" />
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="165dp"
+        android:text="00"
+        app:layout_constraintStart_toEndOf="@+id/month_text"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/follower_num"
+        android:id="@+id/year_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="100"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="317dp"
-        tools:layout_editor_absoluteY="78dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="나는 개똥벌레"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="40dp"
-        tools:layout_editor_absoluteY="61dp" />
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="165dp"
+        android:text="2024."
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
 
     <ScrollView
         android:layout_width="392dp"
         android:layout_height="514dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="154dp">
+        android:layout_marginTop="201dp"
+        app:layout_constraintEnd_toStartOf="@+id/bottom_view"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/bottom_view"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mypage_re"
@@ -104,26 +137,16 @@
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:id="@+id/bottom_view"
+        android:layout_width="409dp"
+        android:layout_height="86dp"
+        android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_bottom"
-        app:labelVisibilityMode="labeled"
-        app:itemTextColor="@color/black"
-        app:itemIconTint="#2196F3">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="392dp"
-        android:layout_height="3dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="119dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

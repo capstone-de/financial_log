@@ -73,6 +73,8 @@ class HomeMain: AppCompatActivity() {
 
                 }
                 R.id.settings -> {
+                    val intent = Intent(this, MyPage::class.java)
+                    startActivity(intent)
                     Toast.makeText(applicationContext, "mypage", Toast.LENGTH_SHORT).show()
 
                 }
