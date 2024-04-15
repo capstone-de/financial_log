@@ -11,7 +11,7 @@ class DiaryListAdapter : RecyclerView.Adapter<DiaryListAdapter.DiaryViewHolder>(
     private val items = ArrayList<DiaryList>()
 
     class DiaryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val dwirte_view = itemView.findViewById<TextView>(R.id.diary_wirte)
+        val dwirte_view = itemView.findViewById<TextView>(R.id.feed_text)
         val tag_d = itemView.findViewById<TextView>(R.id.tag_dr)
         val tag_w = itemView.findViewById<TextView>(R.id.tag_1)
 
