@@ -104,16 +104,14 @@
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:id="@+id/bottom_view_na"
+        android:layout_width="409dp"
+        android:layout_height="86dp"
+        android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_bottom"
-        app:labelVisibilityMode="labeled"
-        app:itemTextColor="@color/black"
-        app:itemIconTint="#2196F3">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="1dp">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 

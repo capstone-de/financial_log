@@ -3,6 +3,8 @@ package com.example.financiallog
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.telecom.Call
+import android.view.Menu
 import android.widget.CalendarView
 import android.widget.TextView
 import android.widget.Toast
@@ -11,12 +13,18 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.reflect.Member
+
 
 class HomeMain: AppCompatActivity() {
 
     lateinit var cal : CalendarView; lateinit var datetext : TextView;
     lateinit var expendtext : TextView; lateinit var incometext: TextView;
     lateinit var re_expend: RecyclerView; lateinit var re_income : RecyclerView;
+    lateinit var data_ex : ApiObject; lateinit var data_in : ApiObject;
+    lateinit var list_ex : List<ExpendAdapter.Exlist>; lateinit var list_in : List<IncomeAdapter.IncomeList>
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,13 +39,13 @@ class HomeMain: AppCompatActivity() {
         //날짜표시
         cal.setOnDateChangeListener { calendarView, year, month, day ->
             datetext.setText(
-                month.toString (month + 1) + "월" + day  + "일"
+                 (month+1).toString() + "월" + day  + "일"
             )
         }
 
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
-        re_expend.layoutManager = LinearLayoutManager(this)
+        re_expend.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val adapter_1 = ExpendAdapter()
         re_expend.adapter = adapter_1
 
@@ -62,9 +70,8 @@ class HomeMain: AppCompatActivity() {
                     Toast.makeText(applicationContext, "financial", Toast.LENGTH_SHORT).show()
                 }
                 R.id.add -> {
-                    val intent = Intent(this, IncomeAct::class.java)
+                    val intent = Intent(this, ExpendAct::class.java)
                     startActivity(intent)
-
                 }
                 R.id.diary -> {
                     val intent = Intent(this, DiarySns::class.java)
@@ -87,4 +94,7 @@ class HomeMain: AppCompatActivity() {
 
 
     }
+
+
 }
+

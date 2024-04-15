@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckedTextView
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +14,7 @@ class SaveDiary : AppCompatActivity() {
 
     lateinit var save_tv1 : TextView;
     lateinit var check_tv1 : ImageView;
-    lateinit var home_btn : Button;
+    lateinit var home_btn : ImageButton;
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,7 @@ class SaveDiary : AppCompatActivity() {
 
         save_tv1 = findViewById<TextView>(R.id.saveText)
         check_tv1 = findViewById<ImageView>(R.id.checkImView)
-        home_btn = findViewById<Button>(R.id.x_Imagebtn)
+        home_btn = findViewById<ImageButton>(R.id.x_Imagebtn)
 
         // X버튼 클릭시 이동
         home_btn.setOnClickListener{
