@@ -13,8 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import retrofit2.Callback
-import retrofit2.Response
 import java.lang.reflect.Member
 
 
@@ -80,8 +78,9 @@ class HomeMain: AppCompatActivity() {
 
                 }
                 R.id.settings -> {
+                    val intent = Intent(this, MyPage::class.java)
+                    startActivity(intent)
                     Toast.makeText(applicationContext, "mypage", Toast.LENGTH_SHORT).show()
-
                 }
                 else -> {
                     Toast.makeText(applicationContext, "else", Toast.LENGTH_SHORT).show()

@@ -3,28 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/diarylist_back">
-
-
-    <ImageView
-        android:id="@+id/feed_image"
-        android:layout_width="113dp"
-        android:layout_height="114dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="35dp"
-        tools:srcCompat="@tools:sample/avatars" />
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/feed_text"
-        android:layout_width="193dp"
-        android:layout_height="45dp"
+        android:id="@+id/nickname_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="일기 내용을 적어주세요"
+        android:text="나는 개똥벌레"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="162dp"
-        tools:layout_editor_absoluteY="55dp" />
+        tools:layout_editor_absoluteY="18dp" />
 
     <TextView
         android:id="@+id/tag_dr"
@@ -48,15 +37,22 @@
         tools:layout_editor_absoluteX="187dp"
         tools:layout_editor_absoluteY="123dp" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginBottom="184dp"
-        android:background="@color/gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/feed_text"
+        android:layout_width="193dp"
+        android:layout_height="45dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="타인의 일기 내용 표시"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="55dp" />
 
-
+    <ImageView
+        android:id="@+id/feed_image"
+        android:layout_width="113dp"
+        android:layout_height="114dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="35dp"
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>
