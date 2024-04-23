@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class DiaryWriteAct : AppCompatActivity() {
 
@@ -20,7 +22,7 @@ class DiaryWriteAct : AppCompatActivity() {
     lateinit var diary_save : Button; lateinit var group_op:ChipGroup;
     lateinit var date_tv :TextView; lateinit var exdiary_tv :TextView;
     lateinit var re_expend: RecyclerView; lateinit var ed_diary : EditText;
-    lateinit var tag_tv:TextView; lateinit var together_tv:TextView;
+    lateinit var tag_tv:TextView; lateinit var today : Date; lateinit var mFormat : SimpleDateFormat
     lateinit var tag_chip:Chip; lateinit var photo_tv:ImageView;
     lateinit var photo_tv1:ImageView; lateinit var photo_tv2:ImageView;
 
@@ -32,13 +34,12 @@ class DiaryWriteAct : AppCompatActivity() {
         dx_btn = findViewById<ImageButton>(R.id.imageButton3)
         photo_btn = findViewById<ImageButton>(R.id.camera_btn)
         diary_save = findViewById<Button>(R.id.save_btn)
-        group_op =findViewById<ChipGroup>(R.id.open_chip)
+        group_op =findViewById<ChipGroup>(R.id.diary_chipgroup)
         date_tv = findViewById<TextView>(R.id.date_View)
         exdiary_tv = findViewById<TextView>(R.id.today_diary)
         re_expend = findViewById<RecyclerView>(R.id.diary_re)
         ed_diary = findViewById<EditText>(R.id.diary_ed)
         tag_tv = findViewById<TextView>(R.id.tag_view)
-        together_tv = findViewById<TextView>(R.id.toget_view)
         tag_chip = findViewById<Chip>(R.id.tagchip)
         photo_tv = findViewById<ImageView>(R.id.diary_image1)
         photo_tv1 = findViewById<ImageView>(R.id.diary_image2)
@@ -53,6 +54,8 @@ class DiaryWriteAct : AppCompatActivity() {
 
 
         // 날짜 불러오기
+        mFormat = SimpleDateFormat("MM월 dd일 ")
+        date_tv.setText(getTime())
 
 
         // 지출 내역 불러오기
@@ -75,9 +78,11 @@ class DiaryWriteAct : AppCompatActivity() {
         })
 
 
+    }
 
-
-
-
+    private fun getTime(): String? {
+        var mNow = System.currentTimeMillis()
+        today = Date(mNow)
+        return mFormat.format(today)
     }
 }

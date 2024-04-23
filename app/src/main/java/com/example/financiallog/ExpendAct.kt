@@ -2,6 +2,7 @@ package com.example.financiallog
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -11,13 +12,9 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.Volley
 import com.google.android.material.chip.ChipGroup
-import org.json.JSONException
-import org.json.JSONObject
-import java.lang.reflect.Array.getInt
+import retrofit2.Call
+import retrofit2.Callback
 import java.util.Date
 
 class ExpendAct : AppCompatActivity() {
@@ -76,6 +73,42 @@ class ExpendAct : AppCompatActivity() {
         })
 
         //카테고리 선택 시
+        group_expend.setOnCheckedStateChangeListener { group, checkedIds ->
+            val selectedChip = group.checkedChipId
+            when(selectedChip){
+                R.id.food_ex -> {
+                    Toast.makeText(applicationContext, "식비", Toast.LENGTH_SHORT).show()
+                }
+                R.id.cultual -> {
+                    Toast.makeText(applicationContext, "문화생활", Toast.LENGTH_SHORT).show()
+                }
+                R.id.traffic -> {
+                    Toast.makeText(applicationContext, "교통/차량", Toast.LENGTH_SHORT).show()
+                }
+                R.id.tax_ex -> {
+                    Toast.makeText(applicationContext, "세금", Toast.LENGTH_SHORT).show()
+                }
+                R.id.living -> {
+                    Toast.makeText(applicationContext, "주거/통신", Toast.LENGTH_SHORT).show()
+                }
+                R.id.education-> {
+                    Toast.makeText(applicationContext, "교육", Toast.LENGTH_SHORT).show()
+                }
+                R.id.dues -> {
+                    Toast.makeText(applicationContext, "경조사/회비", Toast.LENGTH_SHORT).show()
+                }
+                R.id.medical_ex -> {
+                    Toast.makeText(applicationContext, "병원/약국", Toast.LENGTH_SHORT).show()
+                }
+                R.id.shopping -> {
+                    Toast.makeText(applicationContext, "쇼핑", Toast.LENGTH_SHORT).show()
+                }
+                R.id.etc -> {
+                    Toast.makeText(applicationContext, "기타", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
 
 
         //seekbar 선택 시
@@ -83,14 +116,42 @@ class ExpendAct : AppCompatActivity() {
 
         //저장 버튼
         btn_exsave.setOnClickListener(View.OnClickListener {
-            val Exmoney = ed_pay.toString()
+            val Exmoney = ed_pay.textAlignment
+            val Exdate = Date()
             val Excate = group_expend.toString()
             val Exshop = ed_shop.toString()
             val ExTogether = ed_toget.toString()
             val ExCheck = alone_chip.toString()
             val Exsatis = seek_bar.toString()
+            var input = HashMap<String, String>()
+            input.put("user_id","4")
+            input.put("Expay",Exmoney.toString())
+            input.put("Exdate", Exdate.toString())
+            input.put("Excate", Excate)
+            input.put("Exshop", Exshop)
+            input.put("ExTogether", ExTogether)
+            input.put("Exsatis", Exsatis)
 
-           /* val responseListener: Response.Listener<String?> = Response.Listener<String?>{ response ->
+            apiobject.api.insertEx(input)!!.enqueue(object : Callback<PostExpend> {
+                override fun onResponse(
+                    call: Call<PostExpend>,
+                    response: retrofit2.Response<PostExpend>
+                ) {
+                    if(response.isSuccessful) {
+                        Log.d("test", response.body().toString())
+                        var intnet = Intent(applicationContext,SaveCheck::class.java)
+                        startActivity(intnet)
+                        var data = response.body() // GsonConverter를 사용해 데이터매핑
+                    }
+                }
+
+                override fun onFailure(call: Call<PostExpend>, t: Throwable) {
+                    Log.d("test", "실패$t")
+                }
+
+            })
+
+            /*val responseListener: Response.Listener<String?> = Response.Listener<String?>{ response ->
                 try{
                     val jsonObject = JSONObject(response)
                     val success = jsonObject.getBoolean("success")
@@ -109,19 +170,17 @@ class ExpendAct : AppCompatActivity() {
                     return@Listener
                 }
             }
-            val ExpendInsert = InsertRequestExpend(user,Exmoney,Excate,Exshop,ExTogether,Exsatis, responseListener)
+            val ExpendInsert = InsertRequestExpend(4,Exdate,Exmoney,Excate,Exshop,ExTogether,Exsatis, responseListener)
             val queue: RequestQueue = Volley.newRequestQueue(applicationContext)
-            queue.add(ExpendInsert) */
+            queue.add(ExpendInsert)*/
 
-           val exadapter = ExpendAdapter()
+           /*val exadapter = ExpendAdapter()
             exadapter.addItem(ExpendAdapter.Exlist(Excate, Exshop, Exmoney, ExTogether,ExCheck,Exsatis))
             val intent = Intent(this, SaveCheck::class.java)
             intent.putExtra("user", user)
-            startActivity(intent)
+            startActivity(intent)*/
 
         })
-
-
 
 
 

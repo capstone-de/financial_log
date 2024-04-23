@@ -8,7 +8,7 @@ import com.android.volley.toolbox.StringRequest
 import java.util.Date
 
 class InsertRequestExpend(
-    user:Int, price:String, category : String, bname:String, with_whom:String, satisfaction:String,
+    user:Int, date :Date, price:Int, category : String, bname:String, with_whom:String, satisfaction:String,
     listener:Response.Listener<String?>)
     : StringRequest(Method.POST, URL, listener, null){
     private val applicationContext: Context? = null
@@ -17,8 +17,8 @@ class InsertRequestExpend(
     init{
         map = HashMap()
         map["user"] = user.toString()
-        //map["date"] = date.toString()
-        map["price"] = price
+        map["date"] = date.toString()
+        map["price"] = price.toString()
         map["category"] = category
         map["bname"] = bname
         map["with_whom"] = with_whom
@@ -33,7 +33,7 @@ class InsertRequestExpend(
         return map
     }
     companion object{
-        private const val URL ="http://8000/wallet_app/saveExpense"
+        private const val URL ="http://10.0.2.2:8000/wallet_app/saveExpense/"
     }
 
 

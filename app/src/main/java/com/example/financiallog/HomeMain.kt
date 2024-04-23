@@ -3,23 +3,21 @@ package com.example.financiallog
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.telecom.Call
-import android.view.Menu
 import android.widget.CalendarView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.lang.reflect.Member
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class HomeMain: AppCompatActivity() {
 
-    lateinit var cal : CalendarView; lateinit var datetext : TextView;
-    lateinit var expendtext : TextView; lateinit var incometext: TextView;
+    lateinit var cal : CalendarView; lateinit var datetext : TextView; lateinit var today :Date;
+    lateinit var expendtext : TextView; lateinit var incometext: TextView; lateinit var mFormat :SimpleDateFormat
     lateinit var re_expend: RecyclerView; lateinit var re_income : RecyclerView;
     lateinit var data_ex : ApiObject; lateinit var data_in : ApiObject;
     lateinit var list_ex : List<ExpendAdapter.Exlist>; lateinit var list_in : List<IncomeAdapter.IncomeList>
@@ -35,17 +33,36 @@ class HomeMain: AppCompatActivity() {
         incometext = findViewById<TextView>(R.id.income_text)
 
         //날짜표시
+        mFormat = SimpleDateFormat("MM월 dd일 ")
+        datetext.setText(getTime())
         cal.setOnDateChangeListener { calendarView, year, month, day ->
             datetext.setText(
                  (month+1).toString() + "월" + day  + "일"
             )
         }
 
+
+
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
         re_expend.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         val adapter_1 = ExpendAdapter()
         re_expend.adapter = adapter_1
+       /* data_ex.getExpend.enqueue(object : Callback<ExpendAdapter.Exlist?>() {
+            fun getExpendAll(call: Call<ExpendAdapter.Exlist?>, response: Response<ExpendAdapter.Exlist?>) {
+                if (response.isSuccessful()) {
+                    val body: ExpendAdapter.Exlist = response.body()
+                    if (body != null) {
+                        Log.d("data.getUserId()", body.getUserId() + "")
+                        Log.d("data.getId()", body.getId() + "")
+                        Log.d("data.getTitle()", body.getTitle())
+                        Log.d("data.getBody()", body.getBody())
+                        Log.e("getData end", "======================================")
+                    }
+                }
+            }
+
+            fun onFailure(call: Call<ExpendAdapter.Exlist?>, t: Throwable) {}*/
 
 
         // 수입 내역 화면에 보여주기
@@ -90,8 +107,11 @@ class HomeMain: AppCompatActivity() {
         }
 
 
-
-
+    }
+    private fun getTime(): String? {
+        var mNow = System.currentTimeMillis()
+        today = Date(mNow)
+        return mFormat.format(today)
     }
 
 

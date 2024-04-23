@@ -8,7 +8,7 @@ import com.android.volley.toolbox.StringRequest
 import java.util.Date
 
 class InsertRequestIncome(
-    user:Int, date: Date, price:Int, category : String, memo:String, listener: Response.Listener<String?>)
+    user:Int, date: Date, price:Int, category: String, memo:String, listener: Response.Listener<String?>)
     : StringRequest(Method.POST, URL, listener, null){
     private val applicationContext: Context? = null
     private val map: MutableMap<String, String>
@@ -31,7 +31,7 @@ class InsertRequestIncome(
         return map
     }
     companion object{
-        private const val URL ="http://8000/wallet_app/saveIncome"
+        private const val URL ="http://10.0.2.2:8000/wallet_app/saveIncome/"
     }
 
 
