@@ -24,9 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="148dp"
+        android:layout_marginEnd="119dp"
         android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="날짜 및 요일"
+        android:text="날짜"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,15 +48,16 @@
         android:id="@+id/today_expend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
         android:background="@drawable/text_view"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="오늘의 소비"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/diary_re"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.741"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="40dp" />
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/diary_ed"
@@ -76,6 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="216dp"
         android:layout_marginEnd="40dp"
+        app:singleSelection="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
@@ -109,6 +111,7 @@
         android:layout_marginEnd="212dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="잠실역"
+        style="@style/Widget.MaterialComponents.Chip.Entry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />

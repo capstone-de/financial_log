@@ -8,14 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class DiarySns : AppCompatActivity(){
 
     lateinit var year_tv : TextView;
-    lateinit var month_tv : TextView;
-    lateinit var day_tv : TextView;
     lateinit var feed_list: RecyclerView;
+    lateinit var today :Date;
+    lateinit var mFormat :SimpleDateFormat;
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,14 +25,17 @@ class DiarySns : AppCompatActivity(){
         setContentView(R.layout.sns_feed)
 
         year_tv = findViewById<TextView>(R.id.year_text)
-        month_tv = findViewById<TextView>(R.id.month_text)
-        day_tv = findViewById<TextView>(R.id.day_text)
 
         // 일기리스트 화면에 보여주기
         feed_list = findViewById<RecyclerView>(R.id.feed_re)
         feed_list.layoutManager = LinearLayoutManager(this)
         val adapter_my = DiaryListAdapter()
         feed_list.adapter = adapter_my
+
+
+        //날짜
+        mFormat = SimpleDateFormat("yyyy.MM.dd")
+        year_tv.setText(getTime())
 
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_view)
@@ -67,8 +72,10 @@ class DiarySns : AppCompatActivity(){
         }
 
 
-
-
-
+    }
+    private fun getTime(): String? {
+        var mNow = System.currentTimeMillis()
+        today = Date(mNow)
+        return mFormat.format(today)
     }
 }

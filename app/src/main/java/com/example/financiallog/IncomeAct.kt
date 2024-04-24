@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,17 +19,13 @@ import java.util.Date
 
 class IncomeAct : AppCompatActivity() {
 
-    lateinit var btn_x: ImageButton;
-    lateinit var btn_incom: Button;
-    lateinit var btn_expend: Button;
-    lateinit var tv_pay: TextView;
-    lateinit var ed_pay: EditText;
-    lateinit var tv_cate: TextView;
-    lateinit var tv_memo: TextView;
-    lateinit var ed_memo: EditText;
-    lateinit var group_income: ChipGroup;
+    lateinit var btn_x: ImageButton; lateinit var btn_incom: Button; lateinit var btn_expend: Button;
+    lateinit var tv_pay: TextView; lateinit var ed_pay: EditText;
+    lateinit var tv_cate: TextView; lateinit var tv_memo: TextView;
+    lateinit var ed_memo: EditText; lateinit var group_income: ChipGroup;
     lateinit var btn_save: Button;
-    lateinit var apiobject: ApiObject;
+    lateinit var paychip :Chip; lateinit var extrachip:Chip; lateinit var financialchip:Chip; lateinit var etc_chip:Chip;
+    val apiobject : ApiObject by lazy { ApiObject() };
     lateinit var data: List<ExpendAdapter.Exlist>;
 
     @SuppressLint("MissingInflatedId")
@@ -45,9 +42,24 @@ class IncomeAct : AppCompatActivity() {
         tv_memo = findViewById<TextView>(R.id.memo)
         ed_memo = findViewById<EditText>(R.id.memo_ed)
         group_income = findViewById<ChipGroup>(R.id.income_group)
+        paychip = findViewById<Chip>(R.id.pay_in)
+        extrachip = findViewById(R.id.extra_in)
+        financialchip = findViewById(R.id.financial_in)
+        etc_chip = findViewById(R.id.etc_1)
         btn_save = findViewById<Button>(R.id.save_expend)
 
         //카테고리 선택 시
+        var IncomeChip :String? =null
+        if (paychip.isChecked){
+            IncomeChip = paychip.text.toString()
+        } else if (extrachip.isChecked){
+            IncomeChip = extrachip.text.toString()
+        }else if(financialchip.isChecked){
+            IncomeChip = financialchip.text.toString()
+        }else if (etc_chip.isChecked){
+            IncomeChip = etc_chip.text.toString()
+        }
+
         group_income.setOnCheckedStateChangeListener { group, checkedIds ->
             val selectedChip = group.checkedChipId
             when (selectedChip) {
@@ -66,9 +78,7 @@ class IncomeAct : AppCompatActivity() {
                 R.id.etc_1 -> {
                     Toast.makeText(applicationContext, "기타", Toast.LENGTH_SHORT).show()
                 }
-
             }
-
         }
 
 
@@ -76,14 +86,14 @@ class IncomeAct : AppCompatActivity() {
         btn_save.setOnClickListener(View.OnClickListener {
             val Inmoney = ed_pay.textAlignment
             val Incul = Date()
-            val Incate = tv_cate.toString()
+            val Incate = IncomeChip
             val Inmemo = ed_memo.toString()
 
             var input = HashMap<String, String>()
             input.put("user_id", "4")
             input.put("Inpay", Inmoney.toString())
             input.put("Indate", Incul.toString())
-            input.put("Incate", Incate)
+            input.put("Incate", Incate.toString())
             input.put("Inmemo", Inmemo)
 
             apiobject.api.insertIn(input)!!.enqueue(object : Callback<PostIncome> {
@@ -92,7 +102,7 @@ class IncomeAct : AppCompatActivity() {
                     response: retrofit2.Response<PostIncome>
                 ) {
                     if (response.isSuccessful) {
-                        Log.d("test", response.body().toString())
+                        Log.d("IncomeAct", response.body().toString())
                         var data = response.body() // GsonConverter를 사용해 데이터매핑
                         var intnet = Intent(applicationContext,SaveDiary::class.java)
                         startActivity(intnet)

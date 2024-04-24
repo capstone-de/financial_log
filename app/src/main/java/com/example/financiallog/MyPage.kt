@@ -9,34 +9,36 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.widget.Toast
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class MyPage : AppCompatActivity() {
 
     lateinit var year_tv: TextView;
-    lateinit var month_tv: TextView;
-    lateinit var day_tv: TextView;
     lateinit var following: TextView;
     lateinit var following_ntv: TextView;
     lateinit var follower: TextView;
     lateinit var follower_ntv: TextView;
     lateinit var user_id: TextView;
     lateinit var mypage_list: RecyclerView;
-    lateinit var btn_more: Button;
+    lateinit var btn_more: Button; lateinit var today :Date; lateinit var mFormat :SimpleDateFormat;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mypage_home)
 
         year_tv = findViewById<TextView>(R.id.year_text)
-        month_tv = findViewById<TextView>(R.id.month_text)
-        day_tv = findViewById<TextView>(R.id.day_text)
         following = findViewById<TextView>(R.id.textView6)
         following_ntv = findViewById<TextView>(R.id.follow_num)
         follower = findViewById<TextView>(R.id.follower_tv)
         follower_ntv = findViewById<TextView>(R.id.follower_num)
         user_id = findViewById<TextView>(R.id.textView3)
         //btn_more = findViewById<Button>(R.id.imageButton4)
+
+        // 날짜
+        mFormat = SimpleDateFormat("yyyy.MM.dd")
+        year_tv.setText(getTime())
 
         // mypage_list = findViewById<ScrollView>(R.id.mypage_re)
 
@@ -91,5 +93,10 @@ class MyPage : AppCompatActivity() {
             }; true
 
         }
+    }
+    private fun getTime(): String? {
+        var mNow = System.currentTimeMillis()
+        today = Date(mNow)
+        return mFormat.format(today)
     }
 }

@@ -1,14 +1,22 @@
 package com.example.financiallog
 
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class ApiObject {
-    lateinit var api : ApiInter
+     var api : ApiInter
+     val okHttpClient = OkHttpClient.Builder()
+         .connectTimeout(110, TimeUnit.SECONDS)
+         .readTimeout(100, TimeUnit.SECONDS)
+         .writeTimeout(100, TimeUnit.SECONDS)
+         .build()
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8000/")
+            .baseUrl("http://10.0.2.2:8000")
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         api = retrofit.create(ApiInter::class.java)

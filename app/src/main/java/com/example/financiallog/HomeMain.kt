@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 
 class HomeMain: AppCompatActivity() {
@@ -33,7 +34,7 @@ class HomeMain: AppCompatActivity() {
         incometext = findViewById<TextView>(R.id.income_text)
 
         //날짜표시
-        mFormat = SimpleDateFormat("MM월 dd일 ")
+        mFormat = SimpleDateFormat("MM월 dd일 ", Locale.KOREAN)
         datetext.setText(getTime())
         cal.setOnDateChangeListener { calendarView, year, month, day ->
             datetext.setText(
@@ -45,9 +46,9 @@ class HomeMain: AppCompatActivity() {
 
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
-        re_expend.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        val adapter_1 = ExpendAdapter()
-        re_expend.adapter = adapter_1
+        re_expend.layoutManager = LinearLayoutManager(this)
+        //val adapter_1 = ExpendAdapter()
+        //re_expend.adapter = adapter_1
        /* data_ex.getExpend.enqueue(object : Callback<ExpendAdapter.Exlist?>() {
             fun getExpendAll(call: Call<ExpendAdapter.Exlist?>, response: Response<ExpendAdapter.Exlist?>) {
                 if (response.isSuccessful()) {
@@ -68,8 +69,8 @@ class HomeMain: AppCompatActivity() {
         // 수입 내역 화면에 보여주기
         re_income = findViewById<RecyclerView>(R.id.income_re)
         re_income.layoutManager = LinearLayoutManager(this)
-        val adapter_2 = ExpendAdapter()
-        re_expend.adapter = adapter_2
+        //val adapter_2 = IncomeAdapter()
+        //re_expend.adapter = adapter_2
 
 
         // 하단바 버튼
@@ -82,6 +83,8 @@ class HomeMain: AppCompatActivity() {
                     Toast.makeText(applicationContext, "home", Toast.LENGTH_SHORT).show()
                 }
                 R.id.financial -> {
+                    val intent = Intent(this, DiaryWriteAct::class.java)
+                    startActivity(intent)
                     Toast.makeText(applicationContext, "financial", Toast.LENGTH_SHORT).show()
                 }
                 R.id.add -> {
