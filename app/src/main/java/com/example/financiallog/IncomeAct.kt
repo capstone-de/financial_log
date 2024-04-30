@@ -15,6 +15,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import retrofit2.Call
 import retrofit2.Callback
+import java.text.SimpleDateFormat
 import java.util.Date
 
 class IncomeAct : AppCompatActivity() {
@@ -49,34 +50,39 @@ class IncomeAct : AppCompatActivity() {
         btn_save = findViewById<Button>(R.id.save_expend)
 
         //카테고리 선택 시
+//        var IncomeChip :String? =null
+//        if (paychip.isChecked){
+//            IncomeChip = paychip.text.toString()
+//        } else if (extrachip.isChecked){
+//            IncomeChip = extrachip.text.toString()
+//        }else if(financialchip.isChecked){
+//            IncomeChip = financialchip.text.toString()
+//        }else if (etc_chip.isChecked){
+//            IncomeChip = etc_chip.text.toString()
+//        }
         var IncomeChip :String? =null
-        if (paychip.isChecked){
-            IncomeChip = paychip.text.toString()
-        } else if (extrachip.isChecked){
-            IncomeChip = extrachip.text.toString()
-        }else if(financialchip.isChecked){
-            IncomeChip = financialchip.text.toString()
-        }else if (etc_chip.isChecked){
-            IncomeChip = etc_chip.text.toString()
-        }
 
         group_income.setOnCheckedStateChangeListener { group, checkedIds ->
             val selectedChip = group.checkedChipId
             when (selectedChip) {
                 R.id.pay_in -> {
                     Toast.makeText(applicationContext, "월급", Toast.LENGTH_SHORT).show()
+                    IncomeChip = "salary"
                 }
 
                 R.id.extra_in -> {
                     Toast.makeText(applicationContext, "부수입", Toast.LENGTH_SHORT).show()
+                    IncomeChip = "side income"
                 }
 
                 R.id.financial_in -> {
                     Toast.makeText(applicationContext, "금융수익", Toast.LENGTH_SHORT).show()
+                    IncomeChip = "financial income"
                 }
 
                 R.id.etc_1 -> {
                     Toast.makeText(applicationContext, "기타", Toast.LENGTH_SHORT).show()
+                    IncomeChip = "etc"
                 }
             }
         }
@@ -84,17 +90,18 @@ class IncomeAct : AppCompatActivity() {
 
         // 저장 버튼 시
         btn_save.setOnClickListener(View.OnClickListener {
-            val Inmoney = ed_pay.textAlignment
-            val Incul = Date()
+            val Inmoney = ed_pay.text.toString()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+            val Incul = dateFormat.format(Date())
             val Incate = IncomeChip
-            val Inmemo = ed_memo.toString()
+            val Inmemo = ed_memo.text.toString()
 
             var input = HashMap<String, String>()
-            input.put("user_id", "4")
-            input.put("Inpay", Inmoney.toString())
-            input.put("Indate", Incul.toString())
-            input.put("Incate", Incate.toString())
-            input.put("Inmemo", Inmemo)
+            input.put("user", "4")
+            input.put("price", Inmoney)
+            input.put("date", Incul.toString())
+            input.put("category", Incate.toString())
+            input.put("memo", Inmemo)
 
             apiobject.api.insertIn(input)!!.enqueue(object : Callback<PostIncome> {
                 override fun onResponse(
