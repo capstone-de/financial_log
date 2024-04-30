@@ -8,7 +8,7 @@ data class PostExpend(
     val pay_tv_1 : Int,
     val tv_cateG_1: String,
     val banme_tv : String,
-    val tv_together_1: String,
+    val tv_together_1: HashMap<String,String>,
     val tv_sat_1: Int,
 
 )

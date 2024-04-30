@@ -1,6 +1,8 @@
 package com.example.financiallog
 
+import FollowerAdapter
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +11,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ListView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
@@ -29,6 +32,7 @@ class ExpendAct : AppCompatActivity() {
     lateinit var alone_chip: CheckBox; lateinit var seek_bar:SeekBar; lateinit var seek_zero : TextView;
     lateinit var seek_per :TextView; val apiobject : ApiObject by lazy { ApiObject() };
     lateinit var data : List<ExpendAdapter.Exlist>; lateinit var textView:TextView; lateinit var group_expend : ChipGroup;
+    val followers = listOf("User1", "User2", "User3", "User4")
 
 
     lateinit var foodchip:Chip; lateinit var cultualchip:Chip; lateinit var taxchip:Chip; lateinit var livingchip:Chip;
@@ -88,6 +92,13 @@ class ExpendAct : AppCompatActivity() {
             val intent = Intent(this, HomeMain::class.java)
             startActivity(intent)
         })
+
+        // 함께 하는 사람
+
+        ed_toget.setOnClickListener {
+            showFollowersDialog()
+        }
+
 
         //카테고리 선택 시
         var Chipchoose: String? = null
@@ -229,6 +240,16 @@ class ExpendAct : AppCompatActivity() {
         })
 
 
+    }
+     fun showFollowersDialog() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.followers_list)
+        val listView: ListView = dialog.findViewById(R.id.listView)
 
+        // ArrayAdapter를 사용해 ListView에 팔로워 목록 데이터 연결
+        val adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
+        listView.adapter = adapter
+
+        dialog.show()
     }
 }
