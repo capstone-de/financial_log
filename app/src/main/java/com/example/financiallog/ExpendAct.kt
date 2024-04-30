@@ -18,6 +18,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import retrofit2.Call
 import retrofit2.Callback
+import java.text.SimpleDateFormat
 import java.util.Date
 
 class ExpendAct : AppCompatActivity() {
@@ -90,59 +91,48 @@ class ExpendAct : AppCompatActivity() {
 
         //카테고리 선택 시
         var Chipchoose: String? = null
-        if (foodchip.isChecked){
-            Chipchoose = foodchip.text.toString()
-        }else if(cultualchip.isChecked){
-            Chipchoose = cultualchip.text.toString()
-        }else if(taxchip.isChecked){
-            Chipchoose = taxchip.text.toString()
-        }else if(livingchip.isChecked){
-            Chipchoose = livingchip.text.toString()
-        }else if(educhip.isChecked){
-            Chipchoose = educhip.text.toString()
-        }else if(dueschip.isChecked){
-            Chipchoose = dueschip.text.toString()
-        }else if(medicalchip.isChecked){
-            Chipchoose = medicalchip.text.toString()
-        }else if (shoppingchip.isChecked){
-            Chipchoose = shoppingchip.text.toString()
-        }else if (trafficchip.isChecked){
-            Chipchoose = trafficchip.text.toString()
-        }else if (etcchip.isChecked){
-            Chipchoose = etcchip.text.toString()
-        }
 
         group_expend.setOnCheckedStateChangeListener { group, checkedIds ->
             val selectedChip = group.checkedChipId
             when(selectedChip){
                 R.id.food_ex -> {
+                    Chipchoose = "food"
                     Toast.makeText(applicationContext, "식비", Toast.LENGTH_SHORT).show()
                 }
                 R.id.cultual -> {
+                    Chipchoose = "cultural/living"
                     Toast.makeText(applicationContext, "문화생활", Toast.LENGTH_SHORT).show()
                 }
                 R.id.traffic -> {
+                    Chipchoose = "tranportation/vehicle"
                     Toast.makeText(applicationContext, "교통/차량", Toast.LENGTH_SHORT).show()
                 }
                 R.id.tax_ex -> {
+                    Chipchoose ="tax"
                     Toast.makeText(applicationContext, "세금", Toast.LENGTH_SHORT).show()
                 }
                 R.id.living -> {
+                    Chipchoose = "housing/communication"
                     Toast.makeText(applicationContext, "주거/통신", Toast.LENGTH_SHORT).show()
                 }
                 R.id.education-> {
+                    Chipchoose = "education"
                     Toast.makeText(applicationContext, "교육", Toast.LENGTH_SHORT).show()
                 }
                 R.id.dues -> {
+                    Chipchoose = "personal event"
                     Toast.makeText(applicationContext, "경조사/회비", Toast.LENGTH_SHORT).show()
                 }
                 R.id.medical_ex -> {
+                    Chipchoose = "medical"
                     Toast.makeText(applicationContext, "병원/약국", Toast.LENGTH_SHORT).show()
                 }
                 R.id.shopping -> {
+                    Chipchoose = "shopping"
                     Toast.makeText(applicationContext, "쇼핑", Toast.LENGTH_SHORT).show()
                 }
                 R.id.etc -> {
+                    Chipchoose = "etc"
                     Toast.makeText(applicationContext, "기타", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -150,7 +140,7 @@ class ExpendAct : AppCompatActivity() {
         }
 
         // 혼자 선택
-       var Chipalone :String? = null
+        var Chipalone :String? = null
         if (alone_chip.isChecked){
             Chipalone = alone_chip.text.toString()
         }
@@ -168,23 +158,25 @@ class ExpendAct : AppCompatActivity() {
 
         //저장 버튼
         btn_exsave.setOnClickListener(View.OnClickListener {
-            val Exmoney = ed_pay.textAlignment
-            val Exdate = Date()
-            val Excate = Chipchoose.toString()
-            val Exshop = ed_shop.toString()
-            val ExTogether = ed_toget.toString()
+            val Exmoney = ed_pay.text.toString()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+            val date = dateFormat.format(Date())
+            val Excate = Chipchoose
+            val Exshop = ed_shop.text.toString()
+            val ExTogether = ed_toget.text.toString()
             val ExCheck = Chipalone.toString()
-            val Exsatis = textView.textAlignment
+            val Exsatis = textView.text.toString()
+
             var input = HashMap<String, String>()
-            input.put("user_id","4")
-            input.put("Expay",Exmoney.toString())
-            input.put("Exdate", Exdate.toString())
-            input.put("Excate", Excate)
-            input.put("Exshop", Exshop)
+            input.put("user","4")
+            input.put("price",Exmoney)
+            input.put("date", date)
+            input.put("category", Excate.toString())
+            input.put("bname", Exshop)
             if (ExTogether.isEmpty()){
-                input.put("ExCheck",ExCheck)
-            }else input.put("ExTogether", ExTogether)
-            input.put("Exsatis", Exsatis.toString())
+                input.put("with_whom","4")
+            }else input.put("with_whom", ExTogether)
+            input.put("satisfactions", Exsatis)
 
             apiobject.api.insertEx(input)!!.enqueue(object : Callback<PostExpend> {
                 override fun onResponse(
@@ -228,11 +220,11 @@ class ExpendAct : AppCompatActivity() {
             val queue: RequestQueue = Volley.newRequestQueue(applicationContext)
             queue.add(ExpendInsert)*/
 
-           /*val exadapter = ExpendAdapter()
-            exadapter.addItem(ExpendAdapter.Exlist(Excate, Exshop, Exmoney, ExTogether,ExCheck,Exsatis))
-            val intent = Intent(this, SaveCheck::class.java)
-            intent.putExtra("user", user)
-            startActivity(intent)*/
+            /*val exadapter = ExpendAdapter()
+             exadapter.addItem(ExpendAdapter.Exlist(Excate, Exshop, Exmoney, ExTogether,ExCheck,Exsatis))
+             val intent = Intent(this, SaveCheck::class.java)
+             intent.putExtra("user", user)
+             startActivity(intent)*/
 
         })
 
