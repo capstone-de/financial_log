@@ -9,7 +9,7 @@ interface ApiInter {
 
     // 지출관련
     @POST("/wallet_app/saveExpense")
-    fun insertEx(@Body map: HashMap<String, String>): Call<PostExpend>?
+    fun insertEx(@Body map: HashMap<String, Any>): Call<PostExpend>?
     @GET("/calendar_app/getWallet?user=1&date=2024-04-09")
     fun getExpendAll(): Call<List<PostExpend>>
 

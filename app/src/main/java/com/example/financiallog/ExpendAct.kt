@@ -152,8 +152,8 @@ class ExpendAct : AppCompatActivity() {
 
         // 혼자 선택
         var Chipalone :String? = null
-        if (alone_chip.isChecked){
-            Chipalone = alone_chip.text.toString()
+        alone_chip.setOnClickListener(){
+            Chipalone = ""
         }
 
 
@@ -178,14 +178,16 @@ class ExpendAct : AppCompatActivity() {
             val ExCheck = Chipalone.toString()
             val Exsatis = textView.text.toString()
 
-            var input = HashMap<String, String>()
+            var input = HashMap<String, Any>()
+            var with_whom = HashMap<String, String>()
             input.put("user","4")
             input.put("price",Exmoney)
             input.put("date", date)
             input.put("category", Excate.toString())
             input.put("bname", Exshop)
             if (ExTogether.isEmpty()){
-                input.put("with_whom","4")
+//                input.put("with_whom",ExCheck)
+                input.put("with_whom", with_whom)
             }else input.put("with_whom", ExTogether)
             input.put("satisfactions", Exsatis)
 
