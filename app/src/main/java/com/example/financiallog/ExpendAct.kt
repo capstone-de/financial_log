@@ -189,7 +189,7 @@ class ExpendAct : AppCompatActivity() {
 //                input.put("with_whom",ExCheck)
                 input.put("with_whom", with_whom)
             }else input.put("with_whom", ExTogether)
-            input.put("satisfactions", Exsatis)
+            input.put("satisfaction", Exsatis)
 
             apiobject.api.insertEx(input)!!.enqueue(object : Callback<PostExpend> {
                 override fun onResponse(
