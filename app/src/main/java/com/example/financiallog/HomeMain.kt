@@ -37,11 +37,9 @@ class HomeMain: AppCompatActivity() {
         mFormat = SimpleDateFormat("MM월 dd일 ", Locale.KOREAN)
         datetext.setText(getTime())
         cal.setOnDateChangeListener { calendarView, year, month, day ->
-            datetext.setText(
-                 (month+1).toString() + "월" + day  + "일"
-            )
+            val dateText = String.format("%02d월 %02d일", month + 1, day)
+            datetext.setText(dateText)
         }
-
 
 
         // 지출 내역 화면에 보여주기

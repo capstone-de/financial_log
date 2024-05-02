@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -79,11 +80,24 @@ class DiaryWriteAct : AppCompatActivity() {
 
         // 공개 비공개 눌렀을 때
         var diarychip : String? = null
-        if (openchip.isChecked){
+        group_op.setOnCheckedStateChangeListener { group, checkedIds ->
+            val selectedChip = group.checkedChipId
+            when(selectedChip){
+                R.id.open_chip -> {
+                    diarychip = openchip.text.toString()
+                    Toast.makeText(applicationContext, "공개", Toast.LENGTH_SHORT).show()
+                }
+                R.id.private_chip -> {
+                    diarychip = privatechip.text.toString()
+                    Toast.makeText(applicationContext, "비공개", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        /*if (openchip.isChecked){
             diarychip = openchip.text.toString()
         }else if (privatechip.isChecked){
             diarychip = privatechip.text.toString()
-        }
+        }*/
 
 
         //해시태그 추가하기
@@ -101,18 +115,19 @@ class DiaryWriteAct : AppCompatActivity() {
 
         // 저장하기 버튼 눌렀을 때
         diary_save.setOnClickListener(View.OnClickListener {
-            val Didate = Date()
-            val Dicontent = ed_diary.toString()
-            val Diprivacy = diarychip.toString()
-            val Dihashtag = tag_chip.toString()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+            val date = dateFormat.format(Date())
+            val content = ed_diary.toString()
+            val privacy = diarychip.toString()
+            val hashtag = tag_chip.toString()
             val Difile = photo_tv
 
             var input = HashMap<String, String>()
             input.put("user_id", "4")
-            input.put("date", Didate.toString())
-            input.put("contents", Dicontent)
-            input.put("privacy", Diprivacy)
-            input.put("hastag", Dihashtag)
+            input.put("date", date)
+            input.put("contents", content)
+            input.put("privacy", privacy)
+            input.put("hastag", hashtag)
             input.put("file", Difile.toString())
 
             apiobject.api.insertDi(input)!!.enqueue(object : Callback<PostDiary>{

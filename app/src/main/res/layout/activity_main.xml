@@ -104,6 +104,7 @@
         android:layout_height="86dp"
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp" />
