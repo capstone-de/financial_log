@@ -32,7 +32,7 @@ class ExpendAct : AppCompatActivity() {
     lateinit var alone_chip: CheckBox; lateinit var seek_bar:SeekBar; lateinit var seek_zero : TextView;
     lateinit var seek_per :TextView; val apiobject : ApiObject by lazy { ApiObject() };
     lateinit var data : List<ExpendAdapter.Exlist>; lateinit var textView:TextView; lateinit var group_expend : ChipGroup;
-    val followers = listOf("User1", "User2", "User3", "User4")
+    val followers = listOf("User1", "User2", "User3", "User4");  lateinit var together :String;
 
 
     lateinit var foodchip:Chip; lateinit var cultualchip:Chip; lateinit var taxchip:Chip; lateinit var livingchip:Chip;
@@ -93,16 +93,8 @@ class ExpendAct : AppCompatActivity() {
             startActivity(intent)
         })
 
-        // 함께 하는 사람
-
-        ed_toget.setOnClickListener {
-            showFollowersDialog()
-        }
-
-
         //카테고리 선택 시
         var Chipchoose: String? = null
-
         group_expend.setOnCheckedStateChangeListener { group, checkedIds ->
             val selectedChip = group.checkedChipId
             when(selectedChip){
@@ -150,13 +142,6 @@ class ExpendAct : AppCompatActivity() {
 
         }
 
-        // 혼자 선택
-        var Chipalone :String? = null
-        alone_chip.setOnClickListener(){
-            Chipalone = ""
-        }
-
-
         //seekbar 선택 시
         seek_bar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {}
@@ -166,6 +151,17 @@ class ExpendAct : AppCompatActivity() {
             }
         })
 
+        // 혼자 선택
+        var Chipalone :String? = null
+        alone_chip.setOnClickListener(){
+            Chipalone = ""
+        }
+
+        // 함께 하는 사람
+        ed_toget.setOnClickListener {
+            showFollowersDialog()
+        }
+
 
         //저장 버튼
         btn_exsave.setOnClickListener(View.OnClickListener {
@@ -174,12 +170,12 @@ class ExpendAct : AppCompatActivity() {
             val date = dateFormat.format(Date())
             val Excate = Chipchoose
             val Exshop = ed_shop.text.toString()
-            val ExTogether = ed_toget.text.toString()
-            val ExCheck = Chipalone.toString()
+            val ExTogether = together
             val Exsatis = textView.text.toString()
 
             var input = HashMap<String, Any>()
             var with_whom = HashMap<String, String>()
+            var with_Whom = HashMap<String, String>()
             input.put("user","4")
             input.put("price",Exmoney)
             input.put("date", date)
@@ -188,7 +184,10 @@ class ExpendAct : AppCompatActivity() {
             if (ExTogether.isEmpty()){
 //                input.put("with_whom",ExCheck)
                 input.put("with_whom", with_whom)
-            }else input.put("with_whom", ExTogether)
+            }else if(ExTogether != null){
+                with_Whom["with_whom"] = together
+                input.put("with_whom", with_Whom)
+            }
             input.put("satisfaction", Exsatis)
 
             apiobject.api.insertEx(input)!!.enqueue(object : Callback<PostExpend> {
@@ -252,6 +251,15 @@ class ExpendAct : AppCompatActivity() {
         val adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
         listView.adapter = adapter
 
+         listView.setOnItemClickListener { parent, view, position, id ->
+             // 클릭된 아이템의 텍스트 가져오기
+             val selectedFollower = followers[position]
+             Toast.makeText(this, "Selected follower: $selectedFollower", Toast.LENGTH_SHORT).show()
+             // 선택된 팔로워의 텍스트를 사용할 수 있도록 처리
+             together = selectedFollower
+             ed_toget.setText(selectedFollower) // Display the selected follower on the screen
+             dialog.dismiss() // 다이얼로그 닫기
+         }
         dialog.show()
     }
 }
