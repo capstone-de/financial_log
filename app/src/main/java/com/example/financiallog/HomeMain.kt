@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.CalendarView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -86,8 +87,10 @@ class HomeMain: AppCompatActivity() {
                     Toast.makeText(applicationContext, "financial", Toast.LENGTH_SHORT).show()
                 }
                 R.id.add -> {
-                    val intent = Intent(this, ExpendAct::class.java)
-                    startActivity(intent)
+                    showMoreMenu()
+                    true
+                    //val intent = Intent(this, ExpendAct::class.java)
+                    //startActivity(intent)
                 }
                 R.id.diary -> {
                     val intent = Intent(this, DiarySns::class.java)
@@ -109,6 +112,46 @@ class HomeMain: AppCompatActivity() {
 
 
     }
+
+    private fun showMoreMenu() {
+        val moreBottomView = BottomNavigationView(this)
+        moreBottomView.menu.add(0, R.id.add_income, 0, "수입")
+        moreBottomView.menu.add(0, R.id.add_expend, 1, "지출")
+        moreBottomView.menu.add(0, R.id.add_diary, 2, "일기")
+
+        // 새로운 BottomNavigationView의 클릭 이벤트를 처리합니다.
+        moreBottomView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.add_income -> {
+                    // More 1 메뉴 선택 시 동작 구현
+                    val intent = Intent(this, IncomeAct::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.add_expend -> {
+                    // More 2 메뉴 선택 시 동작 구현
+                    val intent = Intent(this, ExpendAct::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.add_diary -> {
+                    // More 3 메뉴 선택 시 동작 구현
+                    val intent = Intent(this, DiaryWriteAct::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // 새로운 BottomNavigationView를 화면에 표시합니다.
+        // 여기서는 예시로 다이얼로그 형태로 표시하였습니다.
+        val dialog = AlertDialog.Builder(this)
+            .setView(moreBottomView)
+            .create()
+        dialog.show()
+    }
+
     private fun getTime(): String? {
         var mNow = System.currentTimeMillis()
         today = Date(mNow)
