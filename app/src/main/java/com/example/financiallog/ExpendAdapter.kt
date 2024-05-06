@@ -15,9 +15,9 @@ class ExpendAdapter:RecyclerView.Adapter<ExpendViewHolder1>(){
         val payView1:TextView = itemView.findViewById<TextView>(R.id.expend_tv)
 
         fun setItem(item: PostExpend){
-            catView1.text = item.tv_cateG_1
-            shopView1.text = item.banme_tv
-            payView1.text = item.pay_tv_1.toString()
+            catView1.text = item.category
+            shopView1.text = item.banme
+            payView1.text = item.price.toString()
 
         }
 

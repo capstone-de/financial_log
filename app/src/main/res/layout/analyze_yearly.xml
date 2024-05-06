@@ -7,39 +7,88 @@
     android:layout_height="match_parent"
     android:background="#FAF4E9">
 
-    <android.widget.Button
-        android:id="@+id/btn_analyze"
+    <TextView
+        android:id="@+id/yearly_tv"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:background="@drawable/btn_analyze"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="가계부"
+        android:text="2024년"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.309"
+        app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="27dp" />
+        tools:layout_editor_absoluteY="152dp" />
 
-    <android.widget.Button
-        android:id="@+id/btn_diary"
-        android:layout_width="wrap_content"
+    <ImageButton
+        android:id="@+id/underButton"
+        android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="116dp"
-        android:background="@drawable/btn_analyze1"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="일기"
+        android:layout_marginEnd="236dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/analyze_under"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck"
+        tools:layout_editor_absoluteY="142dp" />
+
+    <LinearLayout
+        android:layout_width="392dp"
+        android:layout_height="128dp"
+        android:background="@drawable/analyze_view"
+        android:orientation="horizontal"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="27dp" />
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="350dp">
+
+        <TextView
+            android:id="@+id/tv_yearly_sat"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="2024년 \n만족했던 소비" />
+
+        <com.github.mikephil.charting.charts.RadarChart
+                android:id="@+id/chart3"
+                android:layout_width="230dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="3dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="397dp"
+        android:layout_height="150dp"
+        android:background="@drawable/analyze_view"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="190dp">
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chart"
+            android:layout_width="380dp"
+            android:layout_height="134dp"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.514"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.347" />
+
+    </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         app:layout_constraintTop_toBottomOf="@+id/btn_analyze"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp">
+        tools:layout_editor_absoluteX="-1dp">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/day"
@@ -69,6 +118,63 @@
             android:fontFamily="@font/gmarketsansttfmedium"
             android:text="연별" />
     </com.google.android.material.tabs.TabLayout>
+
+    <LinearLayout
+        android:layout_width="391dp"
+        android:layout_height="150dp"
+        android:background="@drawable/analyze_view"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="486dp">
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="121dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="2024년 소비금액" />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chart2"
+            android:layout_width="377dp"
+            android:layout_height="127dp"
+            android:layout_margin="9dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.514"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.347" />
+
+    </LinearLayout>
+
+    <android.widget.Button
+        android:id="@+id/btn_diary"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="108dp"
+        android:background="@drawable/btn_analyze1"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="일기"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="27dp" />
+
+    <android.widget.Button
+        android:id="@+id/btn_analyze"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:background="@drawable/btn_analyze"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="가계부"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.346"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="27dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_view"

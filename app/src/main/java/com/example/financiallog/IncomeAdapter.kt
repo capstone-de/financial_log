@@ -5,42 +5,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.util.ArrayList
+import java.util.Date
 
-class IncomeAdapter: RecyclerView.Adapter<IncomeAdapter.IncomeViewHolder>() {
-    private var items = ArrayList<IncomeList>()
+class IncomeAdapter(private val data: List<ResponseIncome.DataIn>): RecyclerView.Adapter<IncomeAdapter.IncomeViewHolder>() {
 
     class IncomeViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: ResponseIncome.DataIn){
+            itemView.findViewById<TextView>(R.id.category_tv).text = item.category.toString()
+            itemView.findViewById<TextView>(R.id.expend_tv).text = item.price.toString()
+        }
         val catView2 = itemView.findViewById<TextView>(R.id.category_tv)
         val payView2 = itemView.findViewById<TextView>(R.id.expend_tv)
-
-        fun setItem(item: IncomeList){
-            catView2.text = item.tv_cateG_2
-            payView2.text = item.tv_pay_2.toString()
-        }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IncomeViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.income_list, parent, false)
-        return IncomeViewHolder(itemView)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.income_list, parent, false)
+        return IncomeViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
-    fun addItem(item: IncomeList) {
-        items.add(item)
-    }
+    override fun getItemCount() = data.size
+
 
     override fun onBindViewHolder(holder: IncomeViewHolder, position: Int) {
-        val inlist: IncomeList = items[position]
-        holder.setItem(inlist)
+        val item = data[position]
+        holder.bind(item)
     }
-    data class IncomeList(
-        val tv_cateG_2: String,
-        val tv_pay_2: Int,
-    )
+
 }
 
 

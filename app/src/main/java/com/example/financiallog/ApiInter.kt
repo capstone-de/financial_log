@@ -17,11 +17,11 @@ interface ApiInter {
     @POST("/wallet_app/saveIncome")
     fun insertIn(@Body map: HashMap<String, String>): Call<PostIncome>?
     @GET("/calendar_app/getWallet?user=1&date=2024-04-09")
-    fun getIncomeAll(): Call<List<PostIncome>>
+    fun getIncomeAll(): Call<ResponseIncome>
 
     //일기관련
     @POST("/diary/saveDiary")
-    fun insertDi(@Body map: HashMap<String, String>): Call<PostDiary>?
+    fun insertDi(@Body map: HashMap<String, Any>): Call<PostDiary>?
     @GET("/diary_app/saveDiary?user=1&date=2024-04-09")
     fun diarywriteEx(): Call<List<PostDiary>>
     @GET("/diary_app/diaryList?user=user_id")
