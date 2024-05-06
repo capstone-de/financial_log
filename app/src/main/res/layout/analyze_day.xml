@@ -1,6 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FAF4E9">
+
+    <TextView
+        android:id="@+id/cate_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="주거/통신"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="437dp" />
+
+    <TextView
+        android:id="@+id/date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="현재날짜"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="168dp" />
+
+    <TextView
+        android:id="@+id/cate_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="식비"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="375dp" />
+
+    <TextView
+        android:id="@+id/day_income_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5,000,000"
+        android:textColor="#2F8FFF"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="118dp"
+        tools:layout_editor_absoluteY="210dp" />
+
+    <TextView
+        android:id="@+id/day_expend_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="210,000"
+        android:textColor="#F66A67"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="220dp"
+        tools:layout_editor_absoluteY="210dp" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="202dp"
+        tools:layout_editor_absoluteY="210dp" />
+
+    <android.widget.Button
+        android:id="@+id/btn_analyze"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:background="@drawable/btn_analyze"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="가계부"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.309"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="27dp" />
+
+    <android.widget.Button
+        android:id="@+id/btn_diary"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="116dp"
+        android:background="@drawable/btn_analyze1"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="일기"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="27dp" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        app:layout_constraintTop_toBottomOf="@+id/btn_analyze"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="일별" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="주별" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="월별" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/yearly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="연별" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <ImageButton
+        android:id="@+id/leftButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="108dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/btn_left"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck"
+        tools:layout_editor_absoluteY="154dp" />
+
+    <ImageButton
+        android:id="@+id/rightButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="104dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/btn_right"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck"
+        tools:layout_editor_absoluteY="154dp" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_view"
+        android:layout_width="409dp"
+        android:layout_height="86dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom"
+        tools:ignore="MissingConstraints,"
+        tools:layout_editor_absoluteX="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

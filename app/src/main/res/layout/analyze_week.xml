@@ -90,6 +90,35 @@
         tools:ignore="MissingConstraints,SpeakableTextPresentCheck"
         tools:layout_editor_absoluteY="154dp" />
 
+    <TextView
+        android:id="@+id/weekly_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="11월 1주"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="177dp"
+        tools:layout_editor_absoluteY="161dp" />
+
+    <TextView
+        android:id="@+id/weekly_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="11.04~11.10"
+        android:textSize="11sp"
+        tools:layout_editor_absoluteX="174dp"
+        tools:layout_editor_absoluteY="187dp" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="350dp"
+        android:layout_height="366dp"
+        android:src="@tools:sample/avatars"
+        app:srcCompat="@drawable/analyze_week_box"
+        tools:layout_editor_absoluteX="30dp"
+        tools:layout_editor_absoluteY="182dp" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_view"
         android:layout_width="409dp"
