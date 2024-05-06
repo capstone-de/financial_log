@@ -3,28 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#FAF4E9"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/month_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:text="00."
-        app:layout_constraintStart_toEndOf="@+id/year_text"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <TextView
-        android:id="@+id/day_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="160dp"
-        android:text="00"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/month_text"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="16dp" />
 
     <TextView
         android:id="@+id/year_text"
@@ -51,22 +32,19 @@
             tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="3dp"
-            tools:listitem="@layout/diary_list" />
+            tools:listitem="@layout/feed_list" />
 
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        app:itemIconTint="#2196F3"
-        app:itemTextColor="@color/black"
-        app:labelVisibilityMode="labeled"
+        android:id="@+id/bottom_view"
+        android:layout_width="409dp"
+        android:layout_height="86dp"
+        android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_bottom">
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        app:menu="@menu/menu_bottom"
+        app:labelVisibilityMode="labeled"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

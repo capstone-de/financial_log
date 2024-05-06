@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.CheckedTextView
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,9 +14,9 @@ class SaveCheck : AppCompatActivity() {
 
     lateinit var tv_1 : TextView;
     lateinit var tv_2 : TextView;
-    lateinit var tv_3 : CheckedTextView;
+    lateinit var tv_3 : TextView;
     lateinit var iv_1 : ImageView;
-    lateinit var btn_home :Button;
+    lateinit var btn_home :ImageButton;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +24,9 @@ class SaveCheck : AppCompatActivity() {
 
         tv_1 = findViewById<TextView>(R.id.textView)
         tv_2 = findViewById<TextView>(R.id.textView2)
-        tv_3 = findViewById<CheckedTextView >(R.id.checkedTextView)
+        tv_3 = findViewById<TextView >(R.id.checkedTextView)
         iv_1 = findViewById<ImageView>(R.id.imageView)
-        btn_home = findViewById<Button>(R.id.imageButton)
+        btn_home = findViewById<ImageButton>(R.id.imageButton)
 
         // 텍스트 클릭시 이동
         tv_3.setOnClickListener{
