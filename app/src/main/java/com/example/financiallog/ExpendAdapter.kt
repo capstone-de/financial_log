@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.financiallog.ExpendAdapter.ExpendViewHolder as ExpendViewHolder1
 
 class ExpendAdapter:RecyclerView.Adapter<ExpendViewHolder1>(){
-    private var items = ArrayList<Exlist>()
+    private var items = ArrayList<PostExpend>()
     class ExpendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val catView1 = itemView.findViewById<TextView>(R.id.category_tv)
-        val shopView1 = itemView.findViewById<TextView>(R.id.shop_tv)
-        val payView1 = itemView.findViewById<TextView>(R.id.expend_tv)
-        val tvView1 = itemView.findViewById<View>(R.id.view3)
+        val catView1:TextView = itemView.findViewById<TextView>(R.id.category_tv)
+        val shopView1:TextView = itemView.findViewById<TextView>(R.id.shop_tv)
+        val payView1:TextView = itemView.findViewById<TextView>(R.id.expend_tv)
 
-        fun setItem(item: Exlist){
-            catView1.text = item.tv_cateG_1
-            shopView1.text = item.tv_shopN_1
-            payView1.text = item.tv_pay_1
+        fun setItem(item: PostExpend){
+            catView1.text = item.category
+            shopView1.text = item.banme
+            payView1.text = item.price.toString()
+
         }
 
     }
@@ -31,12 +31,12 @@ class ExpendAdapter:RecyclerView.Adapter<ExpendViewHolder1>(){
     override fun getItemCount(): Int {
         return items.size
     }
-    fun addItem(item: Exlist) {
+    fun addItem(item: PostExpend) {
         items.add(item)
     }
 
     override fun onBindViewHolder(holder: ExpendViewHolder1, position: Int) {
-        val exlist:Exlist = items[position]
+        val exlist:PostExpend = items[position]
         holder.setItem(exlist)
 
     }
@@ -44,6 +44,9 @@ class ExpendAdapter:RecyclerView.Adapter<ExpendViewHolder1>(){
     data class Exlist(
         val tv_cateG_1: String,
         val tv_shopN_1: String,
-        val tv_pay_1: String,
+        val tv_pay_1: Int,
+        val tv_together_1: String,
+        val tv_check_1: String,
+        val tv_sat_1: String,
     )
 }

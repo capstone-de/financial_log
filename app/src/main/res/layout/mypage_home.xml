@@ -80,27 +80,8 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/month_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="165dp"
-        android:text="00."
-        app:layout_constraintStart_toEndOf="@+id/year_text"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/day_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="165dp"
-        android:text="00"
-        app:layout_constraintStart_toEndOf="@+id/month_text"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+
 
     <TextView
         android:id="@+id/year_text"
@@ -143,6 +124,7 @@
         android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom"
+        app:labelVisibilityMode="labeled"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp">
 
