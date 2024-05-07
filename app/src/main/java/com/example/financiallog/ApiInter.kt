@@ -10,13 +10,13 @@ interface ApiInter {
     // 지출관련
     @POST("/wallet_app/saveExpense")
     fun insertEx(@Body map: HashMap<String, Any>): Call<PostExpend>?
-    @GET("/calendar_app/getWallet?user=4&date=2024-05-07")
+    @GET("/calendar_app/getWalletExpense?user=4&date=2024-05-07")
     fun getExpendAll(): Call<ResponseExpend>
 
     //수입관련
     @POST("/wallet_app/saveIncome")
     fun insertIn(@Body map: HashMap<String, String>): Call<PostIncome>?
-    @GET("/calendar_app/getWallet?user=4&date=2024-05-07")
+    @GET("/calendar_app/getWalletIncome?user=4&date=2024-05-07")
     fun getIncomeAll(): Call<ResponseIncome>
 
     //일기관련

@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.Callback
@@ -100,9 +103,9 @@ class HomeMain: AppCompatActivity() {
                 response: Response<ResponseExpend>
             ) {
                 if(response.isSuccessful){
-                    val data = response.body()!!.ReExpend
+                    val data = response.body()!!.expense
                     val expendadapter = ExpendAdapter(data)
-                    re_income.adapter = expendadapter
+                    re_expend.adapter = expendadapter
                     Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
 
                 }
@@ -142,7 +145,7 @@ class HomeMain: AppCompatActivity() {
                 response: Response<ResponseIncome>
             ) {
                 if(response.isSuccessful){
-                    val data = response.body()!!.ReIncome
+                    val data = response.body()!!.income
                     val incomeadapter = IncomeAdapter(data)
                     re_income.adapter = incomeadapter
                     Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
@@ -162,7 +165,7 @@ class HomeMain: AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             val response = data_in.api.getIncomeAll().execute()
             if (response.isSuccessful) {
-                val incomeData = response.body()?.ReIncome
+                val incomeData = response.body()?.income
                 incomeAdapter.setData(incomeData ?: emptyList())
                 //setupRecyclerView(incomeData)
             }
