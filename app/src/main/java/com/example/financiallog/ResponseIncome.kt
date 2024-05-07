@@ -4,7 +4,7 @@ import java.util.ArrayList
 import java.util.Date
 
 data class ResponseIncome (
-    val ReIncome : ArrayList<DataIn>
+    val ReIncome : List<DataIn>
 )
 {
     data class DataIn(
