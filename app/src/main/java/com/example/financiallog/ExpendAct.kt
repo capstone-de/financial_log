@@ -31,7 +31,7 @@ class ExpendAct : AppCompatActivity() {
     lateinit var ed_pay:EditText; lateinit var ed_shop:EditText; lateinit var ed_toget:EditText; lateinit var tv_exsat:TextView;
     lateinit var alone_chip: CheckBox; lateinit var seek_bar:SeekBar; lateinit var seek_zero : TextView;
     lateinit var seek_per :TextView; val apiobject : ApiObject by lazy { ApiObject() };
-    lateinit var data : List<ExpendAdapter.Exlist>; lateinit var textView:TextView; lateinit var group_expend : ChipGroup;
+    lateinit var textView:TextView; lateinit var group_expend : ChipGroup;
     val followers = listOf("User1", "User2", "User3", "User4");  lateinit var together :String;
 
 

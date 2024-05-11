@@ -27,7 +27,7 @@ class IncomeAct : AppCompatActivity() {
     lateinit var btn_save: Button;
     lateinit var paychip :Chip; lateinit var extrachip:Chip; lateinit var financialchip:Chip; lateinit var etc_chip:Chip;
     val apiobject : ApiObject by lazy { ApiObject() };
-    lateinit var data: List<ExpendAdapter.Exlist>;
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
