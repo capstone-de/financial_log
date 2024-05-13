@@ -2,6 +2,7 @@ package com.example.financiallog
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -9,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -19,6 +23,8 @@ class DiarySns : AppCompatActivity(){
     lateinit var feed_list: RecyclerView;
     lateinit var today :Date;
     lateinit var mFormat :SimpleDateFormat;
+    val diary_list : ApiObject by lazy { ApiObject() }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +36,26 @@ class DiarySns : AppCompatActivity(){
         // 일기리스트 화면에 보여주기
         feed_list = findViewById<RecyclerView>(R.id.feed_re)
         feed_list.layoutManager = LinearLayoutManager(this)
-        val adapter_my = DiaryListAdapter()
-        feed_list.adapter = adapter_my
+        diary_list.api.getDiarylist().enqueue(object : Callback<ResponseDiary> {
+            override fun onResponse(
+                call: Call<ResponseDiary>,
+                response: Response<ResponseDiary>
+            ) {
+                if(response.isSuccessful){
+                    val data = response.body()!!
+                    val data_1 = response.body()!!.hashtag
+                    val diaryadapter = DiaryListAdapter(data,data_1)
+                    feed_list.adapter = diaryadapter
+                    Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
 
+                }
+            }
+            override fun onFailure(call: Call<ResponseDiary>, t: Throwable) {
+                Log.d("response", "실패$t")
+                Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
         //날짜
         mFormat = SimpleDateFormat("yyyy.MM.dd")
@@ -48,6 +71,8 @@ class DiarySns : AppCompatActivity(){
                     Toast.makeText(applicationContext, "home", Toast.LENGTH_SHORT).show()
                 }
                 R.id.financial -> {
+                    val intent = Intent(this, AnalyzeDayAct::class.java)
+                    startActivity(intent)
                     Toast.makeText(applicationContext, "financial", Toast.LENGTH_SHORT).show()
                 }
                 R.id.add -> {

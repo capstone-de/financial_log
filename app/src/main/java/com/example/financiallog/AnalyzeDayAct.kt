@@ -75,6 +75,26 @@ class AnalyzeDayAct: AppCompatActivity() {
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // 탭이 다시 선택될 때 필요한 처리
+                tab?.let { // tab이 null이 아닌 경우에만 실행
+                    when(it.position) {
+                        0 -> {
+                            val intent = Intent(this@AnalyzeDayAct, AnalyzeDayAct::class.java)
+                            startActivity(intent)
+                        }
+                        1 -> {
+                            val intent = Intent(this@AnalyzeDayAct, AnalyzeWeekAct::class.java)
+                            startActivity(intent)
+                        }
+                        2 -> {
+                            val intent = Intent(this@AnalyzeDayAct, AnalyzeMonthAct::class.java)
+                            startActivity(intent)
+                        }
+                        3 -> {
+                            val intent = Intent(this@AnalyzeDayAct, AnalyzeyearlyAct::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                }
             }
         })
 

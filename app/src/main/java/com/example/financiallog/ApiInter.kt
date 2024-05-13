@@ -19,13 +19,25 @@ interface ApiInter {
     @GET("/calendar_app/getWalletIncome?user=4&date=2024-05-07")
     fun getIncomeAll(): Call<ResponseIncome>
 
+    //달력
+    @GET("/calendar_app/getCalendar?user=1&year=2024&month=4")
+    fun getcalender():Call<ResponseCalender>
+
     //일기관련
     @POST("/diary/saveDiary")
     fun insertDi(@Body map: HashMap<String, Any>): Call<PostDiary>?
     @GET("/diary_app/saveDiary?user=1&date=2024-04-09")
-    fun diarywriteEx(): Call<List<PostDiary>>
+    fun diarywriteEx(): Call<ResponseExpend>
     @GET("/diary_app/diaryList?user=user_id")
-    fun getDiarylist(): Call<List<PostDiary>>
+    fun getDiarylist(): Call<ResponseDiary>
     @GET("/diary_app/myDiaryList?user=4")
-    fun getDiaryMylist(): Call<List<PostDiary>>
+    fun getDiaryMylist(): Call<ResponseMyDiary>
+
+    //로그인
+    @GET("/login/signIn")
+    fun signIn(): Call<ResponseExpend>
+
+    //회원가입
+    @POST("/login/signUp")
+    fun signUp(@Body map: HashMap<String, Any>): Call<PostExpend>?
 }

@@ -37,9 +37,9 @@
         android:layout_width="352dp"
         android:layout_height="125dp"
         android:layout_marginTop="80dp"
-        android:layout_marginEnd="36dp"
         android:background="@drawable/re_expend"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
         tools:listitem="@layout/expend_list" />
@@ -48,15 +48,16 @@
         android:id="@+id/today_expend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
         android:background="@drawable/text_view"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="오늘의 소비"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/diary_re"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.123"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.741"
+        app:layout_constraintVertical_bias="0.774"
         tools:ignore="MissingConstraints" />
 
     <EditText
@@ -64,10 +65,10 @@
         android:layout_width="360dp"
         android:layout_height="268dp"
         android:layout_marginTop="264dp"
-        android:layout_marginEnd="24dp"
         android:background="@drawable/ed_diary"
         android:fontFamily="@font/gmarketsansttfmedium"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck,MissingConstraints" />
 
@@ -118,8 +119,8 @@
         android:id="@+id/tag_group"
         android:layout_width="349dp"
         android:layout_height="48dp"
-        android:layout_marginStart="40dp"
         android:layout_marginTop="580dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
@@ -130,12 +131,13 @@
         android:id="@+id/tag_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="556dp"
-        android:layout_marginEnd="312dp"
+        android:layout_marginTop="552dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="해시태그: "
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -157,12 +159,13 @@
         android:id="@+id/today_diary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="228dp"
-        android:layout_marginEnd="316dp"
+        android:layout_marginTop="232dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="나의 일기"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
