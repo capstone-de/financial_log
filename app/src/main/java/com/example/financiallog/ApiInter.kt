@@ -28,4 +28,15 @@ interface ApiInter {
     fun getDiarylist(): Call<List<PostDiary>>
     @GET("/diary_app/myDiaryList?user=4")
     fun getDiaryMylist(): Call<List<PostDiary>>
+
+    //통계관련
+    @GET("/statistics/daily/{user?date}")
+    fun getStatisticsDaily(): Call<List<ResponseStatDay>> //일별
+    @GET("/statistics/weekly/{user?date}")
+    fun getStatisticsWeekly(): Call<List<ResponseStatWeek>> //주별
+    @GET("/statistics/monthly/{user?year?month}")
+    fun getStatisticsMonthly(): Call<List<ResponseStatMonth>> //월별
+    @GET("/statistics/yearly/{user?year}")
+    fun getStatisticsYearly(): Call<List<ResponseStatYear>> //연별
+
 }

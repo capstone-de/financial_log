@@ -1,38 +1,383 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAF4E9">
 
+
+    <TextView
+        android:id="@+id/monthly_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="159dp"
+        android:layout_marginTop="146dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="2024년 11월"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/m_underButton"
+        android:layout_width="61dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="132dp"
+        android:layout_marginEnd="96dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/analyze_under"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
+    <LinearLayout
+        android:layout_width="384dp"
+        android:layout_height="371dp"
+        android:layout_marginTop="36dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/income_box">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/analyze_month_box2"
+                    android:orientation="vertical"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="210dp"
+                    tools:layout_editor_absoluteY="357dp">
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/mon_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="177dp"
+                        android:layout_height="176dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/analyze_month_box2"
+                        android:orientation="vertical"
+                        tools:ignore="MissingConstraints">
+
+                        <TextView
+                            android:id="@+id/ranking"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="이번달 소비 순위"
+                            android:textSize="14sp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/ranking_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="1등"
+                            android:textSize="13sp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="40dp">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ranking_text1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="식비"
+                            android:textSize="13sp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="75dp"
+                            android:layout_marginTop="40dp">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ranking_per1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="40%"
+                            android:textSize="13sp"
+                            android:layout_marginStart="140dp"
+                            android:layout_marginTop="40dp">
+                        </TextView>
+
+
+
+                        <TextView
+                            android:id="@+id/ranking_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="2등"
+                            android:textSize="13sp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="65dp">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ranking_text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="교통/차량"
+                            android:textSize="13sp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="75dp"
+                            android:layout_marginTop="65dp">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ranking_per2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="30%"
+                            android:textSize="13sp"
+                            android:layout_marginStart="140dp"
+                            android:layout_marginTop="65dp">
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/ranking_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="3등"
+                            android:textSize="13sp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="90dp">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ranking_text3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="문화생활"
+                            android:textSize="13sp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="75dp"
+                            android:layout_marginTop="90dp">
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ranking_per3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="19%"
+                            android:textSize="13sp"
+                            android:layout_marginStart="140dp"
+                            android:layout_marginTop="90dp">
+                        </TextView>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="177dp"
+                        android:layout_height="176dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/analyze_month_box2"
+                        android:orientation="vertical"
+                        tools:ignore="MissingConstraints">
+
+                        <TextView
+                            android:id="@+id/more_cate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="15dp"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="지난달보다\n ' 식비 ' 지출이\n 가장 많이 늘었어요!"
+                            android:textSize="13sp">
+                        </TextView>
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/mon_chart2"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="369dp"
+                    android:layout_height="139dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/analyze_view"
+                    tools:ignore="MissingConstraints">
+
+                    <TextView
+                        android:id="@+id/month_satis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gmarketsansttfmedium"
+                        android:text="이번달 가장 만족했던 소비는"
+                        android:textSize="15sp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                    />
+
+                    <TextView
+                        android:id="@+id/month_satis_cate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gmarketsansttfmedium"
+                        android:text="쇼핑"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="80dp"
+                        android:background="#B4B7F9"
+                        />
+                    <TextView
+                        android:id="@+id/month_satis_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gmarketsansttfmedium"
+                        android:text="자라 70,000 원 "
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="180dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/month_satis_per"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="85% 만족했어요:)"
+                        android:fontFamily="@font/gmarketsansttfmedium"
+                        android:textSize="14sp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        />
+                </RelativeLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/income_box"
+        android:layout_width="167dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="181dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/analyze_month_incomebox" />
+
+    <TextView
+        android:id="@+id/text_income"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="187dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="수입"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/in_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="89dp"
+        android:layout_marginTop="206dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="3,000,000"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/expend_box"
+        android:layout_width="156dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="181dp"
+        android:layout_marginEnd="45dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/analyze_month_expendbox" />
+
+    <TextView
+        android:id="@+id/text_expend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="187dp"
+        android:layout_marginEnd="105dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="지출"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/ex_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="206dp"
+        android:layout_marginEnd="80dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="1,500,000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.widget.Button
         android:id="@+id/btn_analyze"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="27dp"
         android:background="@drawable/btn_analyze"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="가계부"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.309"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="27dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <android.widget.Button
         android:id="@+id/btn_diary"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginEnd="116dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="108dp"
         android:background="@drawable/btn_analyze1"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="일기"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="27dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -70,35 +415,16 @@
             android:text="연별" />
     </com.google.android.material.tabs.TabLayout>
 
-    <ImageButton
-        android:id="@+id/leftButton"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="108dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/btn_left"
-        tools:ignore="MissingConstraints,SpeakableTextPresentCheck"
-        tools:layout_editor_absoluteY="154dp" />
-
-    <ImageButton
-        android:id="@+id/rightButton"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginEnd="104dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/btn_right"
-        tools:ignore="MissingConstraints,SpeakableTextPresentCheck"
-        tools:layout_editor_absoluteY="154dp" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_view"
         android:layout_width="409dp"
         android:layout_height="86dp"
         android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom"
         tools:ignore="MissingConstraints,"
         tools:layout_editor_absoluteX="1dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
