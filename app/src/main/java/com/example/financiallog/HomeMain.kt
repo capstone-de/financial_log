@@ -129,9 +129,8 @@ class HomeMain: AppCompatActivity() {
 
                 }
             }
-
             override fun onFailure(call: Call<ResponseCalender>, t: Throwable) {
-                Log.d("response", "실패$t")
+                Log.d("get main calender", "실패$t")
                 Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
 

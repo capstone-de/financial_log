@@ -24,6 +24,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.VolleyLog.TAG
 import com.google.android.material.chip.Chip
@@ -87,7 +88,8 @@ class DiaryWriteAct : AppCompatActivity() {
 
 
         // 지출 내역 불러오기
-        list_ex.api.diarywriteEx().enqueue(object : Callback<ResponseExpend> {
+        re_expend.layoutManager = LinearLayoutManager(this)
+        list_ex.api.getExpendAll().enqueue(object : Callback<ResponseExpend> {
             override fun onResponse(
                 call: Call<ResponseExpend>,
                 response: Response<ResponseExpend>

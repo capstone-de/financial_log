@@ -24,7 +24,7 @@ interface ApiInter {
     fun getIncomeAll(): Call<ResponseIncome>
 
     //달력
-    @GET("/calendar_app/getCalendar?user=1&year=2024&month=4")
+    @GET("/calendar_app/getCalendar?user=6&year=2024&month=5")
     fun getcalender():Call<ResponseCalender>
 
     //일기관련
