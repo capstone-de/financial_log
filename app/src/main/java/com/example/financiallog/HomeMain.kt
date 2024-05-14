@@ -2,10 +2,8 @@ package com.example.financiallog
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -15,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.Callback
@@ -33,7 +34,7 @@ class HomeMain: AppCompatActivity() {
     lateinit var expendtext : TextView; lateinit var incometext: TextView; lateinit var mFormat :SimpleDateFormat
     lateinit var re_expend: RecyclerView; lateinit var re_income : RecyclerView;
     val data_ex : ApiObject by lazy { ApiObject() }; val data_in : ApiObject by lazy { ApiObject() };
-    lateinit var list_ex : List<ExpendAdapter.Exlist>; val Diarybtn : DiaryWriteAct by lazy { DiaryWriteAct() }
+    val Diarybtn : DiaryWriteAct by lazy { DiaryWriteAct() }
     val Incombtn :IncomeAct by lazy { IncomeAct() }
     private val datesWithEvent = mutableSetOf<CalendarDay>(); private val DiaryEvent = mutableSetOf<CalendarDay>()
 
@@ -93,11 +94,28 @@ class HomeMain: AppCompatActivity() {
         }*/
 
 
-
-
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
         re_expend.layoutManager = LinearLayoutManager(this)
+        data_ex.api.getExpendAll().enqueue(object : Callback<ResponseExpend> {
+            override fun onResponse(
+                call: Call<ResponseExpend>,
+                response: Response<ResponseExpend>
+            ) {
+                if(response.isSuccessful){
+                    val data = response.body()!!.expense
+                    val expendadapter = ExpendAdapter(data)
+                    re_expend.adapter = expendadapter
+                    Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+            override fun onFailure(call: Call<ResponseExpend>, t: Throwable) {
+                Log.d("response", "실패$t")
+                Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
        // val adapter_1 = ExpendAdapter()
       //  re_expend.adapter = adapter_1
@@ -127,14 +145,13 @@ class HomeMain: AppCompatActivity() {
                 response: Response<ResponseIncome>
             ) {
                 if(response.isSuccessful){
-                    val data = response.body()?.ReIncome?: emptyList()
+                    val data = response.body()!!.income
                     val incomeadapter = IncomeAdapter(data)
                     re_income.adapter = incomeadapter
                     Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
 
                 }
             }
-
             override fun onFailure(call: Call<ResponseIncome>, t: Throwable) {
                 Log.d("response", "실패$t")
                 Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
@@ -148,7 +165,7 @@ class HomeMain: AppCompatActivity() {
         GlobalScope.launch(Dispatchers.Main) {
             val response = data_in.api.getIncomeAll().execute()
             if (response.isSuccessful) {
-                val incomeData = response.body()?.ReIncome
+                val incomeData = response.body()?.income
                 incomeAdapter.setData(incomeData ?: emptyList())
                 //setupRecyclerView(incomeData)
             }
@@ -167,7 +184,7 @@ class HomeMain: AppCompatActivity() {
                     Toast.makeText(applicationContext, "home", Toast.LENGTH_SHORT).show()
                 }
                 R.id.financial -> {
-                    val intent = Intent(this, DiaryWriteAct::class.java)
+                    val intent = Intent(this, AnalyzeDayAct::class.java)
                     startActivity(intent)
                     Toast.makeText(applicationContext, "financial", Toast.LENGTH_SHORT).show()
                 }

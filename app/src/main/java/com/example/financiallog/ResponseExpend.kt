@@ -3,15 +3,17 @@ package com.example.financiallog
 import java.util.ArrayList
 import java.util.Date
 
-data class ResponseIncome (
-    val income : ArrayList<DataIn>,
+data class ResponseExpend (
+    val expense : ArrayList<DataEx>
 )
 {
-    data class DataIn(
+    data class DataEx(
 //        val user : Int,
 //        val date : Date,
         val price : Int,
         val category: String,
-//        val memo: String
+        val bname : String,
+//        val with_whom: HashMap<String,String>,
+//        val satisfaction: Int
     )
 }
