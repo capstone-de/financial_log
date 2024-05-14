@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,12 +10,12 @@
         android:id="@+id/yearly_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="152dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="2024년"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.065"
+        app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -25,24 +24,22 @@
         android:id="@+id/underButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="240dp"
+        android:layout_marginTop="142dp"
+        android:layout_marginEnd="236dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/analyze_under"
         tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="392dp"
         android:layout_height="128dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="350dp"
         android:background="@drawable/analyze_view"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="7dp">
 
         <TextView
             android:id="@+id/tv_yearly_sat"
@@ -65,16 +62,14 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
         android:layout_width="397dp"
         android:layout_height="150dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="190dp"
         android:background="@drawable/analyze_view"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yearly_tv"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="7dp">
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
@@ -92,9 +87,9 @@
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tabLayout"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         app:layout_constraintTop_toBottomOf="@+id/btn_analyze"
@@ -133,13 +128,12 @@
     <LinearLayout
         android:layout_width="391dp"
         android:layout_height="150dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="486dp"
         android:background="@drawable/analyze_view"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="7dp">
 
         <TextView
             android:id="@+id/textView11"
@@ -169,8 +163,8 @@
         android:id="@+id/btn_diary"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="108dp"
         android:background="@drawable/btn_analyze1"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="일기"
@@ -182,12 +176,12 @@
         android:id="@+id/btn_analyze"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="27dp"
         android:background="@drawable/btn_analyze"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="가계부"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.337"
+        app:layout_constraintHorizontal_bias="0.346"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -197,8 +191,8 @@
         android:layout_width="409dp"
         android:layout_height="86dp"
         android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp" />

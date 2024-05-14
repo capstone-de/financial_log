@@ -25,12 +25,15 @@ class AnalyzeDayAct: AppCompatActivity() {
         val tab_week =findViewById<TabLayout>(R.id.week)
         val tab_month = findViewById<TabLayout>(R.id.month)
         val tab_yearly = findViewById<TabLayout>(R.id.yearly)
+
         val left_btn = findViewById<ImageButton>(R.id.leftButton)
         val right_btn =findViewById<ImageButton>(R.id.rightButton)
+
         val date_text = findViewById<TextView>(R.id.date_text)
         val income_tv =findViewById<TextView>(R.id.day_income_text)
         val expend_tv = findViewById<TextView>(R.id.day_expend_text)
-        val text_tv = findViewById<TextView>(R.id.textView12)
+        val slash_tv = findViewById<TextView>(R.id.slash)
+
 
         //가계부 버튼 클릭 시
         analyze_btn.setOnClickListener(View.OnClickListener{

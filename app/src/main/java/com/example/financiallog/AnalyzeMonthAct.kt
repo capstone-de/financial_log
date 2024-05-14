@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,11 +20,14 @@ class AnalyzeMonthAct: AppCompatActivity() {
 
         val analyze_btn = findViewById<Button>(R.id.btn_analyze)
         val analyzedi_btn = findViewById<Button>(R.id.btn_diary)
-        val tab_analyze =findViewById<TabLayout>(R.id.tabLayout)
+
+        val tab_analyze =findViewById<TabLayout>(R.id.tabLayout3)
         val tab_day = findViewById<TabLayout>(R.id.day)
         val tab_week =findViewById<TabLayout>(R.id.week)
         val tab_month = findViewById<TabLayout>(R.id.month)
         val tab_yearly = findViewById<TabLayout>(R.id.yearly)
+
+        val date_text = findViewById<TextView>(R.id.monthly_tv)
 
         //가계부 버튼 클릭 시
         analyze_btn.setOnClickListener(View.OnClickListener{

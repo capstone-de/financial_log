@@ -19,6 +19,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
 
         val analyze_btn = findViewById<Button>(R.id.btn_analyze)
         val analyzedi_btn = findViewById<Button>(R.id.btn_diary)
+
         val tab_analyze =findViewById<TabLayout>(R.id.tabLayout)
         val tab_day = findViewById<TabLayout>(R.id.day)
         val tab_week =findViewById<TabLayout>(R.id.week)

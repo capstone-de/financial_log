@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,8 +10,8 @@
         android:id="@+id/btn_diary"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="108dp"
         android:background="@drawable/btn_analyze1"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="일기"
@@ -24,12 +23,12 @@
         android:id="@+id/btn_analyze"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="27dp"
         android:background="@drawable/btn_analyze"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="가계부"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.337"
+        app:layout_constraintHorizontal_bias="0.362"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -79,8 +78,8 @@
         android:layout_width="409dp"
         android:layout_height="86dp"
         android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom"
         tools:ignore="MissingConstraints,"
         tools:layout_editor_absoluteX="1dp" />
@@ -89,12 +88,12 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="145dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="11월 1주"
         android:textSize="23dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
@@ -103,8 +102,8 @@
         android:id="@+id/rightButton"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="92dp"
+        android:layout_marginTop="147dp"
+        android:layout_marginEnd="96dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/btn_right"
@@ -114,38 +113,37 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="176dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="(11.04 ~ 11.10)"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
-
 
     <ImageButton
         android:id="@+id/leftButton"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="144dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="147dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/btn_left"
         tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
 
+
     <LinearLayout
         android:layout_width="391dp"
         android:layout_height="280dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="208dp"
         android:background="@drawable/analyze_view"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="11dp">
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
