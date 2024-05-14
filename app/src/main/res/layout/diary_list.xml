@@ -11,10 +11,23 @@
         android:id="@+id/feed_image"
         android:layout_width="113dp"
         android:layout_height="114dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="35dp"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/day_tv"
+        android:layout_width="215dp"
+        android:layout_height="29dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="날짜"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.744"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="1dp" />
 
     <TextView
         android:id="@+id/feed_text"
@@ -22,31 +35,35 @@
         android:layout_height="45dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="일기 내용을 적어주세요"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.724"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="162dp"
-        tools:layout_editor_absoluteY="55dp" />
+        tools:layout_editor_absoluteY="84dp" />
 
     <TextView
         android:id="@+id/tag_dr"
-        android:layout_width="41dp"
-        android:layout_height="46dp"
+        android:layout_width="134dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="116dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="#"
         android:textColor="#624E19"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="174dp"
-        tools:layout_editor_absoluteY="123dp" />
+        tools:layout_editor_absoluteY="149dp" />
 
     <TextView
-        android:id="@+id/tag_1"
-        android:layout_width="78dp"
-        android:layout_height="38dp"
+        android:id="@+id/nickname_tv"
+        android:layout_width="101dp"
+        android:layout_height="23dp"
+        android:layout_marginEnd="152dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="건대입구역"
         android:textColor="#624E19"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="187dp"
-        tools:layout_editor_absoluteY="123dp" />
+        tools:layout_editor_absoluteY="45dp" />
 
     <View
         android:layout_width="0dp"

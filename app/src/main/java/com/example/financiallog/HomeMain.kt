@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,8 +26,6 @@ import java.util.Date
 import java.util.Locale
 import retrofit2.Call as Call
 
-
-
 class HomeMain: AppCompatActivity() {
 
     //lateinit var cal : CalendarView;
@@ -34,6 +33,7 @@ class HomeMain: AppCompatActivity() {
     lateinit var expendtext : TextView; lateinit var incometext: TextView; lateinit var mFormat :SimpleDateFormat
     lateinit var re_expend: RecyclerView; lateinit var re_income : RecyclerView;
     val data_ex : ApiObject by lazy { ApiObject() }; val data_in : ApiObject by lazy { ApiObject() };
+    val data_calender :ApiObject by lazy { ApiObject() }
     val Diarybtn : DiaryWriteAct by lazy { DiaryWriteAct() }
     val Incombtn :IncomeAct by lazy { IncomeAct() }
     private val datesWithEvent = mutableSetOf<CalendarDay>(); private val DiaryEvent = mutableSetOf<CalendarDay>()
@@ -43,7 +43,7 @@ class HomeMain: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val calender = findViewById<MaterialCalendarView>(R.id.calendar_View)
+        val calendarView = findViewById<MaterialCalendarView>(R.id.calendar_View)
        // cal = findViewById<CalendarView>(R.id.calView)
         datetext = findViewById<TextView>(R.id.date_text)
         expendtext = findViewById<TextView>(R.id.expend_tt)
@@ -52,10 +52,49 @@ class HomeMain: AppCompatActivity() {
         //날짜표시
         mFormat = SimpleDateFormat("MM월 dd일 ", Locale.KOREAN)
         datetext.setText(getTime())
-        calender.setOnDateChangedListener { widget, date, selected ->
+        calendarView.setOnDateChangedListener { widget, date, selected ->
             if (selected) {
                 // 선택된 날짜 텍스트 뷰에 표시
                 datetext.setText(formatDate(date.date))
+                // 선택 시 내역 가져오기
+                data_ex.api.getExpendAll().enqueue(object : Callback<ResponseExpend> {
+                    override fun onResponse(
+                        call: Call<ResponseExpend>,
+                        response: Response<ResponseExpend>
+                    ) {
+                        if(response.isSuccessful){
+                            val data = response.body()!!.expense
+                            val expendadapter = ExpendAdapter(data)
+                            re_expend.adapter = expendadapter
+                            Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+                    override fun onFailure(call: Call<ResponseExpend>, t: Throwable) {
+                        Log.d("response", "실패$t")
+                        Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+                data_in.api.getIncomeAll().enqueue(object : Callback<ResponseIncome> {
+                    override fun onResponse(
+                        call: Call<ResponseIncome>,
+                        response: Response<ResponseIncome>
+                    ) {
+                        if(response.isSuccessful){
+                            val data = response.body()!!.income
+                            val incomeadapter = IncomeAdapter(data)
+                            re_income.adapter = incomeadapter
+                            Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+                    override fun onFailure(call: Call<ResponseIncome>, t: Throwable) {
+                        Log.d("response", "실패$t")
+                        Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
             }
         }
         /*calender.setOnDateChangeListener { calendarView, year, month, day ->
@@ -64,6 +103,40 @@ class HomeMain: AppCompatActivity() {
         }*/
 
         // 점 표시
+        data_calender.api.getcalender().enqueue(object : Callback<ResponseCalender>{
+            override fun onResponse(
+                call: Call<ResponseCalender>,
+                response: Response<ResponseCalender>
+            ) {
+                if(response.isSuccessful){
+                    val responseCalendar = response.body()
+                    responseCalendar?.let { calendar ->
+                        // 노란색 점 표시
+                        calendar.diary.forEach { diary ->
+                            calendarView.addDecorator(YellowPointDecorator(diary.data))
+                        }
+
+                        // 파란색 점 표시
+                        calendar.income.forEach { income ->
+                            calendarView.addDecorator(BluePointDecorator(income.data))
+                        }
+
+                        // 빨간색 점 표시
+                        calendar.expense.forEach { expense ->
+                            calendarView.addDecorator(RedPointDecorator(expense.data))
+                        }
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseCalender>, t: Throwable) {
+                Log.d("response", "실패$t")
+                Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
         // 지출 내역에 해당하는 날짜를 저장한 리스트
        // val expenseDates = data_ex
        // val expenseDecorator = CustomDayViewDecorator(Color.RED, expenseDates.toHashSet())
@@ -117,24 +190,6 @@ class HomeMain: AppCompatActivity() {
 
         })
 
-       // val adapter_1 = ExpendAdapter()
-      //  re_expend.adapter = adapter_1
-       /* data_ex.getExpend.enqueue(object : Callback<ExpendAdapter.Exlist?>() {
-            fun getExpendAll(call: Call<ExpendAdapter.Exlist?>, response: Response<ExpendAdapter.Exlist?>) {
-                if (response.isSuccessful()) {
-                    val body: ExpendAdapter.Exlist = response.body()
-                    if (body != null) {
-                        Log.d("data.getUserId()", body.getUserId() + "")
-                        Log.d("data.getId()", body.getId() + "")
-                        Log.d("data.getTitle()", body.getTitle())
-                        Log.d("data.getBody()", body.getBody())
-                        Log.e("getData end", "======================================")
-                    }
-                }
-            }
-
-            fun onFailure(call: Call<ExpendAdapter.Exlist?>, t: Throwable) {}*/
-
 
         // 수입 내역 화면에 보여주기
         re_income = findViewById<RecyclerView>(R.id.income_re)
@@ -158,21 +213,6 @@ class HomeMain: AppCompatActivity() {
             }
 
         })
-
-        /*val incomeAdapter = IncomeAdapter(emptyList())
-        re_income.adapter = incomeAdapter
-
-        GlobalScope.launch(Dispatchers.Main) {
-            val response = data_in.api.getIncomeAll().execute()
-            if (response.isSuccessful) {
-                val incomeData = response.body()?.income
-                incomeAdapter.setData(incomeData ?: emptyList())
-                //setupRecyclerView(incomeData)
-            }
-        }*/
-        //val adapter_2 = IncomeAdapter()
-        //re_expend.adapter = adapter_2
-
 
         // 하단바 버튼
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_view)
@@ -214,14 +254,6 @@ class HomeMain: AppCompatActivity() {
 
 
     }
-   /* private fun setupRecyclerView(data: List<ResponseIncome.DataIn>) {
-        val recyclerView = findViewById<RecyclerView>(R.id.income_re)
-        var incomeAdapter = IncomeAdapter(data)
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@HomeMain)
-            adapter = incomeAdapter
-        }
-    }*/
 
     private fun showMoreMenu() {
         val moreBottomView = BottomNavigationView(this)
@@ -253,7 +285,6 @@ class HomeMain: AppCompatActivity() {
                 else -> false
             }
         }
-
         // 새로운 BottomNavigationView를 화면에 표시합니다.
         // 여기서는 예시로 다이얼로그 형태로 표시하였습니다.
         val dialog = AlertDialog.Builder(this)
@@ -261,7 +292,6 @@ class HomeMain: AppCompatActivity() {
             .create()
         dialog.show()
     }
-
 
     private fun getTime(): String? {
         var mNow = System.currentTimeMillis()
@@ -273,7 +303,6 @@ class HomeMain: AppCompatActivity() {
         val dateFormat = DateTimeFormatter.ofPattern("MM월 dd일", Locale.getDefault())
         return date.format(dateFormat)
     }
-
 
 }
 

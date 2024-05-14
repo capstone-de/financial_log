@@ -241,6 +241,8 @@
                         android:layout_marginTop="10dp"
                     />
 
+
+
                     <TextView
                         android:id="@+id/month_satis_cate"
                         android:layout_width="wrap_content"
