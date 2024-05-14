@@ -36,7 +36,7 @@ class ExpendAct : AppCompatActivity() {
     //var followers = listOf("User1", "User2", "User3", "User4");
     var followers: MutableList<String> = mutableListOf()
     lateinit var together :String;
-    var adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
+    //var adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
 
     lateinit var foodchip:Chip; lateinit var cultualchip:Chip; lateinit var taxchip:Chip; lateinit var livingchip:Chip;
     lateinit var educhip:Chip; lateinit var dueschip:Chip; lateinit var medicalchip:Chip; lateinit var shoppingchip:Chip;
@@ -161,28 +161,23 @@ class ExpendAct : AppCompatActivity() {
         }
 
         // 함께 하는 사람
+        apiobject.api.getfollower().enqueue(object: Callback<ResponseExFollower>{
+            override fun onResponse(
+                call: Call<ResponseExFollower>,
+                response: Response<ResponseExFollower>
+            ) {
+                if(response.isSuccessful){
+                    // 새로운 팔로워 리스트 추가
+                    followers.addAll(listOf(response.body()!!.nickname))
+                }
+            }
+            override fun onFailure(call: Call<ResponseExFollower>, t: Throwable) {
+                Log.d("response", "실패$t")
+                Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
         ed_toget.setOnClickListener {
-            apiobject.api.getfollower().enqueue(object: Callback<ResponseExFollower>{
-                override fun onResponse(
-                    call: Call<ResponseExFollower>,
-                    response: Response<ResponseExFollower>
-                ) {
-                    if(response.isSuccessful){
-                        // 기존 팔로워 리스트 초기화
-                        followers.clear()
-                        // 새로운 팔로워 리스트 추가
-                        followers.addAll(listOf(response.body()!!.nickname))
-                        // 리스트뷰 갱신 코드 추가
-                        adapter.notifyDataSetChanged()
-
-                    }
-                }
-                override fun onFailure(call: Call<ResponseExFollower>, t: Throwable) {
-                    Log.d("response", "실패$t")
-                    Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
-                }
-
-            })
             showFollowersDialog()
         }
 
@@ -272,7 +267,7 @@ class ExpendAct : AppCompatActivity() {
         val listView: ListView = dialog.findViewById(R.id.listView)
 
         // ArrayAdapter를 사용해 ListView에 팔로워 목록 데이터 연결
-        //var adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
+        var adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
         listView.adapter = adapter
 
          listView.setOnItemClickListener { parent, view, position, id ->
