@@ -38,13 +38,13 @@ interface ApiInter {
     fun getDiaryMylist(): Call<ResponseMyDiary>
 
     //통계관련
-    @GET("/statistics/daily/{user?date}")
+    @GET("/statistics_app/daily?user=6&date=24-05-10}")
     fun getStatisticsDaily(): Call<List<ResponseStatDay>> //일별
-    @GET("/statistics/weekly/{user?date}")
+    @GET("/statistics_app/weekly?user=6&date=24-05-10")
     fun getStatisticsWeekly(): Call<List<ResponseStatWeek>> //주별
-    @GET("/statistics/monthly/{user?year?month}")
+    @GET("/statistics_app/monthly?user=6&year=2024&month=05")
     fun getStatisticsMonthly(): Call<List<ResponseStatMonth>> //월별
-    @GET("/statistics/yearly/{user?year}")
+    @GET("/statistics_app/yearly?user=6&year=2024")
     fun getStatisticsYearly(): Call<List<ResponseStatYear>> //연별
 
     //로그인
