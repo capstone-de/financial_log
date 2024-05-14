@@ -103,33 +103,32 @@ class HomeMain: AppCompatActivity() {
         }*/
 
         // 점 표시
-        data_calender.api.getcalender().enqueue(object : Callback<ResponseCalender>{
+        data_calender.api.getcalender().enqueue(object : Callback<ResponseCalendar>{
             override fun onResponse(
-                call: Call<ResponseCalender>,
-                response: Response<ResponseCalender>
+                call: Call<ResponseCalendar>,
+                response: Response<ResponseCalendar>
             ) {
                 if(response.isSuccessful){
                     val responseCalendar = response.body()
                     responseCalendar?.let { calendar ->
                         // 노란색 점 표시
                         calendar.diary.forEach { diary ->
-                            calendarView.addDecorator(YellowPointDecorator(diary.data))
+                            calendarView.addDecorator(YellowPointDecorator(diary))
                         }
 
                         // 파란색 점 표시
-                        calendar.income.forEach { income ->
-                            calendarView.addDecorator(BluePointDecorator(income.data))
-                        }
-
+//                        calendar.income.forEach { income ->
+//                            calendarView.addDecorator(BluePointDecorator(income))
+//                        }
+//
                         // 빨간색 점 표시
                         calendar.expense.forEach { expense ->
-                            calendarView.addDecorator(RedPointDecorator(expense.data))
+                            calendarView.addDecorator(RedPointDecorator(expense))
                         }
                     }
-
                 }
             }
-            override fun onFailure(call: Call<ResponseCalender>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseCalendar>, t: Throwable) {
                 Log.d("get main calender", "실패$t")
                 Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }

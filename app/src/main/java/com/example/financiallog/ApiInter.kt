@@ -25,7 +25,7 @@ interface ApiInter {
 
     //달력
     @GET("/calendar_app/getCalendar?user=6&year=2024&month=5")
-    fun getcalender():Call<ResponseCalender>
+    fun getcalender():Call<ResponseCalendar>
 
     //일기관련
     @POST("/diary_app/saveDiary")
