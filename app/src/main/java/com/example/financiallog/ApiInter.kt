@@ -13,8 +13,9 @@ interface ApiInter {
     @GET("/calendar_app/getWalletExpense?user=4&date=2024-05-07")
     fun getExpendAll(): Call<ResponseExpend>
     //지출 함꼐한 사람
-    @GET("wallet_app/saveExpense")
-    fun getfollower(): Call<ResponseExFollower>
+    @GET("wallet_app/saveExpense?user=6")
+    fun getFollower(): Call<List<String>> // ResponseExFollower 대신 List<String>을 사용
+
 
     //수입관련
     @POST("/wallet_app/saveIncome")

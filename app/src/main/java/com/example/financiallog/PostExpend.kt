@@ -8,7 +8,7 @@ data class PostExpend(
     val price : Int,
     val category: String,
     val banme : String,
-    val with_whom: HashMap<String,String>,
+    val with_whom: ArrayList<String>,
     val satisfaction: Int,
 )
 
