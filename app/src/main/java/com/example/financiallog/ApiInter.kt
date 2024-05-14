@@ -28,9 +28,9 @@ interface ApiInter {
     fun getcalender():Call<ResponseCalender>
 
     //일기관련
-    @POST("/diary/saveDiary")
+    @POST("/diary_app/saveDiary")
     fun insertDi(@Body map: HashMap<String, Any>): Call<PostDiary>?
-    @GET("/diary_app/saveDiary?user=1&date=2024-04-09")
+    @GET("/diary_app/saveDiary?user=6&date=2024-05-14")
     fun diarywriteEx(): Call<ResponseExpend>
     @GET("/diary_app/diaryList?user=user_id")
     fun getDiarylist(): Call<ResponseDiary>

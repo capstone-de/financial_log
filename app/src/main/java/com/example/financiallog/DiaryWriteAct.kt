@@ -50,6 +50,7 @@ class DiaryWriteAct : AppCompatActivity() {
     val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1
     val list_ex : ApiObject by lazy { ApiObject() };
     private var currentPhotoPath: String? = null
+    var hashtaglist = ArrayList<String>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,11 +114,11 @@ class DiaryWriteAct : AppCompatActivity() {
             val selectedChip = group.checkedChipId
             when(selectedChip){
                 R.id.open_chip -> {
-                    diarychip = "O"
+                    diarychip = "1"
                     Toast.makeText(applicationContext, "공개", Toast.LENGTH_SHORT).show()
                 }
                 R.id.private_chip -> {
-                    diarychip = "X"
+                    diarychip = "0"
                     Toast.makeText(applicationContext, "비공개", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -137,6 +138,8 @@ class DiaryWriteAct : AppCompatActivity() {
                 val hashtag = ed_tag.text.toString().trim()
                 if (hashtag.isNotEmpty()) {
                     addHashtag(hashtag)
+                    hashtaglist.add(hashtag)
+                    Log.d("hashtag add ", hashtaglist.toString())
                     ed_tag.text.clear()
                 }
                 return@setOnEditorActionListener true
@@ -164,9 +167,9 @@ class DiaryWriteAct : AppCompatActivity() {
             //val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             //startActivityForResult(intent, PICK_IMAGE_REQUEST)
 
-           // val intent = Intent(Intent.ACTION_PICK)
+            // val intent = Intent(Intent.ACTION_PICK)
             //intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-           // intent.setAction(Intent.ACTION_PICK);
+            // intent.setAction(Intent.ACTION_PICK);
             //launcher.launch(intent);
 
         })
@@ -175,33 +178,34 @@ class DiaryWriteAct : AppCompatActivity() {
         diary_save.setOnClickListener(View.OnClickListener {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
             val date = dateFormat.format(Date())
-            val content = ed_diary.toString()
-            val privacy = diarychip.toString()
-            val hashtag = tag_group.toString()
+            val content = ed_diary.text.toString()
+            val privacy = diarychip
+            val hashtag = hashtaglist
             val files = arrayOf(photo_tv,photo_tv1,photo_tv2)
 
             var input = HashMap<String, Any>()
             var tag = HashMap<String, Any>()
-            var file = HashMap<String, Any>()
-            input.put("user_id", "4")
-            input.put("date", date)
+            var file = ArrayList<String>()
+            input.put("user", "6")
+            input.put("date", date.toString())
             input.put("contents", content)
-            input.put("privacy", privacy)
+            input.put("privacy", privacy.toString())
             if (hashtag.isEmpty()){
-                input.put("hastag",tag)
+                input.put("hastag",hashtaglist)
             } else{
-                tag["hashtag"] = hashtag
-                input.put("hastag",tag)
+                Log.d("hashtag is not empty", hashtaglist.toString())
+//                tag["hashtag"] = hashtag
+                input.put("hastag",hashtaglist)
             }
             if(files.isEmpty()){
                 input.put("file",file)
             }else {
-                file["file"] = files
+//                file["file"] = files
                 input.put("file",file)
             }
             //input.put("hastag", hashtag)
             //input.put("file", Difile.toString())
-
+            Log.d("diary input", input.toString())
             apiobject.api.insertDi(input)!!.enqueue(object : Callback<PostDiary>{
                 override fun onResponse(call: Call<PostDiary>, response: Response<PostDiary>) {
                     if (response.isSuccessful) {
@@ -215,8 +219,8 @@ class DiaryWriteAct : AppCompatActivity() {
                     Log.d("test", "실패$t")
                 }
             })
-           // val intent = Intent(this, SaveDiary::class.java)
-          //  startActivity(intent)
+            // val intent = Intent(this, SaveDiary::class.java)
+            //  startActivity(intent)
         })
     }
 
