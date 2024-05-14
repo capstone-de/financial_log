@@ -155,9 +155,9 @@ class ExpendAct : AppCompatActivity() {
         })
 
         // 혼자 선택
-        var Chipalone :String? = null
         alone_chip.setOnClickListener(){
-            Chipalone = ""
+            together.clear()
+            ed_toget.setText("")
         }
 
         // 함께 하는 사람
@@ -277,9 +277,18 @@ class ExpendAct : AppCompatActivity() {
              val selectedFollower = followers[position]
              Toast.makeText(this, "Selected follower: $selectedFollower", Toast.LENGTH_SHORT).show()
              // 선택된 팔로워의 텍스트를 사용할 수 있도록 처리
-             together.add(selectedFollower)
+ //            together.add(selectedFollower)
              Log.d("----selected together----", together.toString())
-             ed_toget.setText(selectedFollower) // Display the selected follower on the screen
+             // 선택된 팔로워 목록에 추가/제거
+             if (together.contains(selectedFollower)) {
+                 together.remove(selectedFollower)
+             } else {
+                 together.add(selectedFollower)
+             }
+             // 선택된 팔로워 목록 표시
+             val selectedFollowersText = together.joinToString(", ")
+             ed_toget.setText(selectedFollowersText)
+ //            ed_toget.setText(selectedFollower) // Display the selected follower on the screen
              dialog.dismiss() // 다이얼로그 닫기
          }
         dialog.show()
