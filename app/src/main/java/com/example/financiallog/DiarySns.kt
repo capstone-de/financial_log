@@ -43,8 +43,9 @@ class DiarySns : AppCompatActivity(){
             ) {
                 if(response.isSuccessful){
                     val data = response.body()!!
-                    val data_1 = response.body()!!.hashtag
-                    val diaryadapter = DiaryListAdapter(data,data_1)
+                    // ResponseDiary 객체를 포함하는 리스트를 생성합니다.
+                    val dataList = arrayListOf(data) // 여기서는 단일 객체를 리스트에 추가합니다.
+                    val diaryadapter = DiaryListAdapter(dataList) // 수정된 리스트를 어댑터에 전달합니다.
                     feed_list.adapter = diaryadapter
                     Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
 

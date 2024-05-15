@@ -10,7 +10,7 @@ interface ApiInter {
     // 지출관련
     @POST("/wallet_app/saveExpense")
     fun insertEx(@Body map: HashMap<String, Any>): Call<PostExpend>?
-    @GET("/calendar_app/getWalletExpense?user=4&date=2024-05-07")
+    @GET("/calendar_app/getWalletExpense?user=6&date=2024-05-15")
     fun getExpendAll(): Call<ResponseExpend>
     //지출 함꼐한 사람
     @GET("wallet_app/saveExpense?user=6")
@@ -20,7 +20,7 @@ interface ApiInter {
     //수입관련
     @POST("/wallet_app/saveIncome")
     fun insertIn(@Body map: HashMap<String, String>): Call<PostIncome>?
-    @GET("/calendar_app/getWalletIncome?user=4&date=2024-05-07")
+    @GET("/calendar_app/getWalletIncome?user=6&date=2024-05-15")
     fun getIncomeAll(): Call<ResponseIncome>
 
     //달력
@@ -34,7 +34,7 @@ interface ApiInter {
     fun diarywriteEx(): Call<ResponseExpend>
     @GET("/diary_app/diaryList?user=user_id")
     fun getDiarylist(): Call<ResponseDiary>
-    @GET("/diary_app/myDiaryList?user=4")
+    @GET("/diary_app/myDiaryList?user=6")
     fun getDiaryMylist(): Call<ResponseMyDiary>
 
     //통계관련

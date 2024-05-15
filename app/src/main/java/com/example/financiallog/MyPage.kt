@@ -67,8 +67,6 @@ class MyPage : AppCompatActivity() {
                 if(response.isSuccessful){
                     val data = response.body()!!.myDiaryList
                     val data_1 = response.body()!!
-                    //val data_2 = response.body()!!.hashtag
-                    //val data_3 = response.body()!!.following
                     val mylistadapter = DiaryMyListAdapter(data,data_1)
                     mypage_list.adapter = mylistadapter
                     Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()

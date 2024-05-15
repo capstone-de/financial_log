@@ -1,7 +1,10 @@
 package com.example.financiallog
 
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.text.style.ForegroundColorSpan
+import android.text.style.LineBackgroundSpan
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
@@ -22,9 +25,8 @@ class RedPointDecorator(private val dateString: String) : DayViewDecorator {
     }
 
     override fun decorate(view: DayViewFacade) {
-        // DotSpan 생성자의 첫 번째 인자로 점의 색상을 지정합니다.
-        // 여기서는 Color.YELLOW를 사용하였습니다.
-        // 필요에 따라 색상을 변경하거나, 점의 크기를 지정하는 인자를 추가할 수 있습니다.
-        view.addSpan(DotSpan(5f, Color.RED))  // 여기서 5f는 점의 반지름을 의미합니다. 필요에 따라 조절 가능합니다.
+        // Specify the radius of the dot and add the custom span to the DayViewFacade.
+        view.addSpan(RedDotSpanSide(Color.RED, 5f, 10f)) // Adjust the radius as needed.
     }
+
 }

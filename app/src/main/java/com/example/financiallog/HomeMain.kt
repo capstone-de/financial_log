@@ -2,6 +2,7 @@ package com.example.financiallog
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -110,22 +111,39 @@ class HomeMain: AppCompatActivity() {
             ) {
                 if(response.isSuccessful){
                     val responseCalendar = response.body()
-                    responseCalendar?.let { calendar ->
-                        // 노란색 점 표시
-                        calendar.diary.forEach { diary ->
+                       responseCalendar?.let { calendar ->
+                            // 노란색 점 표시
+                            calendar.diary.forEach { diary ->
                             calendarView.addDecorator(YellowPointDecorator(diary))
+                            }
+
+                            // 파란색 점 표시
+                            calendar.income.forEach { income ->
+                            calendarView.addDecorator(BluePointDecorator(income))
                         }
 
-                        // 파란색 점 표시
-//                        calendar.income.forEach { income ->
-//                            calendarView.addDecorator(BluePointDecorator(income))
-//                        }
-//
-                        // 빨간색 점 표시
-                        calendar.expense.forEach { expense ->
+                            // 빨간색 점 표시
+                            calendar.expense.forEach { expense ->
                             calendarView.addDecorator(RedPointDecorator(expense))
+                            }
                         }
-                    }
+                    calendarView.invalidateDecorators() // 모든 Decorator 추가 후 캘린더 뷰 갱신
+
+//                        val diaryDates = response.body()?.diary?.map { dateString ->
+//                        val dateParts = dateString.split("-").map { it.toInt() }
+//                        CalendarDay.from(dateParts[0], dateParts[1] - 1, dateParts[2]) // CalendarDay의 월은 0부터 시작하므로 1을 빼줍니다.
+//                    }
+//                        val incomeDates = response.body()?.income?.map { dateString ->
+//                        val dateParts = dateString.split("-").map { it.toInt() }
+//                        CalendarDay.from(dateParts[0], dateParts[1] - 1, dateParts[2])
+//                    }
+//                        val expenseDates = response.body()?.expense?.map { dateString ->
+//                        val dateParts = dateString.split("-").map { it.toInt() }
+//                        CalendarDay.from(dateParts[0], dateParts[1] - 1, dateParts[2])
+//                    }
+//                    diaryDates?.forEach { calendarView.addDecorator(DiaryDecorator(it)) }
+//                    incomeDates?.forEach { calendarView.addDecorator(IncomeDecorator(it)) }
+//                    expenseDates?.forEach { calendarView.addDecorator(ExpenseDecorator(it)) }
                 }
             }
             override fun onFailure(call: Call<ResponseCalendar>, t: Throwable) {
@@ -134,6 +152,30 @@ class HomeMain: AppCompatActivity() {
             }
 
         })
+
+//                    val responsediary = response.body()!!.diary
+//                    val responseexpense = response.body()!!.expense
+//                    val responseincome = response.body()!!.income
+//
+//                    // Convert data to CalendarDay objects
+//                    val diaryDates = responsediary.map { LocalDate.parse(it).toCalendarDay() }
+//                    val expenseDates = responseexpense.map { LocalDate.parse(it).toCalendarDay() }
+//                    val incomeDates = responseincome.map { LocalDate.parse(it).toCalendarDay() }
+//
+//                    // Combine dates into a single map
+//                    val dateMap = mutableMapOf<CalendarDay, IntArray>()
+//                    diaryDates.forEach { dateMap.getOrPut(it) { IntArray(3) }[0] = Color.YELLOW }
+//                    incomeDates.forEach { dateMap.getOrPut(it) { IntArray(3) }[1] = Color.BLUE }
+//                    expenseDates.forEach { dateMap.getOrPut(it) { IntArray(3) }[2] = Color.RED }
+//
+//                    // Add Decorators for each date
+//                    dateMap.forEach { (date, colors) ->
+//                        calendarView.addDecorator(EventDecorator(colors, listOf(date)))
+//                    }
+
+
+
+
 
         // 지출 내역에 해당하는 날짜를 저장한 리스트
        // val expenseDates = data_ex
@@ -177,7 +219,7 @@ class HomeMain: AppCompatActivity() {
                     val data = response.body()!!.expense
                     val expendadapter = ExpendAdapter(data)
                     re_expend.adapter = expendadapter
-                    Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "지출 내역을 가져옴", Toast.LENGTH_SHORT).show()
 
                 }
             }
@@ -201,7 +243,7 @@ class HomeMain: AppCompatActivity() {
                     val data = response.body()!!.income
                     val incomeadapter = IncomeAdapter(data)
                     re_income.adapter = incomeadapter
-                    Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "수입 내역 가져옴", Toast.LENGTH_SHORT).show()
 
                 }
             }
@@ -301,6 +343,14 @@ class HomeMain: AppCompatActivity() {
         val dateFormat = DateTimeFormatter.ofPattern("MM월 dd일", Locale.getDefault())
         return date.format(dateFormat)
     }
+    fun getCurrentFormattedDate(): String {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return currentDate.format(formatter)
+    }
+
+    fun LocalDate.toCalendarDay(): CalendarDay = CalendarDay.from(year, monthValue - 1, dayOfMonth)
+
 
 }
 
