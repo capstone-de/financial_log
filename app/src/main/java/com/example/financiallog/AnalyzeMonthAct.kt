@@ -1,10 +1,10 @@
 package com.example.financiallog
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -13,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
 class AnalyzeMonthAct: AppCompatActivity() {
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.analyze_month)
@@ -54,16 +55,14 @@ class AnalyzeMonthAct: AppCompatActivity() {
                             startActivity(intent)
                         }
                         2 -> {
-                            //현재 액티비티 이동은 생략
+                            val intent = Intent(this@AnalyzeMonthAct, AnalyzeMonthAct::class.java)
+                            startActivity(intent)
                         }
                         3 -> {
                             val intent = Intent(this@AnalyzeMonthAct, AnalyzeyearlyAct::class.java)
                             startActivity(intent)
                         }
                     }
-                    tab_analyze.getTabAt(it.position)?.select() //선택된 탭으로 설정
-                    // 선택된 탭에 대한 표시 추가
-                    it.view.isSelected = true
                 }
             }
 
@@ -74,8 +73,8 @@ class AnalyzeMonthAct: AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // 탭이 다시 선택될 때 필요한 처리
             }
-
         })
+
 
         //하단바 클릭 시
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_view)
@@ -114,6 +113,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
                 }
             }; true
         }
+
     }
     private fun showMoreMenu() {
         val moreBottomView = BottomNavigationView(this)
@@ -130,23 +130,28 @@ class AnalyzeMonthAct: AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-
                 R.id.add_expend -> {
                     // More 2 메뉴 선택 시 동작 구현
                     val intent = Intent(this, ExpendAct::class.java)
                     startActivity(intent)
                     true
                 }
-
                 R.id.add_diary -> {
                     // More 3 메뉴 선택 시 동작 구현
                     val intent = Intent(this, DiaryWriteAct::class.java)
                     startActivity(intent)
                     true
                 }
-
                 else -> false
             }
         }
+
+        // 새로운 BottomNavigationView를 화면에 표시합니다.
+        // 여기서는 예시로 다이얼로그 형태로 표시하였습니다.
+        val dialog = AlertDialog.Builder(this)
+            .setView(moreBottomView)
+            .create()
+        dialog.show()
     }
+
 }

@@ -31,7 +31,7 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/follower_num"
+        android:id="@+id/following_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="95dp"

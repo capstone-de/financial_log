@@ -1,8 +1,10 @@
 package com.example.financiallog
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -21,37 +26,67 @@ class MyPage : AppCompatActivity() {
     lateinit var following_ntv: TextView;
     lateinit var follower: TextView;
     lateinit var follower_ntv: TextView;
-    lateinit var user_id: TextView;
-    lateinit var mypage_list: RecyclerView;
+    lateinit var user_nickname: TextView;
     lateinit var btn_more: Button; lateinit var today :Date; lateinit var mFormat :SimpleDateFormat;
+    val list_data :ApiObject by lazy { ApiObject() }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mypage_home)
 
         year_tv = findViewById<TextView>(R.id.year_text)
         following = findViewById<TextView>(R.id.textView6)
-        following_ntv = findViewById<TextView>(R.id.follow_num)
+        following_ntv = findViewById<TextView>(R.id.following_num)
         follower = findViewById<TextView>(R.id.follower_tv)
-        follower_ntv = findViewById<TextView>(R.id.follower_num)
-        user_id = findViewById<TextView>(R.id.textView3)
+        follower_ntv = findViewById<TextView>(R.id.follow_num)
+        user_nickname = findViewById<TextView>(R.id.textView3)
         //btn_more = findViewById<Button>(R.id.imageButton4)
 
         // 날짜
         mFormat = SimpleDateFormat("yyyy.MM.dd")
         year_tv.setText(getTime())
 
-        // mypage_list = findViewById<ScrollView>(R.id.mypage_re)
-
         // 팔로워 사람 선택 시 조회
 
         //팔로잉 사람 선택 시 조회
 
+
         // 일기리스트 화면에 보여주기
-        mypage_list = findViewById<RecyclerView>(R.id.mypage_re)
+        var mypage_list = findViewById<RecyclerView>(R.id.mypage_re)
         mypage_list.layoutManager = LinearLayoutManager(this)
-        val adapter_my = DiaryListAdapter()
-        mypage_list.adapter = adapter_my
+
+        list_data.api.getDiaryMylist().enqueue(object :Callback<ResponseMyDiary>{
+            override fun onResponse(
+                call: Call<ResponseMyDiary>,
+                response: Response<ResponseMyDiary>
+
+            ) {
+                Log.d("data",response.body().toString())
+                if(response.isSuccessful){
+                    val nicknamedata = response.body()!!.nickname
+                    user_nickname.text = nicknamedata
+
+                    val followerdata = response.body()!!.follower
+                    follower_ntv.setText(followerdata)
+
+                    val followingdata = response.body()!!.following
+                    following_ntv.setText(followingdata)
+
+                    val data = response.body()!!.myDiaryList
+                    val mylistadapter = DiaryMyListAdapter(data)
+                    mypage_list.adapter = mylistadapter
+
+                    Toast.makeText(applicationContext, "모든 정보를 가져왔습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<ResponseMyDiary>, t: Throwable) {
+                Log.d("response", "실패$t")
+                Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
 
         //하단바 버튼
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_view)
@@ -64,6 +99,8 @@ class MyPage : AppCompatActivity() {
                 }
 
                 R.id.financial -> {
+                    val intent = Intent(this, AnalyzeDayAct::class.java)
+                    startActivity(intent)
                     Toast.makeText(applicationContext, "financial", Toast.LENGTH_SHORT).show()
                 }
 

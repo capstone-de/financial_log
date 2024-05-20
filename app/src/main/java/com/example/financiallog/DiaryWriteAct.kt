@@ -3,7 +3,10 @@ package com.example.financiallog
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.KeyEvent
@@ -20,6 +23,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.VolleyLog.TAG
 import com.google.android.material.chip.Chip
@@ -27,10 +32,11 @@ import com.google.android.material.chip.ChipGroup
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import java.nio.file.Files.list
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
 
 class DiaryWriteAct : AppCompatActivity() {
 
@@ -43,6 +49,9 @@ class DiaryWriteAct : AppCompatActivity() {
     lateinit var photo_tv1:ImageView; lateinit var photo_tv2:ImageView;
     lateinit var openchip:Chip; lateinit var privatechip:Chip; lateinit var tag_group:ChipGroup;
     val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1
+    val list_ex : ApiObject by lazy { ApiObject() };
+    private var currentPhotoPath: String? = null
+    var hashtaglist = ArrayList<String>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +88,26 @@ class DiaryWriteAct : AppCompatActivity() {
 
 
         // 지출 내역 불러오기
+        re_expend.layoutManager = LinearLayoutManager(this)
+        list_ex.api.getExpendAll().enqueue(object : Callback<ResponseExpend> {
+            override fun onResponse(
+                call: Call<ResponseExpend>,
+                response: Response<ResponseExpend>
+            ) {
+                if(response.isSuccessful){
+                    val data = response.body()!!.expense
+                    val expendadapter = ExpendAdapter(data)
+                    re_expend.adapter = expendadapter
+                    Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+            override fun onFailure(call: Call<ResponseExpend>, t: Throwable) {
+                Log.d("response", "실패$t")
+                Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
 
         // 공개 비공개 눌렀을 때
@@ -87,11 +116,11 @@ class DiaryWriteAct : AppCompatActivity() {
             val selectedChip = group.checkedChipId
             when(selectedChip){
                 R.id.open_chip -> {
-                    diarychip = openchip.text.toString()
+                    diarychip = "1"
                     Toast.makeText(applicationContext, "공개", Toast.LENGTH_SHORT).show()
                 }
                 R.id.private_chip -> {
-                    diarychip = privatechip.text.toString()
+                    diarychip = "0"
                     Toast.makeText(applicationContext, "비공개", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -111,6 +140,8 @@ class DiaryWriteAct : AppCompatActivity() {
                 val hashtag = ed_tag.text.toString().trim()
                 if (hashtag.isNotEmpty()) {
                     addHashtag(hashtag)
+                    hashtaglist.add(hashtag)
+                    Log.d("hashtag add ", hashtaglist.toString())
                     ed_tag.text.clear()
                 }
                 return@setOnEditorActionListener true
@@ -122,12 +153,25 @@ class DiaryWriteAct : AppCompatActivity() {
         // 사진 버튼 눌렀을 때
         photo_btn.setOnClickListener(View.OnClickListener{
 
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            //갤러리 열기
+            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
 
-           // val intent = Intent(Intent.ACTION_PICK)
+            //카메라 열기
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            // 두 가지 Intent 실행
+            val chooser = Intent.createChooser(galleryIntent, "Select Image")
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
+            startActivityForResult(chooser, PICK_IMAGE_REQUEST)
+
+
+            //val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            //startActivityForResult(intent, PICK_IMAGE_REQUEST)
+
+            // val intent = Intent(Intent.ACTION_PICK)
             //intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-           // intent.setAction(Intent.ACTION_PICK);
+            // intent.setAction(Intent.ACTION_PICK);
             //launcher.launch(intent);
 
         })
@@ -136,19 +180,34 @@ class DiaryWriteAct : AppCompatActivity() {
         diary_save.setOnClickListener(View.OnClickListener {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
             val date = dateFormat.format(Date())
-            val content = ed_diary.toString()
-            val privacy = diarychip.toString()
-            val hashtag = tag_group.toString()
-            val Difile = photo_tv
+            val content = ed_diary.text.toString()
+            val privacy = diarychip
+            val hashtag = hashtaglist
+            val files = arrayOf(photo_tv,photo_tv1,photo_tv2)
 
             var input = HashMap<String, Any>()
-            input.put("user_id", "4")
-            input.put("date", date)
+            var tag = HashMap<String, Any>()
+            var file = ArrayList<String>()
+            input.put("user", "6")
+            input.put("date", date.toString())
             input.put("contents", content)
-            input.put("privacy", privacy)
-            input.put("hastag", hashtag)
-            input.put("file", Difile.toString())
-
+            input.put("privacy", privacy.toString())
+            if (hashtag.isEmpty()){
+                input.put("hastag",hashtaglist)
+            } else{
+                Log.d("hashtag is not empty", hashtaglist.toString())
+//                tag["hashtag"] = hashtag
+                input.put("hastag",hashtaglist)
+            }
+            if(files.isEmpty()){
+                input.put("file",file)
+            }else {
+//                file["file"] = files
+                input.put("file",file)
+            }
+            //input.put("hastag", hashtag)
+            //input.put("file", Difile.toString())
+            Log.d("diary input", input.toString())
             apiobject.api.insertDi(input)!!.enqueue(object : Callback<PostDiary>{
                 override fun onResponse(call: Call<PostDiary>, response: Response<PostDiary>) {
                     if (response.isSuccessful) {
@@ -158,18 +217,13 @@ class DiaryWriteAct : AppCompatActivity() {
                         startActivity(intnet)
                     }
                 }
-
                 override fun onFailure(call: Call<PostDiary>, t: Throwable) {
                     Log.d("test", "실패$t")
                 }
-
             })
-
-           // val intent = Intent(this, SaveDiary::class.java)
-          //  startActivity(intent)
+            // val intent = Intent(this, SaveDiary::class.java)
+            //  startActivity(intent)
         })
-
-
     }
 
     private fun addHashtag(hashtag: String) {
@@ -185,9 +239,27 @@ class DiaryWriteAct : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
-            val imageUri = data?.data
-            // 이미지뷰에 이미지 설정
-            photo_tv.setImageURI(imageUri)
+            if (data?.clipData != null) {
+                // 여러 장 선택
+                val count = data.clipData?.itemCount ?: 0
+                for (i in 0 until count) {
+                    val imageUri = data.clipData?.getItemAt(i)?.uri
+                    // 이미지뷰에 이미지 설정
+                    photo_tv.setImageURI(imageUri)
+                    photo_tv1.setImageURI(imageUri)
+                    photo_tv2.setImageURI(imageUri)
+                }
+            } else {
+                // 단일 이미지 선택
+                val imageUri = data?.data
+                photo_tv.setImageURI(imageUri)
+            }
+        } else if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
+            // 카메라로 찍은 사진 처리
+            val imageBitmap = BitmapFactory.decodeFile(currentPhotoPath)
+            photo_tv.setImageBitmap(imageBitmap)
+            //val imageBitmap = data?.extras?.get("data") as Bitmap
+            //photo_tv.setImageBitmap(imageBitmap)
         }
     }
 
@@ -214,6 +286,23 @@ class DiaryWriteAct : AppCompatActivity() {
         var mNow = System.currentTimeMillis()
         today = Date(mNow)
         return mFormat.format(today)
+    }
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
+            val photoFile = createImageFile()
+            currentPhotoPath = photoFile.absolutePath
+            val photoURI = FileProvider.getUriForFile(this, "com.example.android.fileprovider", photoFile)
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+            startActivityForResult(takePictureIntent, 101)
+        }
+    }
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
+            currentPhotoPath = absolutePath
+        }
     }
 
 }

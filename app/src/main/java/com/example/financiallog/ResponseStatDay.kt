@@ -9,5 +9,5 @@ data class ResponseStatDay(
         val category: String,
         val bname: String,
         val price: Int
-)
+    )
 }

@@ -10,33 +10,48 @@ interface ApiInter {
     // 지출관련
     @POST("/wallet_app/saveExpense")
     fun insertEx(@Body map: HashMap<String, Any>): Call<PostExpend>?
-    @GET("/calendar_app/getWalletExpense?user=4&date=2024-05-07")
+    @GET("/calendar_app/getWalletExpense?user=6&date=2024-05-15")
     fun getExpendAll(): Call<ResponseExpend>
+    //지출 함꼐한 사람
+    @GET("wallet_app/saveExpense?user=6")
+    fun getFollower(): Call<List<String>> // ResponseExFollower 대신 List<String>을 사용
+
 
     //수입관련
     @POST("/wallet_app/saveIncome")
     fun insertIn(@Body map: HashMap<String, String>): Call<PostIncome>?
-    @GET("/calendar_app/getWalletIncome?user=4&date=2024-05-07")
+    @GET("/calendar_app/getWalletIncome?user=6&date=2024-05-15")
     fun getIncomeAll(): Call<ResponseIncome>
 
+    //달력
+    @GET("/calendar_app/getCalendar?user=6&year=2024&month=5")
+    fun getcalender():Call<ResponseCalendar>
+
     //일기관련
-    @POST("/diary/saveDiary")
+    @POST("/diary_app/saveDiary")
     fun insertDi(@Body map: HashMap<String, Any>): Call<PostDiary>?
-    @GET("/diary_app/saveDiary?user=1&date=2024-04-09")
-    fun diarywriteEx(): Call<List<PostDiary>>
+    @GET("/diary_app/saveDiary?user=6&date=2024-05-14")
+    fun diarywriteEx(): Call<ResponseExpend>
     @GET("/diary_app/diaryList?user=user_id")
-    fun getDiarylist(): Call<List<PostDiary>>
-    @GET("/diary_app/myDiaryList?user=4")
-    fun getDiaryMylist(): Call<List<PostDiary>>
+    fun getDiarylist(): Call<ArrayList<ResponseDiary>>
+    @GET("/diary_app/myDiaryList?user=6")
+    fun getDiaryMylist(): Call<ResponseMyDiary>
 
     //통계관련
-    @GET("/statistics/daily/{user?date}")
+    @GET("/statistics_app/daily?user=6&date=24-05-10}")
     fun getStatisticsDaily(): Call<List<ResponseStatDay>> //일별
-    @GET("/statistics/weekly/{user?date}")
+    @GET("/statistics_app/weekly?user=6&date=24-05-10")
     fun getStatisticsWeekly(): Call<List<ResponseStatWeek>> //주별
-    @GET("/statistics/monthly/{user?year?month}")
+    @GET("/statistics_app/monthly?user=6&year=2024&month=05")
     fun getStatisticsMonthly(): Call<List<ResponseStatMonth>> //월별
-    @GET("/statistics/yearly/{user?year}")
+    @GET("/statistics_app/yearly?user=6&year=2024")
     fun getStatisticsYearly(): Call<List<ResponseStatYear>> //연별
 
+    //로그인
+    @GET("/login/signIn")
+    fun signIn(): Call<ResponseExpend>
+
+    //회원가입
+    @POST("/login/signUp")
+    fun signUp(@Body map: HashMap<String, Any>): Call<PostExpend>?
 }
