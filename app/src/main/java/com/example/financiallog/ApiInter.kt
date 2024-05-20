@@ -4,6 +4,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface ApiInter {
 
@@ -38,8 +39,14 @@ interface ApiInter {
     fun getDiaryMylist(): Call<ResponseMyDiary>
 
     //통계관련
-    @GET("/statistics_app/daily?user=6&date=24-05-10}")
-    fun getStatisticsDaily(): Call<List<ResponseStatDay>> //일별
+    @GET("/statistics_app/daily")
+    fun getStatisticsDaily(
+        @Query("user") userId: Int,
+        @Query("date") date: String
+    ): Call<List<ResponseStatDay>> // 일별 (현재 작성 중인 act에서 이렇게 안하면 오류가 발생해 임시방편
+
+    /*@GET("/statistics_app/daily?user=6&date=24-05-10}")
+    fun getStatisticsDaily(): Call<List<ResponseStatDay>> //일별*/
     @GET("/statistics_app/weekly?user=6&date=24-05-10")
     fun getStatisticsWeekly(): Call<List<ResponseStatWeek>> //주별
     @GET("/statistics_app/monthly?user=6&year=2024&month=05")
