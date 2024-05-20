@@ -72,17 +72,18 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="585dp"
+        android:layout_height="0dp"
         android:layout_marginTop="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yearly_tv">
+        app:layout_constraintTop_toBottomOf="@+id/yearly_tv"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -95,14 +96,7 @@
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.514"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.347"
-                    tools:ignore="MissingClass" />
+                    android:layout_margin="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -126,8 +120,7 @@
                     android:layout_width="230dp"
                     android:layout_height="120dp"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="3dp"
-                    tools:ignore="MissingClass" />
+                    android:layout_marginTop="3dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -150,14 +143,7 @@
                     android:id="@+id/chart2"
                     android:layout_width="match_parent"
                     android:layout_height="127dp"
-                    android:layout_margin="9dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.514"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.347"
-                    tools:ignore="MissingClass" />
+                    android:layout_margin="9dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

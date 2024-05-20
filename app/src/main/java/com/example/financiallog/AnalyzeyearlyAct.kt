@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -14,16 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
 class AnalyzeyearlyAct: AppCompatActivity() {
-    lateinit var year_tv : TextView;lateinit var year_btn : ImageView;
-    //lateinit var 스크롤뷰
-    //lateinit var year_mchart : chart;
-
-    lateinit var year_sata : TextView;
-    //lateinit var year_sata_chart : TextView; <육각형 도형>
-
-    lateinit var year_catex : TextView;
-    //lateinit var year_catex : barchart;
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +25,6 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         val tab_week =findViewById<TabLayout>(R.id.week)
         val tab_month = findViewById<TabLayout>(R.id.month)
         val tab_yearly = findViewById<TabLayout>(R.id.yearly)
-
-
 
         //가계부 버튼 클릭 시
         analyze_btn.setOnClickListener(View.OnClickListener{
@@ -186,3 +172,4 @@ class AnalyzeyearlyAct: AppCompatActivity() {
     }
 
 }
+

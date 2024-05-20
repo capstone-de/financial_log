@@ -2,6 +2,7 @@ package com.example.financiallog
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -103,69 +104,40 @@ class HomeMain: AppCompatActivity() {
         }*/
 
         // 점 표시
-        data_calender.api.getcalender().enqueue(object : Callback<ResponseCalender>{
+        data_calender.api.getcalender().enqueue(object : Callback<ResponseCalendar>{
+            @SuppressLint("SuspiciousIndentation")
             override fun onResponse(
-                call: Call<ResponseCalender>,
-                response: Response<ResponseCalender>
+                call: Call<ResponseCalendar>,
+                response: Response<ResponseCalendar>
             ) {
                 if(response.isSuccessful){
                     val responseCalendar = response.body()
-                    responseCalendar?.let { calendar ->
-                        // 노란색 점 표시
-                        calendar.diary.forEach { diary ->
-                            calendarView.addDecorator(YellowPointDecorator(diary.data))
-                        }
+                        responseCalendar?.let { calendar ->
+                            // 노란색 점 표시
+                            calendar.diary.forEach { diary ->
+                            calendarView.addDecorator(YellowPointDecorator(diary))
+                            }
 
-                        // 파란색 점 표시
-                        calendar.income.forEach { income ->
-                            calendarView.addDecorator(BluePointDecorator(income.data))
-                        }
+                            // 파란색 점 표시
+                            calendar.income.forEach { income ->
+                            calendarView.addDecorator(BluePointDecorator(income))
+                            }
 
-                        // 빨간색 점 표시
-                        calendar.expense.forEach { expense ->
-                            calendarView.addDecorator(RedPointDecorator(expense.data))
+                            // 빨간색 점 표시
+                            calendar.expense.forEach { expense ->
+                            calendarView.addDecorator(RedPointDecorator(expense))
+                            }
                         }
-                    }
+                    calendarView.invalidateDecorators() // 모든 Decorator 추가 후 캘린더 뷰 갱신
 
                 }
             }
-
-            override fun onFailure(call: Call<ResponseCalender>, t: Throwable) {
-                Log.d("response", "실패$t")
+            override fun onFailure(call: Call<ResponseCalendar>, t: Throwable) {
+                Log.d("get main calender", "실패$t")
                 Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
 
         })
-
-        // 지출 내역에 해당하는 날짜를 저장한 리스트
-       // val expenseDates = data_ex
-       // val expenseDecorator = CustomDayViewDecorator(Color.RED, expenseDates.toHashSet())
-       // calender.addDecorator(expenseDecorator)
-
-        // 수입 내역에 해당하는 날짜를 저장한 리스트
-        /*Incombtn.btn_save.setOnClickListener(View.OnClickListener{
-            val today = CalendarDay.today()
-            datesWithEvent.add(today)
-            calender.addDecorator(CustomDayViewDecorator(Color.BLUE, datesWithEvent))
-        })*/
-
-       // val incomeDates =
-       // val incomeDecorator = CustomDayViewDecorator(Color.BLUE, incomeDates.toHashSet())
-      //  calender.addDecorator(incomeDecorator)
-
-        // 일기에 해당하는 날짜를 저장한 리스트
-       // val diaryDates =
-       // val diaryDecorator = CustomDayViewDecorator(Color.YELLOW, diaryDates.toHashSet())
-      //  calender.addDecorator(diaryDecorator)
-        /*Diarybtn.diary_save.setOnClickListener {
-            // 오늘 날짜를 datesWithEvent 집합에 추가
-            val today = CalendarDay.today()
-            DiaryEvent.add(today)
-
-            // 노란색 점 표시
-            calender.addDecorator(CustomDayViewDecorator(Color.YELLOW, DiaryEvent))
-        }*/
-
 
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
@@ -179,8 +151,7 @@ class HomeMain: AppCompatActivity() {
                     val data = response.body()!!.expense
                     val expendadapter = ExpendAdapter(data)
                     re_expend.adapter = expendadapter
-                    Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
-
+                    Toast.makeText(applicationContext, "지출 내역을 가져옴", Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<ResponseExpend>, t: Throwable) {
@@ -189,7 +160,6 @@ class HomeMain: AppCompatActivity() {
             }
 
         })
-
 
         // 수입 내역 화면에 보여주기
         re_income = findViewById<RecyclerView>(R.id.income_re)
@@ -203,7 +173,7 @@ class HomeMain: AppCompatActivity() {
                     val data = response.body()!!.income
                     val incomeadapter = IncomeAdapter(data)
                     re_income.adapter = incomeadapter
-                    Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "수입 내역 가져옴", Toast.LENGTH_SHORT).show()
 
                 }
             }
@@ -251,7 +221,6 @@ class HomeMain: AppCompatActivity() {
                 }
             }; true
         }
-
 
     }
 
@@ -303,6 +272,14 @@ class HomeMain: AppCompatActivity() {
         val dateFormat = DateTimeFormatter.ofPattern("MM월 dd일", Locale.getDefault())
         return date.format(dateFormat)
     }
+    fun getCurrentFormattedDate(): String {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return currentDate.format(formatter)
+    }
+
+    fun LocalDate.toCalendarDay(): CalendarDay = CalendarDay.from(year, monthValue - 1, dayOfMonth)
+
 
 }
 

@@ -21,6 +21,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -32,8 +33,10 @@ class ExpendAct : AppCompatActivity() {
     lateinit var alone_chip: CheckBox; lateinit var seek_bar:SeekBar; lateinit var seek_zero : TextView;
     lateinit var seek_per :TextView; val apiobject : ApiObject by lazy { ApiObject() };
     lateinit var textView:TextView; lateinit var group_expend : ChipGroup;
-    val followers = listOf("User1", "User2", "User3", "User4");  lateinit var together :String;
-
+//    var followers = listOf("User1", "User2", "User3", "User4");
+    var followers: MutableList<String> = mutableListOf()
+    var together = ArrayList<String>()
+    //var adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
 
     lateinit var foodchip:Chip; lateinit var cultualchip:Chip; lateinit var taxchip:Chip; lateinit var livingchip:Chip;
     lateinit var educhip:Chip; lateinit var dueschip:Chip; lateinit var medicalchip:Chip; lateinit var shoppingchip:Chip;
@@ -152,12 +155,32 @@ class ExpendAct : AppCompatActivity() {
         })
 
         // 혼자 선택
-        var Chipalone :String? = null
         alone_chip.setOnClickListener(){
-            Chipalone = ""
+            together.clear()
+            ed_toget.setText("")
         }
 
         // 함께 하는 사람
+        apiobject.api.getFollower().enqueue(object: Callback<List<String>> {
+            override fun onResponse(
+                call: Call<List<String>>,
+                response: Response<List<String>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        followers.addAll(it) // 직접 리스트를 추가
+                        Log.d("----------------", followers.toString())
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+                Log.e("response", "Failed to load follower information", t)
+                Toast.makeText(applicationContext, "Failed to retrieve follower information. Please check your network status.", Toast.LENGTH_LONG).show()
+            }
+        })
+
+
         ed_toget.setOnClickListener {
             showFollowersDialog()
         }
@@ -174,19 +197,17 @@ class ExpendAct : AppCompatActivity() {
             val Exsatis = textView.text.toString()
 
             var input = HashMap<String, Any>()
-            var with_whom = HashMap<String, String>()
-            var with_Whom = HashMap<String, String>()
-            input.put("user","4")
+            input.put("user","6")
             input.put("price",Exmoney)
-            input.put("date", date)
+            input.put("date", date.toString())
             input.put("category", Excate.toString())
             input.put("bname", Exshop)
+//            input.put("with_whom", together)
             if (ExTogether.isEmpty()){
-//                input.put("with_whom",ExCheck)
-                input.put("with_whom", with_whom)
-            }else if(ExTogether != null){
-                with_Whom["with_whom"] = together
-                input.put("with_whom", with_Whom)
+                input.put("with_whom", together)
+            }else{
+                Log.d("together is not empty", together.toString())
+                input.put("with_whom", together)
             }
             input.put("satisfaction", Exsatis)
 
@@ -196,15 +217,15 @@ class ExpendAct : AppCompatActivity() {
                     response: retrofit2.Response<PostExpend>
                 ) {
                     if(response.isSuccessful) {
-                        Log.d("test", response.body().toString())
+                        var data = response.body() // GsonConverter를 사용해 데이터매핑
                         var intnet = Intent(applicationContext,SaveCheck::class.java)
                         startActivity(intnet)
-                        var data = response.body() // GsonConverter를 사용해 데이터매핑
+                        Log.d("test", input.toString())
                     }
                 }
 
                 override fun onFailure(call: Call<PostExpend>, t: Throwable) {
-                    Log.d("test", "실패$t")
+                    Log.d("test", "지출 저장 실패$t")
                 }
 
             })
@@ -248,7 +269,7 @@ class ExpendAct : AppCompatActivity() {
         val listView: ListView = dialog.findViewById(R.id.listView)
 
         // ArrayAdapter를 사용해 ListView에 팔로워 목록 데이터 연결
-        val adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
+        var adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
         listView.adapter = adapter
 
          listView.setOnItemClickListener { parent, view, position, id ->
@@ -256,8 +277,18 @@ class ExpendAct : AppCompatActivity() {
              val selectedFollower = followers[position]
              Toast.makeText(this, "Selected follower: $selectedFollower", Toast.LENGTH_SHORT).show()
              // 선택된 팔로워의 텍스트를 사용할 수 있도록 처리
-             together = selectedFollower
-             ed_toget.setText(selectedFollower) // Display the selected follower on the screen
+ //            together.add(selectedFollower)
+             Log.d("----selected together----", together.toString())
+             // 선택된 팔로워 목록에 추가/제거
+             if (together.contains(selectedFollower)) {
+                 together.remove(selectedFollower)
+             } else {
+                 together.add(selectedFollower)
+             }
+             // 선택된 팔로워 목록 표시
+             val selectedFollowersText = together.joinToString(", ")
+             ed_toget.setText(selectedFollowersText)
+ //            ed_toget.setText(selectedFollower) // Display the selected follower on the screen
              dialog.dismiss() // 다이얼로그 닫기
          }
         dialog.show()

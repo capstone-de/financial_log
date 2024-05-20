@@ -7,11 +7,6 @@ data class ResponseDiary(
     val nickname : String,
     val date : String,
     val contents : String,
-    val hashtag : ArrayList<DataDiary>
-
-) {
-    data class DataDiary(
-        val hashtag :String
-    )
-}
+    val hashtag : List<String>
+)
 

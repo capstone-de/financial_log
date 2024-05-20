@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -15,22 +13,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
 class AnalyzeMonthAct: AppCompatActivity() {
-    lateinit var month_tv : TextView; lateinit var month_btn : ImageButton;
-    lateinit var income_tv : TextView;lateinit var expend_tv : TextView;
-    lateinit var income_im : ImageView;lateinit var expend_im : ImageView;
-
-    lateinit var income_price : TextView;lateinit var expend_price : TextView;
-    //lateinit var month_chart : TextView; lateinit var cate_chart : TextView;
-    lateinit var expendran_tv : TextView; lateinit var ranking1_ntv : TextView;
-    lateinit var ranking1_ttv : TextView;lateinit var ranking1_ptv : TextView;
-    lateinit var ranking2_ntv : TextView;lateinit var ranking2_ttv : TextView;
-    lateinit var ranking2_ptv : TextView;lateinit var ranking3_ntv : TextView;
-    lateinit var ranking3_ctv : TextView;lateinit var ranking3_ptv : TextView;
-    //5위까지
-    lateinit var catebest_tv : TextView;
-    lateinit var satisbest_tv : TextView; lateinit var satisbest_cate : TextView;
-    lateinit var satisbest_expen : TextView;lateinit var satisbest_ptv : TextView;
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,28 +27,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         val tab_month = findViewById<TabLayout>(R.id.month)
         val tab_yearly = findViewById<TabLayout>(R.id.yearly)
 
-        month_tv = findViewById<TextView>(R.id.monthly_tv)
-        month_btn = findViewById<ImageButton>(R.id.m_underButton)
-
-        //현재 월
-
-        //월 변경
-        month_btn.setOnClickListener(View.OnClickListener{
-
-        })
-
-        //이번달 총수입
-
-        //이번달 총지출
-
-        //월 차트
-
-        //월 소비 순위
-
-        //월 베스트소비 카테고리
-
-        //가장 만족한 월 소비
-
+        val date_text = findViewById<TextView>(R.id.monthly_tv)
 
         //가계부 버튼 클릭 시
         analyze_btn.setOnClickListener(View.OnClickListener{
@@ -113,6 +74,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
                 // 탭이 다시 선택될 때 필요한 처리
             }
         })
+
 
         //하단바 클릭 시
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_view)

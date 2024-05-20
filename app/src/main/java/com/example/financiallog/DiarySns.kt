@@ -15,6 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.stream.Collectors.toList
 
 
 class DiarySns : AppCompatActivity(){
@@ -25,8 +26,6 @@ class DiarySns : AppCompatActivity(){
     lateinit var mFormat :SimpleDateFormat;
     val diary_list : ApiObject by lazy { ApiObject() }
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sns_feed)
@@ -36,21 +35,25 @@ class DiarySns : AppCompatActivity(){
         // 일기리스트 화면에 보여주기
         feed_list = findViewById<RecyclerView>(R.id.feed_re)
         feed_list.layoutManager = LinearLayoutManager(this)
-        diary_list.api.getDiarylist().enqueue(object : Callback<ResponseDiary> {
+        diary_list.api.getDiarylist().enqueue(object : Callback<ArrayList<ResponseDiary>> {
             override fun onResponse(
-                call: Call<ResponseDiary>,
-                response: Response<ResponseDiary>
+                call: Call<ArrayList<ResponseDiary>>,
+                response: Response<ArrayList<ResponseDiary>>
             ) {
                 if(response.isSuccessful){
                     val data = response.body()!!
-                    val data_1 = response.body()!!.hashtag
-                    val diaryadapter = DiaryListAdapter(data,data_1)
+                    Log.d("response", response.body().toString())
+                    // ResponseDiary 객체를 포함하는 리스트를 생성합니다.
+                    //val dataList = arrayListOf(data) // 여기서는 단일 객체를 리스트에 추가합니다.
+                    val diaryadapter = DiaryListAdapter(data) // 수정된 리스트를 어댑터에 전달합니다.
                     feed_list.adapter = diaryadapter
                     Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
-
+                }else {
+                    // 에러 처리
+                    Log.e("API_ERROR", "Error: ${response.code()}")
                 }
             }
-            override fun onFailure(call: Call<ResponseDiary>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<ResponseDiary>>, t: Throwable) {
                 Log.d("response", "실패$t")
                 Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }

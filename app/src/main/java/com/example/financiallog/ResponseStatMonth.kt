@@ -43,6 +43,4 @@ data class ResponseStatMonth (
         val category: String,
         val totalExpense: Int?
     )
-
 }
-
