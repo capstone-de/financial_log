@@ -9,10 +9,26 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class AnalyzeDayAct: AppCompatActivity() {
+
+    lateinit var date_tv : TextView;
+    lateinit var income_tv : TextView;lateinit var expend_tv : TextView;
+    lateinit var slash_tv : TextView;
+    lateinit var dayexp_list : RecyclerView;
+    lateinit var DFormat :SimpleDateFormat;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +37,7 @@ class AnalyzeDayAct: AppCompatActivity() {
         val analyze_btn = findViewById<Button>(R.id.btn_analyze)
         val analyzedi_btn = findViewById<Button>(R.id.btn_diary)
         val tab_analyze =findViewById<TabLayout>(R.id.tabLayout)
+
         val tab_day = findViewById<TabLayout>(R.id.day)
         val tab_week =findViewById<TabLayout>(R.id.week)
         val tab_month = findViewById<TabLayout>(R.id.month)
@@ -29,14 +46,55 @@ class AnalyzeDayAct: AppCompatActivity() {
         val left_btn = findViewById<ImageButton>(R.id.leftButton)
         val right_btn =findViewById<ImageButton>(R.id.rightButton)
 
-        val date_text = findViewById<TextView>(R.id.date_text)
-        val income_tv =findViewById<TextView>(R.id.day_income_text)
-        val expend_tv = findViewById<TextView>(R.id.day_expend_text)
-        val slash_tv = findViewById<TextView>(R.id.slash)
-<<<<<<< HEAD
-=======
+        date_tv = findViewById<TextView>(R.id.date_text)
+        income_tv =findViewById<TextView>(R.id.day_income_text)
+        expend_tv = findViewById<TextView>(R.id.day_expend_text)
+        slash_tv = findViewById<TextView>(R.id.slash)
 
->>>>>>> f4e1deaa07d48dd614c2f63056791c8a9f026487
+        dayexp_list = findViewById<RecyclerView>(R.id.analyday_re)
+
+        //날짜 표시
+        DFormat = SimpleDateFormat("MM월 dd일 ", Locale.KOREAN)
+        //date_tv.setText(getTime())
+
+        //mFormat = SimpleDateFormat("yyyy.MM.dd")
+        //date_tv.setText(getTime())
+        //val dateFormat = SimpleDateFormat("MM-dd-EE")
+
+        //총 수입
+        val tIncome_tv = findViewById<TextView>(R.id.day_income_text)
+
+        // Retrofit 인스턴스 생성
+        val retrofit = Retrofit.Builder()
+            .baseUrl("/statistics/daily/{user?date}") // 실제 API URL로 변경
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiService = retrofit.create(ApiService::class.java)
+
+        // API 호출
+        apiService.getStatDay().enqueue(object : Callback<ResponseStatDay> {
+            override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
+                if (response.isSuccessful) {
+                    val responseStatDay = response.body()
+                    if (responseStatDay != null) {
+                        // totalIncome 값을 설정합니다.
+                        tIncome_tv.text = "${responseStatDay.totalIncome} 원"
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseStatDay>, t: Throwable) {
+                // 에러 처리
+            }
+        })
+
+
+
+        //총 지출
+
+        //
+
 
         //가계부 버튼 클릭 시
         analyze_btn.setOnClickListener(View.OnClickListener{
@@ -106,6 +164,7 @@ class AnalyzeDayAct: AppCompatActivity() {
                 }
             }
         })
+
 
 
         //하단바 클릭 시

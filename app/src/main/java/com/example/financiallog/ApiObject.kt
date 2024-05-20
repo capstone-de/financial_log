@@ -71,7 +71,14 @@ interface ApiInsertExpend {
 interface ApiInsertIncome {
     @POST("wallet_app/saveIncome/")
     fun insertIn(@Body map: HashMap<String?, String?>?): Call<IncomeAdapter.IncomeList?>?
-}*/
+}
+
+interface Apiget
+
+
+
+
+*/
 
 
 

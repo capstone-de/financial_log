@@ -12,6 +12,10 @@ interface ApiInter {
     fun insertEx(@Body map: HashMap<String, Any>): Call<PostExpend>?
     @GET("/calendar_app/getWalletExpense?user=4&date=2024-05-07")
     fun getExpendAll(): Call<ResponseExpend>
+    //지출 함꼐한 사람
+    @GET("wallet_app/saveExpense?user=6")
+    fun getFollower(): Call<List<String>> // ResponseExFollower 대신 List<String>을 사용
+
 
     //수입관련
     @POST("/wallet_app/saveIncome")
@@ -31,11 +35,7 @@ interface ApiInter {
     @GET("/diary_app/diaryList?user=user_id")
     fun getDiarylist(): Call<ResponseDiary>
     @GET("/diary_app/myDiaryList?user=4")
-<<<<<<< HEAD
-    fun getDiaryMylist(): Call<List<PostDiary>>
-=======
     fun getDiaryMylist(): Call<ResponseMyDiary>
->>>>>>> f4e1deaa07d48dd614c2f63056791c8a9f026487
 
     //통계관련
     @GET("/statistics/daily/{user?date}")
@@ -47,8 +47,6 @@ interface ApiInter {
     @GET("/statistics/yearly/{user?year}")
     fun getStatisticsYearly(): Call<List<ResponseStatYear>> //연별
 
-<<<<<<< HEAD
-=======
     //로그인
     @GET("/login/signIn")
     fun signIn(): Call<ResponseExpend>
@@ -56,5 +54,4 @@ interface ApiInter {
     //회원가입
     @POST("/login/signUp")
     fun signUp(@Body map: HashMap<String, Any>): Call<PostExpend>?
->>>>>>> f4e1deaa07d48dd614c2f63056791c8a9f026487
 }

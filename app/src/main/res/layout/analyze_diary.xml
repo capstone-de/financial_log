@@ -77,5 +77,16 @@
         tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
         app:srcCompat="@drawable/analyze_diary_box" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_view"
+        android:layout_width="409dp"
+        android:layout_height="86dp"
+        android:layout_marginBottom="1dp"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/menu_bottom"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="1dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
