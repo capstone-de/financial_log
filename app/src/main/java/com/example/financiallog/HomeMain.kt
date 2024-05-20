@@ -105,13 +105,14 @@ class HomeMain: AppCompatActivity() {
 
         // 점 표시
         data_calender.api.getcalender().enqueue(object : Callback<ResponseCalendar>{
+            @SuppressLint("SuspiciousIndentation")
             override fun onResponse(
                 call: Call<ResponseCalendar>,
                 response: Response<ResponseCalendar>
             ) {
                 if(response.isSuccessful){
                     val responseCalendar = response.body()
-                       responseCalendar?.let { calendar ->
+                        responseCalendar?.let { calendar ->
                             // 노란색 점 표시
                             calendar.diary.forEach { diary ->
                             calendarView.addDecorator(YellowPointDecorator(diary))
@@ -120,7 +121,7 @@ class HomeMain: AppCompatActivity() {
                             // 파란색 점 표시
                             calendar.income.forEach { income ->
                             calendarView.addDecorator(BluePointDecorator(income))
-                        }
+                            }
 
                             // 빨간색 점 표시
                             calendar.expense.forEach { expense ->
@@ -129,21 +130,6 @@ class HomeMain: AppCompatActivity() {
                         }
                     calendarView.invalidateDecorators() // 모든 Decorator 추가 후 캘린더 뷰 갱신
 
-//                        val diaryDates = response.body()?.diary?.map { dateString ->
-//                        val dateParts = dateString.split("-").map { it.toInt() }
-//                        CalendarDay.from(dateParts[0], dateParts[1] - 1, dateParts[2]) // CalendarDay의 월은 0부터 시작하므로 1을 빼줍니다.
-//                    }
-//                        val incomeDates = response.body()?.income?.map { dateString ->
-//                        val dateParts = dateString.split("-").map { it.toInt() }
-//                        CalendarDay.from(dateParts[0], dateParts[1] - 1, dateParts[2])
-//                    }
-//                        val expenseDates = response.body()?.expense?.map { dateString ->
-//                        val dateParts = dateString.split("-").map { it.toInt() }
-//                        CalendarDay.from(dateParts[0], dateParts[1] - 1, dateParts[2])
-//                    }
-//                    diaryDates?.forEach { calendarView.addDecorator(DiaryDecorator(it)) }
-//                    incomeDates?.forEach { calendarView.addDecorator(IncomeDecorator(it)) }
-//                    expenseDates?.forEach { calendarView.addDecorator(ExpenseDecorator(it)) }
                 }
             }
             override fun onFailure(call: Call<ResponseCalendar>, t: Throwable) {
@@ -152,60 +138,6 @@ class HomeMain: AppCompatActivity() {
             }
 
         })
-
-//                    val responsediary = response.body()!!.diary
-//                    val responseexpense = response.body()!!.expense
-//                    val responseincome = response.body()!!.income
-//
-//                    // Convert data to CalendarDay objects
-//                    val diaryDates = responsediary.map { LocalDate.parse(it).toCalendarDay() }
-//                    val expenseDates = responseexpense.map { LocalDate.parse(it).toCalendarDay() }
-//                    val incomeDates = responseincome.map { LocalDate.parse(it).toCalendarDay() }
-//
-//                    // Combine dates into a single map
-//                    val dateMap = mutableMapOf<CalendarDay, IntArray>()
-//                    diaryDates.forEach { dateMap.getOrPut(it) { IntArray(3) }[0] = Color.YELLOW }
-//                    incomeDates.forEach { dateMap.getOrPut(it) { IntArray(3) }[1] = Color.BLUE }
-//                    expenseDates.forEach { dateMap.getOrPut(it) { IntArray(3) }[2] = Color.RED }
-//
-//                    // Add Decorators for each date
-//                    dateMap.forEach { (date, colors) ->
-//                        calendarView.addDecorator(EventDecorator(colors, listOf(date)))
-//                    }
-
-
-
-
-
-        // 지출 내역에 해당하는 날짜를 저장한 리스트
-       // val expenseDates = data_ex
-       // val expenseDecorator = CustomDayViewDecorator(Color.RED, expenseDates.toHashSet())
-       // calender.addDecorator(expenseDecorator)
-
-        // 수입 내역에 해당하는 날짜를 저장한 리스트
-        /*Incombtn.btn_save.setOnClickListener(View.OnClickListener{
-            val today = CalendarDay.today()
-            datesWithEvent.add(today)
-            calender.addDecorator(CustomDayViewDecorator(Color.BLUE, datesWithEvent))
-        })*/
-
-       // val incomeDates =
-       // val incomeDecorator = CustomDayViewDecorator(Color.BLUE, incomeDates.toHashSet())
-      //  calender.addDecorator(incomeDecorator)
-
-        // 일기에 해당하는 날짜를 저장한 리스트
-       // val diaryDates =
-       // val diaryDecorator = CustomDayViewDecorator(Color.YELLOW, diaryDates.toHashSet())
-      //  calender.addDecorator(diaryDecorator)
-        /*Diarybtn.diary_save.setOnClickListener {
-            // 오늘 날짜를 datesWithEvent 집합에 추가
-            val today = CalendarDay.today()
-            DiaryEvent.add(today)
-
-            // 노란색 점 표시
-            calender.addDecorator(CustomDayViewDecorator(Color.YELLOW, DiaryEvent))
-        }*/
-
 
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
@@ -220,7 +152,6 @@ class HomeMain: AppCompatActivity() {
                     val expendadapter = ExpendAdapter(data)
                     re_expend.adapter = expendadapter
                     Toast.makeText(applicationContext, "지출 내역을 가져옴", Toast.LENGTH_SHORT).show()
-
                 }
             }
             override fun onFailure(call: Call<ResponseExpend>, t: Throwable) {
@@ -229,7 +160,6 @@ class HomeMain: AppCompatActivity() {
             }
 
         })
-
 
         // 수입 내역 화면에 보여주기
         re_income = findViewById<RecyclerView>(R.id.income_re)
@@ -291,7 +221,6 @@ class HomeMain: AppCompatActivity() {
                 }
             }; true
         }
-
 
     }
 

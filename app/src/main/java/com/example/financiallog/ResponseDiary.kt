@@ -7,7 +7,6 @@ data class ResponseDiary(
     val nickname : String,
     val date : String,
     val contents : String,
-    val hashtag : ArrayList<String>
-
+    val hashtag : List<String>
 )
 
