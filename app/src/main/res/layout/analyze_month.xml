@@ -32,8 +32,8 @@
 
     <LinearLayout
         android:layout_width="384dp"
-        android:layout_height="371dp"
-        android:layout_marginTop="36dp"
+        android:layout_height="380dp"
+        android:layout_marginTop="25dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
