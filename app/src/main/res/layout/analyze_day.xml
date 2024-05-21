@@ -1,6 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FAF4E9">
+
+    <TextView
+        android:id="@+id/date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="168dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="현재날짜"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/leftButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/day_income_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="118dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="5,000,000"
+        android:textColor="#2F8FFF"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leftButton" />
+
+    <TextView
+        android:id="@+id/day_expend_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="133dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="210,000"
+        android:textColor="#F66A67"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rightButton" />
+
+    <TextView
+        android:id="@+id/slash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="210dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="/"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/day_expend_text"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/day_income_text"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.widget.Button
+        android:id="@+id/btn_analyze"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="27dp"
+        android:background="@drawable/btn_analyze"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="가계부"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <android.widget.Button
+        android:id="@+id/btn_diary"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="108dp"
+        android:background="@drawable/btn_analyze1"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="일기"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        app:layout_constraintTop_toBottomOf="@+id/btn_analyze"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="일별" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="주별" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="월별" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/yearly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="연별" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <ImageButton
+        android:id="@+id/leftButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="154dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/btn_left"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/rightButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="154dp"
+        android:layout_marginEnd="104dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/btn_right"
+        tools:ignore="MissingConstraints,SpeakableTextPresentCheck" />
+
+
+    <ScrollView
+        android:id="@+id/scrollView4"
+        android:layout_width="408dp"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintVertical_bias="1.0">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/analyday_re"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/analyzeday_list" />
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_view"
+        android:layout_width="409dp"
+        android:layout_height="86dp"
+        android:layout_marginBottom="1dp"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/menu_bottom"
+        tools:ignore="MissingConstraints,"
+        tools:layout_editor_absoluteX="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -12,9 +17,10 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_main_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinancialLog"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
@@ -55,6 +61,34 @@
         </activity>
         <activity
             android:name=".MyPage"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".AnalyzeDayAct"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".AnalyzeDiaryAct"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".AnalyzeWeekAct"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".AnalyzeMonthAct"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".AnalyzeyearlyAct"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".SignInAct"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".SignUpAct"
             android:exported="true">
         </activity>
 

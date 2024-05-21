@@ -45,9 +45,14 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.2.1") //recyclerview
     // For control over item selection of both touch and mouse driven selection
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
+    implementation ("com.github.prolificinteractive:material-calendarview:2.0.1")
+    implementation ("com.jakewharton.threetenabp:threetenabp:1.4.7")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation ("com.android.volley:volley:1.2.1")
+    implementation ("com.github.PhilJay:MpAndroidChart:v3.1.0") //chart
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
