@@ -12,7 +12,7 @@
         android:layout_width="113dp"
         android:layout_height="114dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
@@ -22,6 +22,7 @@
         android:id="@+id/day_tv"
         android:layout_width="215dp"
         android:layout_height="29dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="날짜"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,26 +31,26 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
+
     <TextView
         android:id="@+id/feed_text"
         android:layout_width="235dp"
         android:layout_height="72dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="일기 내용을 적어주세요"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.909"
+        app:layout_constraintHorizontal_bias="0.914"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/day_tv"
         tools:ignore="MissingConstraints" />
 
-
     <TextView
         android:id="@+id/tag_dr"
-        android:layout_width="134dp"
-        android:layout_height="26dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="104dp"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="48dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="# 건대입구역"
         android:textColor="#624E19"
@@ -60,7 +61,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginBottom="184dp"
+        android:layout_marginBottom="200dp"
         android:background="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

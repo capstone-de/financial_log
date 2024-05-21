@@ -32,6 +32,7 @@
             android:layout_height="777dp"
             tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
             tools:layout_editor_absoluteX="0dp"
+            android:padding="8dp"
             tools:layout_editor_absoluteY="3dp"
             tools:listitem="@layout/feed_list" />
 

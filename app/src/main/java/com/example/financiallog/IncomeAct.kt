@@ -87,6 +87,25 @@ class IncomeAct : AppCompatActivity() {
             }
         }
 
+        // 수입 버튼
+        btn_incom.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, IncomeAct::class.java)
+            startActivity(intent)
+        })
+
+
+        // 지출 버튼
+        btn_expend.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, ExpendAct::class.java)
+            startActivity(intent)
+        })
+
+        // X 버튼
+        btn_x.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this, HomeMain::class.java)
+            startActivity(intent)
+        })
+
 
         // 저장 버튼 시
         btn_save.setOnClickListener(View.OnClickListener {
@@ -145,26 +164,6 @@ class IncomeAct : AppCompatActivity() {
             val intent = Intent(this, SaveDiary::class.java)
             startActivity(intent)*/
 
-            })
-
-
-            // 수입 버튼
-            btn_incom.setOnClickListener(View.OnClickListener {
-                val intent = Intent(this, IncomeAct::class.java)
-                startActivity(intent)
-            })
-
-
-            // 지출 버튼
-            btn_expend.setOnClickListener(View.OnClickListener {
-                val intent = Intent(this, ExpendAct::class.java)
-                startActivity(intent)
-            })
-
-            // X 버튼
-            btn_x.setOnClickListener(View.OnClickListener {
-                val intent = Intent(this, HomeMain::class.java)
-                startActivity(intent)
             })
 
 
