@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.VolleyLog.TAG
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -89,7 +91,7 @@ class DiaryWriteAct : AppCompatActivity() {
 
         // 지출 내역 불러오기
         re_expend.layoutManager = LinearLayoutManager(this)
-        list_ex.api.getExpendAll().enqueue(object : Callback<ResponseExpend> {
+        list_ex.api.getExpendAll(6,getCurrentFormattedDate()).enqueue(object : Callback<ResponseExpend> {
             override fun onResponse(
                 call: Call<ResponseExpend>,
                 response: Response<ResponseExpend>
@@ -304,5 +306,11 @@ class DiaryWriteAct : AppCompatActivity() {
             currentPhotoPath = absolutePath
         }
     }
+    fun getCurrentFormattedDate(): String {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return currentDate.format(formatter)
+    }
+
 
 }

@@ -11,8 +11,11 @@ interface ApiInter {
     // 지출관련
     @POST("/wallet_app/saveExpense")
     fun insertEx(@Body map: HashMap<String, Any>): Call<PostExpend>?
-    @GET("/calendar_app/getWalletExpense?user=6&date=2024-05-15")
-    fun getExpendAll(): Call<ResponseExpend>
+    @GET("/calendar_app/getWalletExpense?")
+    fun getExpendAll(
+        @Query("user") userId: Int,
+        @Query("date") date: String
+    ): Call<ResponseExpend>
     //지출 함꼐한 사람
     @GET("wallet_app/saveExpense?user=6")
     fun getFollower(): Call<List<String>> // ResponseExFollower 대신 List<String>을 사용
@@ -22,7 +25,8 @@ interface ApiInter {
     @POST("/wallet_app/saveIncome")
     fun insertIn(@Body map: HashMap<String, String>): Call<PostIncome>?
     @GET("/calendar_app/getWalletIncome?user=6&date=2024-05-15")
-    fun getIncomeAll(): Call<ResponseIncome>
+    fun getIncomeAll(@Query("user") userId: Int,
+                     @Query("date") date: String): Call<ResponseIncome>
 
     //달력
     @GET("/calendar_app/getCalendar?user=6&year=2024&month=5")

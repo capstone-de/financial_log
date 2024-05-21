@@ -47,7 +47,7 @@ class DiarySns : AppCompatActivity(){
                     //val dataList = arrayListOf(data) // 여기서는 단일 객체를 리스트에 추가합니다.
                     val diaryadapter = DiaryListAdapter(data) // 수정된 리스트를 어댑터에 전달합니다.
                     feed_list.adapter = diaryadapter
-                    Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "탐색 갖고오기 성공", Toast.LENGTH_SHORT).show()
                 }else {
                     // 에러 처리
                     Log.e("API_ERROR", "Error: ${response.code()}")

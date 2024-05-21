@@ -68,10 +68,10 @@ class MyPage : AppCompatActivity() {
                     user_nickname.text = nicknamedata
 
                     val followerdata = response.body()!!.follower
-                    follower_ntv.setText(followerdata)
+                    follower_ntv.setText(followerdata.toString())
 
                     val followingdata = response.body()!!.following
-                    following_ntv.setText(followingdata)
+                    following_ntv.setText(followingdata.toString())
 
                     val data = response.body()!!.myDiaryList
                     val mylistadapter = DiaryMyListAdapter(data)

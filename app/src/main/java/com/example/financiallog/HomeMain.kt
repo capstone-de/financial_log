@@ -45,7 +45,7 @@ class HomeMain: AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val calendarView = findViewById<MaterialCalendarView>(R.id.calendar_View)
-       // cal = findViewById<CalendarView>(R.id.calView)
+        // cal = findViewById<CalendarView>(R.id.calView)
         datetext = findViewById<TextView>(R.id.date_text)
         expendtext = findViewById<TextView>(R.id.expend_tt)
         incometext = findViewById<TextView>(R.id.income_text)
@@ -58,7 +58,7 @@ class HomeMain: AppCompatActivity() {
                 // 선택된 날짜 텍스트 뷰에 표시
                 datetext.setText(formatDate(date.date))
                 // 선택 시 내역 가져오기
-                data_ex.api.getExpendAll().enqueue(object : Callback<ResponseExpend> {
+                data_ex.api.getExpendAll(6,getFormattedDate(date.date)).enqueue(object : Callback<ResponseExpend> {
                     override fun onResponse(
                         call: Call<ResponseExpend>,
                         response: Response<ResponseExpend>
@@ -77,7 +77,7 @@ class HomeMain: AppCompatActivity() {
                     }
 
                 })
-                data_in.api.getIncomeAll().enqueue(object : Callback<ResponseIncome> {
+                data_in.api.getIncomeAll(6,getFormattedDate(date.date)).enqueue(object : Callback<ResponseIncome> {
                     override fun onResponse(
                         call: Call<ResponseIncome>,
                         response: Response<ResponseIncome>
@@ -112,22 +112,22 @@ class HomeMain: AppCompatActivity() {
             ) {
                 if(response.isSuccessful){
                     val responseCalendar = response.body()
-                        responseCalendar?.let { calendar ->
-                            // 노란색 점 표시
-                            calendar.diary.forEach { diary ->
+                    responseCalendar?.let { calendar ->
+                        // 노란색 점 표시
+                        calendar.diary.forEach { diary ->
                             calendarView.addDecorator(YellowPointDecorator(diary))
-                            }
-
-                            // 파란색 점 표시
-                            calendar.income.forEach { income ->
-                            calendarView.addDecorator(BluePointDecorator(income))
-                            }
-
-                            // 빨간색 점 표시
-                            calendar.expense.forEach { expense ->
-                            calendarView.addDecorator(RedPointDecorator(expense))
-                            }
                         }
+
+                        // 파란색 점 표시
+                        calendar.income.forEach { income ->
+                            calendarView.addDecorator(BluePointDecorator(income))
+                        }
+
+                        // 빨간색 점 표시
+                        calendar.expense.forEach { expense ->
+                            calendarView.addDecorator(RedPointDecorator(expense))
+                        }
+                    }
                     calendarView.invalidateDecorators() // 모든 Decorator 추가 후 캘린더 뷰 갱신
 
                 }
@@ -142,7 +142,7 @@ class HomeMain: AppCompatActivity() {
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
         re_expend.layoutManager = LinearLayoutManager(this)
-        data_ex.api.getExpendAll().enqueue(object : Callback<ResponseExpend> {
+        data_ex.api.getExpendAll(6, getCurrentFormattedDate()).enqueue(object : Callback<ResponseExpend> {
             override fun onResponse(
                 call: Call<ResponseExpend>,
                 response: Response<ResponseExpend>
@@ -164,7 +164,7 @@ class HomeMain: AppCompatActivity() {
         // 수입 내역 화면에 보여주기
         re_income = findViewById<RecyclerView>(R.id.income_re)
         re_income.layoutManager = LinearLayoutManager(this)
-        data_in.api.getIncomeAll().enqueue(object : Callback<ResponseIncome> {
+        data_in.api.getIncomeAll(6,getCurrentFormattedDate()).enqueue(object : Callback<ResponseIncome> {
             override fun onResponse(
                 call: Call<ResponseIncome>,
                 response: Response<ResponseIncome>
@@ -278,8 +278,12 @@ class HomeMain: AppCompatActivity() {
         return currentDate.format(formatter)
     }
 
+    fun getFormattedDate(date: LocalDate): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
+        return date.format(formatter)
+    }
+
     fun LocalDate.toCalendarDay(): CalendarDay = CalendarDay.from(year, monthValue - 1, dayOfMonth)
 
 
 }
-
