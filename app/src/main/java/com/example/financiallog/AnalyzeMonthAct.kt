@@ -2,6 +2,7 @@ package com.example.financiallog
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -16,7 +17,13 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +35,10 @@ class AnalyzeMonthAct: AppCompatActivity() {
     lateinit var expend_text: TextView
     lateinit var mFormat: SimpleDateFormat
     lateinit var currentDate: Date
+    lateinit var monthChart: BarChart
+    lateinit var mon_cateChart: BarChart
 
+    val apiobject: ApiObject by lazy { ApiObject() }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +60,9 @@ class AnalyzeMonthAct: AppCompatActivity() {
         income_text = findViewById(R.id.in_price)
         expend_text = findViewById(R.id.ex_price)
 
+        monthChart = findViewById((R.id.mon_chart))
+        mon_cateChart = findViewById((R.id.mon_chart2))
+
         // 날짜 표시
         mFormat = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
         currentDate = Date()
@@ -57,7 +70,8 @@ class AnalyzeMonthAct: AppCompatActivity() {
 
         month_btn.setOnClickListener { showMonthPickerDialog() } // 다른 달 선택 다이얼로그 표시
 
-        //월 수입 표시
+        // 데이터
+        getDataForMonthComparison()
 
 
 
@@ -259,5 +273,63 @@ class AnalyzeMonthAct: AppCompatActivity() {
         return Pair(totalIncome, totalExpense)
     }*/
 
+    private fun getDataForMonthComparison() {
+        // Replace with your actual API implementation
+        apiobject.api.getStatisticsMonthly().enqueue(object : Callback<List<ResponseStatMonth>> {
+            override fun onResponse(call: Call<List<ResponseStatMonth>>, response: Response<List<ResponseStatMonth>>) {
+                if (response.isSuccessful) {
+                    val data = response.body()
+                    data?.let {
+                        if (it.isNotEmpty()) {
+                            // Assuming the API returns a list with at least one element
+                            updateBarChart(it[0].category)
+                        }
+                    }
+                } else {
+                    // Handle API call failure
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseStatMonth>>, t: Throwable) {
+                // Handle API call failure
+            }
+        })
+    }
+
+    private fun updateBarChart(categoryData: ResponseStatMonth.MonthlyCategory) {
+        val barEntries = mutableListOf<BarEntry>()
+        val lastMonthExpenses = categoryData.lastMonth.associateBy { it.category }
+        val thisMonthExpenses = categoryData.thisMonth.associateBy { it.category }
+
+        thisMonthExpenses.forEach { index, expense ->
+            val category = expense.category
+            val thisMonthExpense = expense.totalExpense ?: 0
+
+            val lastMonthExpense = lastMonthExpenses[category]?.totalExpense ?: 0
+            val increasedExpense = thisMonthExpense - lastMonthExpense
+
+            if (increasedExpense > 0) {
+                barEntries.add(BarEntry(index.toFloat(), increasedExpense.toFloat(), category))
+            }
+        }
+
+
+        val dataSet = BarDataSet(barEntries, "지출 증가 카테고리")
+        dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
+        dataSet.valueTextColor = Color.BLACK
+        dataSet.valueTextSize = 10f
+
+        val barData = BarData(dataSet)
+        mon_cateChart.data = barData
+
+        // X축 설정
+        val xAxis = mon_cateChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setDrawGridLines(false)
+        xAxis.granularity = 1f
+        xAxis.valueFormatter = IndexAxisValueFormatter(barEntries.map { it.data as String })
+
+        mon_cateChart.invalidate() // Refresh the chart
+    }
 
 }

@@ -5,14 +5,14 @@ data class ResponseStatMonth (
     val feb: MonthStatistics,
     val mar: MonthStatistics,
     val apr: MonthStatistics,
-    val may: MonthStatistics,
+   /* val may: MonthStatistics,
     val jun: MonthStatistics,
     val jul: MonthStatistics,
     val aug: MonthStatistics,
     val sep: MonthStatistics,
     val oct: MonthStatistics,
     val nov: MonthStatistics,
-    val dec: MonthStatistics,
+    val dec: MonthStatistics,*/
 
     val category: MonthlyCategory,
     val satisfaction: Satisfaction
@@ -28,6 +28,11 @@ data class ResponseStatMonth (
         val thisMonth: List<MonthCategoryExpense>
     )
 
+    data class MonthCategoryExpense(
+        val category: String,
+        val totalExpense: Int?
+    )
+
     data class Satisfaction(
         val satisfaction: SatisfactionItem?
     )
@@ -39,8 +44,5 @@ data class ResponseStatMonth (
         val satisfaction: Int
     )
 
-    data class MonthCategoryExpense(
-        val category: String,
-        val totalExpense: Int?
-    )
+
 }
