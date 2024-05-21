@@ -57,6 +57,10 @@ interface ApiInter {
     fun getStatisticsMonthly(): Call<List<ResponseStatMonth>> //월별
     @GET("/statistics_app/yearly?user=6&year=2024")
     fun getStatisticsYearly(): Call<List<ResponseStatYear>> //연별
+    @GET("/wordcloud_app/myDiary?user=userid")// 나의 현재 트렌드
+    fun getStatisticsMyHashtag():Call<ResponseMyHashtag>
+    @GET("/wordcloud_app/diary") //전체 트렌드
+    fun getStatisticsHashtag():Call<ResponseStatHasgtag>
 
     //로그인
     @GET("/login/signIn")
