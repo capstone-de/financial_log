@@ -7,12 +7,12 @@ data class ResponseStatMonth (
     val apr: MonthStatistics,
     val may: MonthStatistics,
     val jun: MonthStatistics,
-    /*val jul: MonthStatistics,
+    val jul: MonthStatistics,
     val aug: MonthStatistics,
     val sep: MonthStatistics,
     val oct: MonthStatistics,
     val nov: MonthStatistics,
-    val dec: MonthStatistics,*/
+    val dec: MonthStatistics,
 
     val category: MonthlyCategory,
     val satisfaction: Satisfaction

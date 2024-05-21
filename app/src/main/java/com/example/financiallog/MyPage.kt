@@ -27,7 +27,8 @@ class MyPage : AppCompatActivity() {
     lateinit var follower: TextView;
     lateinit var follower_ntv: TextView;
     lateinit var user_nickname: TextView;
-    lateinit var btn_more: Button; lateinit var today :Date; lateinit var mFormat :SimpleDateFormat;
+    lateinit var btn_more: Button; lateinit var today :Date;
+    lateinit var mFormat :SimpleDateFormat;
     val list_data :ApiObject by lazy { ApiObject() }
 
     @SuppressLint("MissingInflatedId")

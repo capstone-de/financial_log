@@ -5,14 +5,31 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.*
 
 class AnalyzeMonthAct: AppCompatActivity() {
+    lateinit var monthText: TextView
+    lateinit var income_text: TextView
+    lateinit var expend_text: TextView
+    lateinit var mFormat: SimpleDateFormat
+    lateinit var currentDate: Date
+
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +44,22 @@ class AnalyzeMonthAct: AppCompatActivity() {
         val tab_month = findViewById<TabLayout>(R.id.month)
         val tab_yearly = findViewById<TabLayout>(R.id.yearly)
 
-        val date_text = findViewById<TextView>(R.id.monthly_tv)
+        val month_btn = findViewById<ImageButton>(R.id.m_underButton)
+
+        monthText = findViewById(R.id.monthly_tv)
+        income_text = findViewById(R.id.in_price)
+        expend_text = findViewById(R.id.ex_price)
+
+        // 날짜 표시
+        mFormat = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
+        currentDate = Date()
+        monthText.text = mFormat.format(currentDate)
+
+        month_btn.setOnClickListener { showMonthPickerDialog() } // 다른 달 선택 다이얼로그 표시
+
+        //월 수입 표시
+
+
 
         //가계부 버튼 클릭 시
         analyze_btn.setOnClickListener(View.OnClickListener{
@@ -153,5 +185,79 @@ class AnalyzeMonthAct: AppCompatActivity() {
             .create()
         dialog.show()
     }
+
+
+    private fun showMonthPickerDialog() {
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+
+        // 다이얼로그에 표시할 월 목록 생성
+        val months = (1..12).map { month -> "${String.format("%02d", month)}월" }.toTypedArray()
+
+        AlertDialog.Builder(this)
+            .setTitle("달 선택")
+            .setItems(months) { dialog, which ->
+                calendar.set(Calendar.MONTH, which)
+                currentDate = calendar.time
+                monthText.text = mFormat.format(currentDate)
+
+                // 선택한 달에 해당하는 데이터로 업데이트
+                //fetchMonthlyData(currentYear)
+            }
+            .show()
+    }
+
+    /*private fun fetchMonthlyData(year: Int) {
+        val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+
+        apiobject.api.getStatisticsMonthly(userId = 6, date = dateString).enqueue(object : Callback<List<ResponseStatMonth>>{
+            override fun onResponse(call: Call<ResponseStatMonth>, response: Response<ResponseStatMonth>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { responseData ->
+                        updateIncomeAndExpense(responseData)
+                    }
+                } else {
+                    // 응답 실패 처리
+                    Toast.makeText(this@AnalyzeMonthAct, "데이터를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                    updateIncomeAndExpense(null)
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseStatMonth>, t: Throwable) {
+                // 네트워크 오류 처리
+                Toast.makeText(this@AnalyzeMonthAct, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                updateIncomeAndExpense(null)
+            }
+        })
+    }
+
+    private fun updateIncomeAndExpense(data: ResponseStatMonth?) {
+        val monthStatistics = getMonthStatistics(data)
+        income_text.text = monthStatistics.first.toString()
+        expend_text.text = monthStatistics.second.toString()
+    }
+
+    private fun getMonthStatistics(data: ResponseStatMonth?): Pair<Int, Int> {
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+        val monthStatistics = when (currentMonth) {
+            0 -> data?.jan
+            1 -> data?.feb
+            2 -> data?.mar
+            3 -> data?.apr
+            4 -> data?.may
+            5 -> data?.jun
+            6 -> data?.jul
+            7 -> data?.aug
+            8 -> data?.sep
+            9 -> data?.oct
+            10 -> data?.nov
+            11 -> data?.dec
+            else -> null
+        }
+        val totalIncome = monthStatistics?.totalIncome ?: 0
+        val totalExpense = monthStatistics?.totalExpense ?: 0
+        return Pair(totalIncome, totalExpense)
+    }*/
+
 
 }

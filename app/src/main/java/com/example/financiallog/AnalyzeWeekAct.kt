@@ -285,7 +285,6 @@ class AnalyzeWeekAct : AppCompatActivity() {
         for (day in days) {
             val income = day.totalIncome ?: 0
             val expense = day.totalExpense ?: 0
-            totalAmount += (income - expense)
         }
         return totalAmount
     }

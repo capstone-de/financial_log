@@ -30,8 +30,8 @@ class AnalyzeDayAct : AppCompatActivity() {
     lateinit var currentDate: Date
     lateinit var mFormat: SimpleDateFormat
 
-    val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1
-    val list_cate : ApiObject by lazy { ApiObject() };
+    val apiobject : ApiObject by lazy { ApiObject() };
+    //val list_cate : ApiObject by lazy { ApiObject() };
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
