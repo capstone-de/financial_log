@@ -1,6 +1,7 @@
 package com.example.financiallog
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -80,52 +82,45 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         }
 
         //나의 관심사
-        hashtag_data.api.getStatisticsMyHashtag().enqueue(object : Callback<ResponseMyHashtag> {
-            override fun onResponse(
-                call: Call<ResponseMyHashtag>,
-                response: Response<ResponseMyHashtag>
-            ) {
-                if(response.isSuccessful){
-                    val data = response.body()!!
-                    val imgurl = data.img.url
-
-                    //Glide로 이미지 설정
-                    Glide.with(this@AnalyzeDiaryAct)
-                        .load(imgurl)
-                        .into(diary_view1)
-
-                    Toast.makeText(applicationContext, "나의 관심사 data 가져옴", Toast.LENGTH_SHORT).show()
+        hashtag_data.api.getStatisticsMyHashtag().enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { responseBody ->
+                        val inputStream = responseBody.byteStream()
+                        val bitmap = BitmapFactory.decodeStream(inputStream)
+                        runOnUiThread {
+                            diary_view1.setImageBitmap(bitmap)
+                        }
+                    }
+                } else {
+                    Toast.makeText(applicationContext, "이미지를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<ResponseMyHashtag>, t: Throwable) {
-                Log.d("나의현재트렌드","정보를 가져오지 못함")
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("이미지로드", "실패: ${t.message}")
             }
-
         })
 
-        //해시 태그 트렌드
-        hashtag_data.api.getStatisticsHashtag().enqueue(object :Callback<ResponseStatHasgtag>{
-            override fun onResponse(
-                call: Call<ResponseStatHasgtag>,
-                response: Response<ResponseStatHasgtag>
-            ) {
-                if(response.isSuccessful){
-                    val hashtagdata = response.body()!!
-                    val hashurl = hashtagdata.img.url
-
-                    Glide.with(this@AnalyzeDiaryAct)
-                        .load(hashurl)
-                        .into(diary_view2)
-
-                    Toast.makeText(applicationContext, "모든 관심사 data 가져옴", Toast.LENGTH_SHORT).show()
+        //해시태그 트랜드
+        hashtag_data.api.getStatisticsHashtag().enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { responseBody ->
+                        val inputStream = responseBody.byteStream()
+                        val bitmap = BitmapFactory.decodeStream(inputStream)
+                        runOnUiThread {
+                            diary_view2.setImageBitmap(bitmap)
+                        }
+                    }
+                } else {
+                    Toast.makeText(applicationContext, "이미지를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<ResponseStatHasgtag>, t: Throwable) {
-                Log.d("트렌드","정보를 가져오지 못함")
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("이미지로드", "실패: ${t.message}")
             }
-
         })
 
     }
