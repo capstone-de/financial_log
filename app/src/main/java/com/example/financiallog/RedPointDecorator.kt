@@ -26,7 +26,7 @@ class RedPointDecorator(private val dateString: String) : DayViewDecorator {
 
     override fun decorate(view: DayViewFacade) {
         // Specify the radius of the dot and add the custom span to the DayViewFacade.
-        view.addSpan(RedDotSpanSide(Color.parseColor("#fbe64d"), 7f, 10f)) // Adjust the radius as needed.
+        view.addSpan(RedDotSpanSide(Color.parseColor("#fbe64d"), 8f, 10f)) // Adjust the radius as needed.
     }
 
 }

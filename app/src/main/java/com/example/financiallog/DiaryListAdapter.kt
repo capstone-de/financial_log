@@ -16,7 +16,10 @@ class DiaryListAdapter(private val dataList: ArrayList<ResponseDiary>) : Recycle
             itemView.findViewById<TextView>(R.id.day_tv).text = item.date
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
             itemView.findViewById<TextView>(R.id.nickname_view).text = item.nickname
-            itemView.findViewById<TextView>(R.id.tag_dr).text = item.hashtag.joinToString(", ") // 해시태그 리스트를 문자열로 변환
+            if (item.hashtag.isEmpty())
+                itemView.findViewById<TextView>(R.id.tag_dr).text = item.hashtag.joinToString(", ") // 해시태그 리스트를 문자열로 변환
+            else
+                itemView.findViewById<TextView>(R.id.tag_dr).text = "#" + item.hashtag.joinToString(" #") // 해시태그 리스트를 문자열로 변환
             val imageView = itemView.findViewById<ImageView>(R.id.feed_image)
 
             // image가 리스트인 경우 첫 번째 이미지를 사용

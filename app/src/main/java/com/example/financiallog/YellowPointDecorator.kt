@@ -22,7 +22,7 @@ class YellowPointDecorator(private val dateString: String) : DayViewDecorator {
 
     override fun decorate(view: DayViewFacade) {
         // Specify the radius of the dot and add the custom span to the DayViewFacade.
-        view.addSpan(YellowDotSpanSide(Color.parseColor("#d08581"), 7f, 10f)) // Adjust the radius as needed.
+        view.addSpan(YellowDotSpanSide(Color.parseColor("#e56717"), 8f, 10f)) // Adjust the radius as needed.
     }
 
 }
