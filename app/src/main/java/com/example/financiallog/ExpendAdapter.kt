@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.NumberFormat
 import java.util.ArrayList
+import java.util.Locale
 import com.example.financiallog.ExpendAdapter.ExpendViewHolder as ExpendViewHolder1
 
 class ExpendAdapter(private val data: ArrayList<ResponseExpend.DataEx>):RecyclerView.Adapter<ExpendViewHolder1>(){
@@ -37,7 +39,11 @@ class ExpendAdapter(private val data: ArrayList<ResponseExpend.DataEx>):Recycler
             categoryTextView.text = koreanCategory
 
             itemView.findViewById<TextView>(R.id.shop_tv).text = item.bname
-            itemView.findViewById<TextView>(R.id.expend_tv).text = item.price.toString()
+            // 가격을 한국 통화 형식으로 변환하여 TextView에 설정
+            val priceTextView = itemView.findViewById<TextView>(R.id.expend_tv)
+            val formattedPrice = NumberFormat.getNumberInstance(Locale.KOREA).format(item.price)
+            priceTextView.text = formattedPrice
+            //itemView.findViewById<TextView>(R.id.expend_tv).text = item.price.toString()
             // 위치 정보를 저장할 배열을 준비합니다.
             val location = IntArray(2)
             // itemView의 화면 상 위치를 가져옵니다.

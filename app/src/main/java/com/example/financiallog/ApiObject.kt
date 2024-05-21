@@ -21,34 +21,6 @@ class ApiObject {
             .build()
         api = retrofit.create(ApiInter::class.java)
     }
-
-
-
-    /*var retrofitClient = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(OkHttpClient.Builder().build())
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()*/
-
-    /*var getExpend: ApiGetExpend = retrofitClient.create(ApiGetExpend::class.java)
-    var getIncome: ApiGetIncome = retrofitClient.create(ApiGetIncome::class.java)
-    var insertExpend: ApiInsertExpend = retrofitClient.create(ApiInsertExpend::class.java)
-    var insertIncome : ApiInsertIncome = retrofitClient.create(ApiInsertIncome::class.java)*/
-
-    /*private val getRetrofit by lazy{
-        Retrofit.Builder()
-            .baseUrl(Companion.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    val getRetrofitService : ApiExpend by lazy { getRetrofit.create(ApiExpend::class.java) }*/
-
-    //companion object {
-      //  private const val BASE_URL = "http://10.0.2.2:8000/"
-   // }
-
-
 }
 
 /*interface ApiGetExpend {

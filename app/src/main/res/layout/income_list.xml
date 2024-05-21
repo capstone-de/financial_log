@@ -19,9 +19,9 @@
 
     <TextView
         android:id="@+id/expend_tv"
-        android:layout_width="68dp"
+        android:layout_width="100dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginEnd="60dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="금액"
         app:layout_constraintEnd_toEndOf="parent"

@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.NumberFormat
+import java.util.Locale
 import com.example.financiallog.IncomeAdapter.IncomeViewHolder as IncomeViewHolder1
 
 class IncomeAdapter(private val data: List<ResponseIncome.DataIn>): RecyclerView.Adapter<IncomeViewHolder1>() {
@@ -30,7 +32,13 @@ class IncomeAdapter(private val data: List<ResponseIncome.DataIn>): RecyclerView
             val category = item.category
             val koreanCategory = categoryMap[category] ?: category // 매핑이 없으면 원래 카테고리를 사용
             categoryTextView.text = koreanCategory
-            itemView.findViewById<TextView>(R.id.expend_tv).text = item.price.toString()
+
+            // 가격을 한국 통화 형식으로 변환하여 TextView에 설정
+            val priceTextView = itemView.findViewById<TextView>(R.id.expend_tv)
+            val formattedPrice = NumberFormat.getNumberInstance(Locale.KOREA).format(item.price)
+            priceTextView.text = formattedPrice
+            //itemView.findViewById<TextView>(R.id.expend_tv).text = item.price.toString()
+            //itemView.findViewById<TextView>(R.id.expend_tv).text = item.price.toString()
         }
         //val catView2 = itemView.findViewById<TextView>(R.id.category_tv)
         //val payView2 = itemView.findViewById<TextView>(R.id.expend_tv)
