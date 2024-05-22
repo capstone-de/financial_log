@@ -22,7 +22,7 @@ import java.util.stream.Collectors.toList
 
 class DiarySns : AppCompatActivity(){
 
-    lateinit var year_tv : TextView;
+
     lateinit var feed_list: RecyclerView;
     lateinit var today :Date;
     lateinit var mFormat :SimpleDateFormat;
@@ -32,7 +32,6 @@ class DiarySns : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sns_feed)
 
-        year_tv = findViewById<TextView>(R.id.year_text)
 
         // 일기리스트 화면에 보여주기
         feed_list = findViewById<RecyclerView>(R.id.feed_re)
@@ -63,8 +62,8 @@ class DiarySns : AppCompatActivity(){
         })
 
         //날짜
-        mFormat = SimpleDateFormat("yyyy.MM.dd")
-        year_tv.setText(getTime())
+//        mFormat = SimpleDateFormat("yyyy.MM.dd")
+//        year_tv.setText(getTime())
 
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_view)

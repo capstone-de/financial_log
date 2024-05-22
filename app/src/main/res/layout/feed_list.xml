@@ -5,16 +5,52 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <View
+        android:id="@+id/view6"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:layout_marginTop="38dp"
+        android:background="@drawable/diarylist_back"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/feed_text"
-        android:layout_width="193dp"
-        android:layout_height="45dp"
+        android:layout_width="225dp"
+        android:layout_height="80dp"
         android:layout_marginTop="88dp"
-        android:layout_marginEnd="56dp"
+        android:layout_marginEnd="5dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="타인의 일기 내용 표시"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/nickname_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/gmarketsansttfmedium"
+        android:text="나는 개똥벌레"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="150dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="72dp"
+        android:accessibilityHeading="false"
+        android:background="#989797"
+        android:backgroundTint="#989797"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.624"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -24,15 +60,15 @@
         android:layout_height="114dp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp"
+        tools:layout_editor_absoluteY="48dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tag_dr"
         android:layout_width="300dp"
         android:layout_height="30dp"
-        android:layout_marginTop="144dp"
-        android:layout_marginEnd="44dp"
+        android:layout_marginTop="176dp"
+        android:layout_marginEnd="50dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="# 건대입구역"
         android:textColor="#624E19"
@@ -41,23 +77,10 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/nickname_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="나는 개똥벌레"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
         android:id="@+id/day_tv"
         android:layout_width="116dp"
         android:layout_height="17dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="132dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="2024"
@@ -68,11 +91,14 @@
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginBottom="190dp"
+        android:layout_marginBottom="218dp"
         android:background="@color/gray"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

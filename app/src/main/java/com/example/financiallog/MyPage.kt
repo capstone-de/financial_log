@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,6 @@ import java.util.Date
 
 class MyPage : AppCompatActivity() {
 
-    lateinit var year_tv: TextView;
     lateinit var following: TextView;
     lateinit var following_ntv: TextView;
     lateinit var follower: TextView;
@@ -37,7 +37,7 @@ class MyPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mypage_home)
 
-        year_tv = findViewById<TextView>(R.id.year_text)
+        val btn_more = findViewById<ImageView>(R.id.imageView7)
         following = findViewById<TextView>(R.id.textView6)
         following_ntv = findViewById<TextView>(R.id.following_num)
         follower = findViewById<TextView>(R.id.follower_tv)
@@ -46,8 +46,8 @@ class MyPage : AppCompatActivity() {
         //btn_more = findViewById<Button>(R.id.imageButton4)
 
         // 날짜
-        mFormat = SimpleDateFormat("yyyy.MM.dd")
-        year_tv.setText(getTime())
+//        mFormat = SimpleDateFormat("yyyy.MM.dd")
+//        year_tv.setText(getTime())
 
         // 팔로워 사람 선택 시 조회
 

@@ -8,12 +8,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.graphics.BitmapFactory
 import android.util.Base64
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class DiaryListAdapter(private val dataList: ArrayList<ResponseDiary>) : RecyclerView.Adapter<DiaryListAdapter.DiaryViewHolder>() {
 
     class DiaryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: ResponseDiary) {
-            itemView.findViewById<TextView>(R.id.day_tv).text = item.date
+            // 날짜 형식을 변환하여 TextView에 설정
+            val dateFormatInput = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+            val dateFormatOutput = SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREA)
+            val date = dateFormatInput.parse(item.date)
+            val formattedDate = dateFormatOutput.format(date)
+
+            itemView.findViewById<TextView>(R.id.day_tv).text = formattedDate
+            //itemView.findViewById<TextView>(R.id.day_tv).text = item.date
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
             itemView.findViewById<TextView>(R.id.nickname_view).text = item.nickname
             if (item.hashtag.isEmpty())
