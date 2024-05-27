@@ -43,8 +43,6 @@ class AnalyzeWeekAct : AppCompatActivity() {
     lateinit var incomePieChart: PieChart
     lateinit var expensePieChart: PieChart
 
-
-    private val userId: Int = 6 // 사용자 ID를 여기에 할당하세요
     val apiobject: ApiObject by lazy { ApiObject() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +74,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
         leftBtn.setOnClickListener { changeDate(-7) }
         rightBtn.setOnClickListener { changeDate(7) }
 
-        // 데이터 가져오기
+        // 현재 데이터 가져오기
         getDataForWeek(currentDate)
 
         // 가계부 버튼 클릭 시
@@ -278,8 +276,8 @@ class AnalyzeWeekAct : AppCompatActivity() {
     }
 
     private fun getDataForWeek(date: Date) {
-        val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
-        apiobject.api.getStatisticsWeekly().enqueue(object : Callback<List<ResponseStatWeek>> {
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+        apiobject.api.getStatisticsWeekly(6, formattedDate).enqueue(object : Callback<List<ResponseStatWeek>> {
             override fun onResponse(
                 call: Call<List<ResponseStatWeek>>,
                 response: Response<List<ResponseStatWeek>>
@@ -287,8 +285,9 @@ class AnalyzeWeekAct : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val data = response.body()
                     data?.let {
+                        val categories = extractCategories(it) // 카테고리 추출
                         updateBarChart(it)
-                        updateExpensePieChart(it)
+                        updateExpensePieChart(it, categories) // 카테고리 전달
                         updateIncomePieChart(it)
                     }
                 } else {
@@ -380,37 +379,56 @@ class AnalyzeWeekAct : AppCompatActivity() {
         return listOf("월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일")
     }
 
+    // 카테고리 추출 함수
+    private fun extractCategories(data: List<ResponseStatWeek>): List<String> {
+        val categories = mutableListOf<String>()
+        data.forEach { weekData ->
+            weekData.category.expense.forEach { expense ->
+                if (!categories.contains(expense.category)) {
+                    categories.add(expense.category)
+                }
+            }
+        }
+        return categories
+    }
+
     // 지출 파이 차트
-    private fun updateExpensePieChart(data: List<ResponseStatWeek>) {
+    private fun updateExpensePieChart(data: List<ResponseStatWeek>, categories: List<String>) {
         val entries = mutableListOf<PieEntry>()
+        val colors = mutableListOf<Int>()
 
-        // Aggregate expenses for all categories over the week
+        // 카테고리별 지출 합산
         val categoryExpenses = mutableMapOf<String, Int>()
-
         data.forEach { weekData ->
             weekData.category.expense.forEach { expense ->
                 categoryExpenses[expense.category] = categoryExpenses.getOrDefault(expense.category, 0) + expense.totalExpense
             }
         }
 
-        // Convert the aggregated data into PieEntry objects
-        categoryExpenses.forEach { (category, totalExpense) ->
-            entries.add(PieEntry(totalExpense.toFloat(), category))
+        // 카테고리 목록을 순회하며 파이 차트 데이터와 색상을 설정
+        categories.forEach { category ->
+            val expense = categoryExpenses[category] ?: 0 // 해당 카테고리의 지출이 없을 경우 0으로 처리
+            entries.add(PieEntry(expense.toFloat(), category))
+
+            // 랜덤한 색상 생성
+            val color = Color.rgb((0..255).random(), (0..255).random(), (0..255).random())
+            colors.add(color)
         }
 
+        // 파이 데이터셋 생성 및 설정
         val dataSet = PieDataSet(entries, "주간 카테고리별 지출")
-        dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
+        dataSet.colors = colors
 
+        // 파이 차트에 데이터 설정 및 업데이트
         val pieData = PieData(dataSet)
         expensePieChart.data = pieData
         expensePieChart.invalidate() // Refresh the chart
     }
 
+
     //수입 파이 차트
     private fun updateIncomePieChart(data: List<ResponseStatWeek>) {
         val entries = mutableListOf<PieEntry>()
-
-        // Aggregate income for all categories over the week
         val categoryIncome = mutableMapOf<String, Int>()
 
         data.forEach { weekData ->
@@ -419,7 +437,6 @@ class AnalyzeWeekAct : AppCompatActivity() {
             }
         }
 
-        // Convert the aggregated data into PieEntry objects
         categoryIncome.forEach { (category, totalIncome) ->
             entries.add(PieEntry(totalIncome.toFloat(), category))
         }

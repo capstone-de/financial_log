@@ -38,6 +38,15 @@ class AnalyzeMonthAct: AppCompatActivity() {
     lateinit var monthChart: BarChart
     lateinit var mon_cateChart: BarChart
 
+    lateinit var ranking_cate1: TextView;lateinit var ranking_text1: TextView;lateinit var ranking_per1: TextView;
+    lateinit var ranking_cate2: TextView;lateinit var ranking_text2: TextView;lateinit var ranking_per2: TextView;
+    lateinit var ranking_cate3: TextView;lateinit var ranking_text3: TextView;lateinit var ranking_per3: TextView;
+    lateinit var ranking_cate4: TextView;lateinit var ranking_text4: TextView;lateinit var ranking_per4: TextView;
+    lateinit var ranking_cate5: TextView;lateinit var ranking_text5: TextView;lateinit var ranking_per5: TextView;
+    lateinit var satisfaction_cate: TextView;lateinit var satisfaction_bname: TextView;lateinit var satisfaction_price: TextView;lateinit var satisfaction_per: TextView;
+    lateinit var satisfaction_textS: TextView;lateinit var satisfaction_textE: TextView;
+
+
     val apiobject: ApiObject by lazy { ApiObject() }
 
     @SuppressLint("MissingInflatedId")
@@ -63,6 +72,37 @@ class AnalyzeMonthAct: AppCompatActivity() {
         monthChart = findViewById((R.id.mon_chart))
         mon_cateChart = findViewById((R.id.mon_chart2))
 
+        //랭킹
+        ranking_cate1 = findViewById(R.id.ranking_1)
+        ranking_text1 = findViewById(R.id.ranking_text1)
+        ranking_per1 = findViewById(R.id.ranking_per1)
+
+        ranking_cate2 = findViewById(R.id.ranking_2)
+        ranking_text2 = findViewById(R.id.ranking_text2)
+        ranking_per2 = findViewById(R.id.ranking_per2)
+
+        ranking_cate3 = findViewById(R.id.ranking_3)
+        ranking_text3 = findViewById(R.id.ranking_text3)
+        ranking_per3 = findViewById(R.id.ranking_per3)
+
+        ranking_cate4 = findViewById(R.id.ranking_4)
+        ranking_text4 = findViewById(R.id.ranking_text4)
+        ranking_per4 = findViewById(R.id.ranking_per4)
+
+        ranking_cate5 = findViewById(R.id.ranking_5)
+        ranking_text5 = findViewById(R.id.ranking_text5)
+        ranking_per5 = findViewById(R.id.ranking_per5)
+
+        //만족도
+        satisfaction_cate = findViewById(R.id.month_satis_cate)
+        satisfaction_bname = findViewById(R.id.month_satis_bname)
+        satisfaction_price = findViewById(R.id.month_satis_price)
+        satisfaction_per = findViewById(R.id.month_satis_per)
+        satisfaction_textS = findViewById(R.id.month_satis)
+        satisfaction_textE = findViewById(R.id.month_satis_text)
+
+
+
         // 날짜 표시
         mFormat = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
         currentDate = Date()
@@ -70,8 +110,6 @@ class AnalyzeMonthAct: AppCompatActivity() {
 
         month_btn.setOnClickListener { showMonthPickerDialog() } // 다른 달 선택 다이얼로그 표시
 
-        // 데이터
-        getDataForMonthComparison()
 
 
 
@@ -200,6 +238,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         dialog.show()
     }
 
+    private var selectedMonth: Date = Date() // 초기화
 
     private fun showMonthPickerDialog() {
         val calendar = Calendar.getInstance()
@@ -216,19 +255,22 @@ class AnalyzeMonthAct: AppCompatActivity() {
                 monthText.text = mFormat.format(currentDate)
 
                 // 선택한 달에 해당하는 데이터로 업데이트
-                //fetchMonthlyData(currentYear)
+                getDataForMonth(selectedMonth)
             }
             .show()
     }
 
-    /*private fun fetchMonthlyData(year: Int) {
-        val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+    /*private fun fetchMonthlyData(selectedMonth: Date) {
+        val formattedDate = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(selectedMonth)
 
-        apiobject.api.getStatisticsMonthly(userId = 6, date = dateString).enqueue(object : Callback<List<ResponseStatMonth>>{
-            override fun onResponse(call: Call<ResponseStatMonth>, response: Response<ResponseStatMonth>) {
+        apiobject.api.getStatisticsMonthly(6, formattedDate).enqueue(object : Callback<List<ResponseStatMonth>>{
+            override fun onResponse(
+                call: Call<List<ResponseStatMonth>>,
+                response: Response<List<ResponseStatMonth>>
+            ) {
                 if (response.isSuccessful) {
                     response.body()?.let { responseData ->
-                        updateIncomeAndExpense(responseData)
+                        updateIncomeAndExpense(data)
                     }
                 } else {
                     // 응답 실패 처리
@@ -237,65 +279,174 @@ class AnalyzeMonthAct: AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<ResponseStatMonth>, t: Throwable) {
+            override fun onFailure(call: Call<List<ResponseStatMonth>>, t: Throwable) {
                 // 네트워크 오류 처리
+                Toast.makeText(this@AnalyzeMonthAct, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                updateIncomeAndExpense(null)
+            }
+        })
+    }*/
+
+
+    private fun getDataForMonth(date: Date) {
+        val formattedDate = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(date)
+
+        apiobject.api.getStatisticsMonthly(6, formattedDate).enqueue(object : Callback<List<ResponseStatMonth>> {
+            override fun onResponse(
+                call: Call<List<ResponseStatMonth>>,
+                response: Response<List<ResponseStatMonth>>
+            ) {
+                if (response.isSuccessful) {
+                    val data = response.body()
+                    data?.let {
+                        val monthlyCategory = createMonthlyCategory(it[0])
+                        // updateBarChart 함수에 생성한 MonthlyCategory 객체를 전달합니다.
+
+                        updateBarChart(monthlyCategory)
+                        updateIncomeAndExpense(it)
+                        getMonthStatistics(it)
+
+                        // 이번달 카테고리 데이터를 처리하여 상위 5개 카테고리와 각 카테고리의 지출 비율을 추출합니다.
+                        val top5CategoriesWithRatio = getTop5CategoriesWithRatio(it[0].category.thisMonth) // 여기서 수정된 부분입니다.
+                        // UI에 상위 5개 카테고리와 해당 비율을 표시하는 함수를 호출합니다.
+                        showTop5CategoriesWithRatio(top5CategoriesWithRatio)
+                    }
+                } else {
+                    // API 호출 실패 처리
+                    Toast.makeText(this@AnalyzeMonthAct, "데이터를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                    updateIncomeAndExpense(null)
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseStatMonth>>, t: Throwable) {
+                // API 호출 실패 처리
                 Toast.makeText(this@AnalyzeMonthAct, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                 updateIncomeAndExpense(null)
             }
         })
     }
 
-    private fun updateIncomeAndExpense(data: ResponseStatMonth?) {
-        val monthStatistics = getMonthStatistics(data)
-        income_text.text = monthStatistics.first.toString()
-        expend_text.text = monthStatistics.second.toString()
+    // MonthlyCategory 객체를 생성하는 함수
+    private fun createMonthlyCategory(data: ResponseStatMonth): ResponseStatMonth.MonthlyCategory {
+        // ResponseStatMonth에서 필요한 데이터를 추출하여 MonthlyCategory 객체를 생성합니다.
+        val lastMonth = data.category.lastMonth.map { ResponseStatMonth.MonthCategoryExpense(it.category, it.totalExpense) }
+        val thisMonth = data.category.thisMonth.map { ResponseStatMonth.MonthCategoryExpense(it.category, it.totalExpense) }
+        return ResponseStatMonth.MonthlyCategory(lastMonth, thisMonth)
     }
 
-    private fun getMonthStatistics(data: ResponseStatMonth?): Pair<Int, Int> {
+    //월별 수입 지출 표시
+    private fun updateIncomeAndExpense(data: List<ResponseStatMonth>?) {
         val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
-        val monthStatistics = when (currentMonth) {
-            0 -> data?.jan
-            1 -> data?.feb
-            2 -> data?.mar
-            3 -> data?.apr
-            4 -> data?.may
-            5 -> data?.jun
-            6 -> data?.jul
-            7 -> data?.aug
-            8 -> data?.sep
-            9 -> data?.oct
-            10 -> data?.nov
-            11 -> data?.dec
-            else -> null
+        val monthStatistics = data?.firstOrNull()?.let {
+            when (currentMonth) {
+                0 -> it.jan
+                1 -> it.feb
+                2 -> it.mar
+                3 -> it.apr
+
+                else -> null
+            }
         }
         val totalIncome = monthStatistics?.totalIncome ?: 0
         val totalExpense = monthStatistics?.totalExpense ?: 0
-        return Pair(totalIncome, totalExpense)
-    }*/
-
-    private fun getDataForMonthComparison() {
-        // Replace with your actual API implementation
-        apiobject.api.getStatisticsMonthly().enqueue(object : Callback<List<ResponseStatMonth>> {
-            override fun onResponse(call: Call<List<ResponseStatMonth>>, response: Response<List<ResponseStatMonth>>) {
-                if (response.isSuccessful) {
-                    val data = response.body()
-                    data?.let {
-                        if (it.isNotEmpty()) {
-                            // Assuming the API returns a list with at least one element
-                            updateBarChart(it[0].category)
-                        }
-                    }
-                } else {
-                    // Handle API call failure
-                }
-            }
-
-            override fun onFailure(call: Call<List<ResponseStatMonth>>, t: Throwable) {
-                // Handle API call failure
-            }
-        })
+        income_text.text = totalIncome.toString()
+        expend_text.text = totalExpense.toString()
     }
 
+
+    // 월별 총 수입과 지출을 표시하는 함수
+    /*private fun updateIncomeAndExpense(data: List<ResponseStatMonth>?) {
+        val currentMonthData = data?.firstOrNull { it.month == "apr" } // "apr" 월 데이터를 현재 월로 간주합니다.
+        val totalIncome = currentMonthData?.totalIncome ?: 0
+        val totalExpense = currentMonthData?.totalExpense ?: 0
+        income_text.text = totalIncome.toString()
+        expend_text.text = totalExpense.toString()
+    }*/
+
+
+    //4개의 월별 그래프
+    private fun getMonthStatistics(data: List<ResponseStatMonth>?) {
+        // 그래프를 그릴 데이터를 준비합니다.
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+        val monthStatisticsList = mutableListOf<ResponseStatMonth.MonthStatistics>()
+
+        data?.firstOrNull()?.let {
+            monthStatisticsList.add(it.jan)
+            monthStatisticsList.add(it.feb)
+            monthStatisticsList.add(it.mar)
+            monthStatisticsList.add(it.apr)
+        }
+
+
+        // 막대 그래프를 업데이트합니다.
+        val barEntries = monthStatisticsList.mapIndexed { index, monthData ->
+            BarEntry(index.toFloat(),
+                monthData.totalExpense?.toFloat() ?: 0f, // totalExpense가 null이면 0을 사용
+                monthData.totalIncome?.toFloat() ?: 0f    // totalIncome이 null이면 0을 사용
+            )
+        }
+
+        val dataSet = BarDataSet(barEntries, "월별 지출")
+        dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
+        dataSet.valueTextColor = Color.BLACK
+        dataSet.valueTextSize = 10f
+
+        val barData = BarData(dataSet)
+        monthChart.data = barData
+
+        // X축 설정
+        val xAxis = monthChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setDrawGridLines(false)
+        xAxis.granularity = 1f
+        xAxis.valueFormatter = IndexAxisValueFormatter(barEntries.map { it.data as String })
+
+        monthChart.invalidate() // 그래프 새로고침
+    }
+
+
+    // 이번달 카테고리 데이터에서 상위 5개 카테고리와 각 카테고리의 지출 비율을 추출하는 함수
+    private fun getTop5CategoriesWithRatio(thisMonthData: List<ResponseStatMonth.MonthCategoryExpense>): List<Pair<String, Float>> {
+        // 카테고리별 지출을 계산합니다.
+        val categoryMap = mutableMapOf<String, Int>()
+        for (categoryExpense in thisMonthData) {
+            categoryMap[categoryExpense.category] = categoryMap.getOrDefault(categoryExpense.category, 0) + (categoryExpense.totalExpense ?: 0)
+        }
+        // 지출이 많은 순서대로 정렬한 후 상위 5개의 카테고리를 추출합니다.
+        val top5Categories = categoryMap.entries.sortedByDescending { it.value }.take(5)
+        // 전체 지출 합계를 구합니다.
+        val totalExpense = categoryMap.values.sum()
+        // 각 카테고리의 지출 비율을 계산합니다.
+        return top5Categories.map { it.key to it.value.toFloat() / totalExpense }
+    }
+
+    // UI에 상위 5개 카테고리와 해당 비율을 표시하는 함수
+    private fun showTop5CategoriesWithRatio(top5CategoriesWithRatio: List<Pair<String, Float>>) {
+        // 각 순위별로 UI에 표시할 View와 Pair<String, Float> 데이터를 연결합니다.
+
+        val rankingViews = listOf(
+            Pair(ranking_cate1, ranking_per1),
+            Pair(ranking_cate2, ranking_per2),
+            Pair(ranking_cate3, ranking_per3),
+            Pair(ranking_cate4, ranking_per4),
+            Pair(ranking_cate5, ranking_per5)
+        )
+
+        for (i in top5CategoriesWithRatio.indices) {
+            if (i >= rankingViews.size) {
+                break // 상위 5개 이상의 데이터가 있으면 루프를 중단합니다.
+            }
+            val (categoryView, percentView) = rankingViews[i] // 순위에 해당하는 View들을 가져옵니다.
+            val (category, ratio) = top5CategoriesWithRatio[i] // 상위 카테고리와 해당 비율을 가져옵니다.
+
+            // View에 데이터를 설정합니다.
+            categoryView.text = category // 카테고리 이름 설정
+            percentView.text = String.format("%.2f", ratio * 100) + "%" // 비율 설정 (소수점 2자리까지)
+        }
+    }
+
+
+    //지난달 대비 증가 카테고리
     private fun updateBarChart(categoryData: ResponseStatMonth.MonthlyCategory) {
         val barEntries = mutableListOf<BarEntry>()
         val lastMonthExpenses = categoryData.lastMonth.associateBy { it.category }
@@ -331,5 +482,30 @@ class AnalyzeMonthAct: AppCompatActivity() {
 
         mon_cateChart.invalidate() // Refresh the chart
     }
+
+    private fun month_bestsatisfaction(monthData: ResponseStatMonth) {
+        val satisfactionItem = monthData.satisfaction?.satisfaction
+        if (satisfactionItem != null) {
+            val category = satisfactionItem.category
+            val bname = satisfactionItem.bname
+            val price = satisfactionItem.price
+            val satisfaction = satisfactionItem.satisfaction
+
+            // UI에 데이터를 표시합니다.
+            // 여기서는 간단히 예를 들어 TextView에 데이터를 설정하는 것으로 가정합니다.
+            satisfaction_cate.text = category
+            satisfaction_bname.text = bname
+            satisfaction_price.text = price.toString()
+            satisfaction_per.text = satisfaction.toString()
+        } else {
+            // 만족도 데이터가 없는 경우에 대한 처리를 여기에 추가합니다.
+            // 예를 들어, "데이터 없음" 등의 메시지를 표시할 수 있습니다.
+            satisfaction_cate.text = "데이터없음"
+            satisfaction_bname.text = "데이터없음"
+            satisfaction_price.text = "데이터없음"
+            satisfaction_per.text = "데이터없음"
+        }
+    }
+
 
 }
