@@ -38,4 +38,6 @@ data class ResponseStatYear(
         val category: String,
         val averageSatisfaction: Double
     )
+
+
 }

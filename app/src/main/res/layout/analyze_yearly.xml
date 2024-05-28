@@ -113,7 +113,7 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/gmarketsansttfmedium"
-                    android:text="2024년 \n만족했던 소비" />
+                    android:text="2023년 \n만족했던 소비" />
 
                 <com.github.mikephil.charting.charts.RadarChart
                     android:id="@+id/chart3"
@@ -131,7 +131,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/tv_yearly_exp"
                     android:layout_width="121dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"

@@ -15,7 +15,7 @@ class ApiObject {
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8000")
+            .baseUrl("http://10.0.2.2:8000/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -71,7 +71,14 @@ interface ApiInsertExpend {
 interface ApiInsertIncome {
     @POST("wallet_app/saveIncome/")
     fun insertIn(@Body map: HashMap<String?, String?>?): Call<IncomeAdapter.IncomeList?>?
-}*/
+}
+
+interface Apiget
+
+
+
+
+*/
 
 
 

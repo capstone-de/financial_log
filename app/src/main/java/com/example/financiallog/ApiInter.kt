@@ -45,17 +45,21 @@ interface ApiInter {
 
     //통계관련
     @GET("/statistics_app/daily")
-    fun getStatisticsDaily(
-        @Query("user") userId: Int,
-        @Query("date") date: String
-    ): Call<List<ResponseStatDay>> // 일별 (현재 작성 중인 act에서 이렇게 안하면 오류가 발생해 임시방편
+    fun getStatisticsDaily(@Query("user") userId: Int, @Query("date") date: String): Call<List<ResponseStatDay>>//일별
+
+    @GET("/statistics_app/weekly")
+    fun getStatisticsWeekly(@Query("user") userId: Int, @Query("date") date: String): Call<List<ResponseStatWeek>>//주별
+
+    @GET("/statistics_app/monthly")
+    fun getStatisticsMonthly(@Query("user") userId: Int, @Query("date") date: String): Call<List<ResponseStatMonth>> //월별
 
     /*@GET("/statistics_app/daily?user=6&date=24-05-10}")
-    fun getStatisticsDaily(): Call<List<ResponseStatDay>> //일별*/
+    fun getStatisticsDaily(): Call<List<ResponseStatDay>> //일별
+
     @GET("/statistics_app/weekly?user=6&date=24-05-10")
     fun getStatisticsWeekly(): Call<List<ResponseStatWeek>> //주별
     @GET("/statistics_app/monthly?user=6&year=2024&month=05")
-    fun getStatisticsMonthly(): Call<List<ResponseStatMonth>> //월별
+    fun getStatisticsMonthly(): Call<List<ResponseStatMonth>> //월별*/
     @GET("/statistics_app/yearly?user=6&year=2024")
     fun getStatisticsYearly(): Call<List<ResponseStatYear>> //연별
     @GET("/wordcloud_app/myDiary?user=6")// 나의 현재 트렌드
