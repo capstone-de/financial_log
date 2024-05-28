@@ -25,7 +25,7 @@ interface ApiInter {
     //수입관련
     @POST("/wallet_app/saveIncome")
     fun insertIn(@Body map: HashMap<String, String>): Call<PostIncome>?
-    @GET("/calendar_app/getWalletIncome?user=6&date=2024-05-15")
+    @GET("/calendar_app/getWalletIncome?")
     fun getIncomeAll(@Query("user") userId: Int,
                      @Query("date") date: String): Call<ResponseIncome>
 
