@@ -198,6 +198,13 @@ class AnalyzeDayAct : AppCompatActivity() {
         moreBottomView.menu.add(0, R.id.add_expend, 1, "지출")
         moreBottomView.menu.add(0, R.id.add_diary, 2, "일기")
 
+        // 새로운 BottomNavigationView를 화면에 표시합니다.
+        // 여기서는 예시로 다이얼로그 형태로 표시하였습니다.
+        val dialog = AlertDialog.Builder(this)
+            .setView(moreBottomView)
+            .create()
+        dialog.show()
+
         moreBottomView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.add_income -> {
@@ -213,19 +220,38 @@ class AnalyzeDayAct : AppCompatActivity() {
                 }
 
                 R.id.add_diary -> {
-                    val intent = Intent(this, DiaryWriteAct::class.java)
-                    startActivity(intent)
+                    // Retrofit 서비스 호출
+                    apiobject.api.diarywriteEx(6,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
+                        override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
+                            if (response.isSuccessful && response.body() != null) {
+                                // 네트워크 응답이 성공적이고 데이터가 있는 경우
+                                val intent = Intent(this@AnalyzeDayAct, DiaryWriteAct::class.java)
+                                startActivity(intent)
+                            } else {
+                                // 네트워크 응답이 실패했거나 데이터가 없는 경우
+                                Toast.makeText(this@AnalyzeDayAct, "이미 저장된 일기가 있습니다.", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss() // 다이얼로그 닫기
+                            }
+                        }
+
+                        override fun onFailure(call: Call<List<DataEx>>, t: Throwable) {
+                            // 네트워크 요청 실패 시
+                            Toast.makeText(this@AnalyzeDayAct, "네트워크 요청에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            t.printStackTrace()  // 오류 스택 트레이스를 출력하여 디버깅에 도움을 줌
+                            dialog.dismiss() // 다이얼로그 닫기
+                        }
+                    })
                     true
                 }
 
                 else -> false
             }
         }
-
-        val dialog = AlertDialog.Builder(this)
-            .setView(moreBottomView)
-            .create()
-        dialog.show()
+    }
+    fun getCurrentFormattedDate(): String {
+        val currentDate = org.threeten.bp.LocalDate.now()
+        val formatter = org.threeten.bp.format.DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return currentDate.format(formatter)
     }
 
 
