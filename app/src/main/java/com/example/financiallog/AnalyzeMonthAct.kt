@@ -27,6 +27,7 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 import java.util.*
 
 class AnalyzeMonthAct: AppCompatActivity() {
@@ -260,34 +261,6 @@ class AnalyzeMonthAct: AppCompatActivity() {
             .show()
     }
 
-    /*private fun fetchMonthlyData(selectedMonth: Date) {
-        val formattedDate = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(selectedMonth)
-
-        apiobject.api.getStatisticsMonthly(6, formattedDate).enqueue(object : Callback<List<ResponseStatMonth>>{
-            override fun onResponse(
-                call: Call<List<ResponseStatMonth>>,
-                response: Response<List<ResponseStatMonth>>
-            ) {
-                if (response.isSuccessful) {
-                    response.body()?.let { responseData ->
-                        updateIncomeAndExpense(data)
-                    }
-                } else {
-                    // 응답 실패 처리
-                    Toast.makeText(this@AnalyzeMonthAct, "데이터를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
-                    updateIncomeAndExpense(null)
-                }
-            }
-
-            override fun onFailure(call: Call<List<ResponseStatMonth>>, t: Throwable) {
-                // 네트워크 오류 처리
-                Toast.makeText(this@AnalyzeMonthAct, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                updateIncomeAndExpense(null)
-            }
-        })
-    }*/
-
-
     private fun getDataForMonth(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(date)
 
@@ -307,9 +280,11 @@ class AnalyzeMonthAct: AppCompatActivity() {
                         getMonthStatistics(it)
 
                         // 이번달 카테고리 데이터를 처리하여 상위 5개 카테고리와 각 카테고리의 지출 비율을 추출합니다.
-                        val top5CategoriesWithRatio = getTop5CategoriesWithRatio(it[0].category.thisMonth) // 여기서 수정된 부분입니다.
+                        val top5CategoriesWithRatio = getTop5CategoriesWithRatio(it[0].category.thisMonth)
                         // UI에 상위 5개 카테고리와 해당 비율을 표시하는 함수를 호출합니다.
                         showTop5CategoriesWithRatio(top5CategoriesWithRatio)
+
+                        month_bestsatisfaction(it)
                     }
                 } else {
                     // API 호출 실패 처리
@@ -441,7 +416,10 @@ class AnalyzeMonthAct: AppCompatActivity() {
 
             // View에 데이터를 설정합니다.
             categoryView.text = category // 카테고리 이름 설정
-            percentView.text = String.format("%.2f", ratio * 100) + "%" // 비율 설정 (소수점 2자리까지)
+            percentView.text = "${(ratio * 100).toInt()}%" // 비율 설정 (소수점 버리고 정수로 표시)
+
+            //percentView.text = "${Math.round(ratio * 100)}%" // 비율 설정 (반올림하여 정수로 표시)
+            //percentView.text = String.format("%.2f", ratio * 100) + "%" // 비율 설정 (소수점 2자리까지)
         }
     }
 
@@ -483,27 +461,35 @@ class AnalyzeMonthAct: AppCompatActivity() {
         mon_cateChart.invalidate() // Refresh the chart
     }
 
-    private fun month_bestsatisfaction(monthData: ResponseStatMonth) {
-        val satisfactionItem = monthData.satisfaction?.satisfaction
-        if (satisfactionItem != null) {
-            val category = satisfactionItem.category
-            val bname = satisfactionItem.bname
-            val price = satisfactionItem.price
-            val satisfaction = satisfactionItem.satisfaction
 
-            // UI에 데이터를 표시합니다.
-            // 여기서는 간단히 예를 들어 TextView에 데이터를 설정하는 것으로 가정합니다.
-            satisfaction_cate.text = category
-            satisfaction_bname.text = bname
-            satisfaction_price.text = price.toString()
-            satisfaction_per.text = satisfaction.toString()
+    private fun month_bestsatisfaction(monthData: List<ResponseStatMonth>) {
+        val satisfactionData = monthData.firstOrNull()?.satisfaction
+
+        if (satisfactionData != null) {
+            val satisfactionItem = satisfactionData.satisfaction
+            if (satisfactionItem != null) { // satisfactionItem이 null이 아닌 경우에만 처리
+                val category = satisfactionItem.category
+                val bname = satisfactionItem.bname
+                val price = satisfactionItem.price
+                val satisfaction = satisfactionItem.satisfaction
+
+                // UI에 데이터를 표시합니다.
+                satisfaction_cate.text = category
+                satisfaction_bname.text = bname
+                satisfaction_price.text = price.toString()
+                satisfaction_per.text = satisfaction.toString()
+            } else {
+                // 만족도 데이터가 없는 경우에 대한 처리를 여기에 추가합니다.
+                satisfaction_cate.text = "데이터없음"
+                satisfaction_bname.text = "데이터없음"
+                satisfaction_price.text = "데이터없음"
+                satisfaction_per.text = "데이터없음"
+            }
         } else {
             // 만족도 데이터가 없는 경우에 대한 처리를 여기에 추가합니다.
-            // 예를 들어, "데이터 없음" 등의 메시지를 표시할 수 있습니다.
-            satisfaction_cate.text = "데이터없음"
-            satisfaction_bname.text = "데이터없음"
-            satisfaction_price.text = "데이터없음"
-            satisfaction_per.text = "데이터없음"
+            satisfaction_cate.text = "없음"
+            satisfaction_price.text = "없음"
+            satisfaction_per.text = "없음"
         }
     }
 

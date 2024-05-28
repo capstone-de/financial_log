@@ -257,11 +257,8 @@ class AnalyzeWeekAct : AppCompatActivity() {
         calendar.add(Calendar.DATE, 6)
         val endOfWeek = calendar.time
 
-        // 주 번호 계산
-        calendar.time = date
-        val weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR)
-
         // 월별 주 번호 계산
+        calendar.time = date
         val weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH)
 
         val monthFormat = SimpleDateFormat("MM월", Locale.KOREAN)
@@ -274,6 +271,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
         weekText.text = weekNumberText
         weekText_date.text = weekRangeText
     }
+
 
     private fun getDataForWeek(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
