@@ -36,9 +36,9 @@ interface ApiInter {
     //일기관련
     @POST("/diary_app/saveDiary")
     fun insertDi(@Body map: HashMap<String, Any>): Call<PostDiary>?
-    @GET("/diary_app/saveDiary?user=6&date=2024-05-14")
-    fun diarywriteEx(): Call<ResponseExpend>
-    @GET("/diary_app/diaryList?user=user_id")
+    @GET("/diary_app/saveDiary?")
+    fun diarywriteEx(@Query("user") userId: Int, @Query("date") date: String): Call<List<DataEx>>
+    @GET("/diary_app/diaryList?user=6")
     fun getDiarylist(): Call<ArrayList<ResponseDiary>>
     @GET("/diary_app/myDiaryList?user=6")
     fun getDiaryMylist(): Call<ResponseMyDiary>

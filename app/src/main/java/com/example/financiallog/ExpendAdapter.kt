@@ -6,24 +6,50 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.NumberFormat
 import java.util.ArrayList
+import java.util.Locale
 import com.example.financiallog.ExpendAdapter.ExpendViewHolder as ExpendViewHolder1
 
 class ExpendAdapter(private val data: ArrayList<ResponseExpend.DataEx>):RecyclerView.Adapter<ExpendViewHolder1>(){
    // private var items = ArrayList<PostExpend>()
 
 
+
     class ExpendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: ResponseExpend.DataEx){
-            itemView.findViewById<TextView>(R.id.category_tv).text = item.category
+            // 카테고리 매핑 설정
+            val categoryMap = mapOf(
+                "tax" to "세금",
+                "food" to "음식",
+                "housing/communication" to "주거/통신",
+                "tranportation/vehicle" to "교통/차량",
+                "education" to "교육",
+                "personal event" to "경조사/회비",
+                "medical" to "병원/약국",
+                "cultural/living" to "문화생활",
+                "shopping" to "쇼핑",
+                "etc" to "기타"
+            )
+
+            // 카테고리를 변환하여 TextView에 설정
+            val categoryTextView = itemView.findViewById<TextView>(R.id.category_tv)
+            val category = item.category
+            val koreanCategory = categoryMap[category] ?: category // 매핑이 없으면 원래 카테고리를 사용
+            categoryTextView.text = koreanCategory
+
             itemView.findViewById<TextView>(R.id.shop_tv).text = item.bname
-            itemView.findViewById<TextView>(R.id.expend_tv).text = item.price.toString()
+            // 가격을 한국 통화 형식으로 변환하여 TextView에 설정
+            val priceTextView = itemView.findViewById<TextView>(R.id.expend_tv)
+            val formattedPrice = NumberFormat.getNumberInstance(Locale.KOREA).format(item.price)
+            priceTextView.text = formattedPrice
+            //itemView.findViewById<TextView>(R.id.expend_tv).text = item.price.toString()
             // 위치 정보를 저장할 배열을 준비합니다.
             val location = IntArray(2)
             // itemView의 화면 상 위치를 가져옵니다.
             itemView.getLocationOnScreen(location)
             // 위치 정보를 사용하여 로그를 출력합니다.
-            Log.d("Expend ItemPosition", "category: ${item.category}, bname: ${item.bname}, price: ${item.price}, x: ${location[0]}, y: ${location[1]}")
+            Log.d("Expend ItemPosition", "category: ${koreanCategory}, bname: ${item.bname}, price: ${item.price}, x: ${location[0]}, y: ${location[1]}")
         }
 
 

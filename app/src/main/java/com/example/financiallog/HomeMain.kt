@@ -15,9 +15,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.Callback
@@ -35,9 +37,8 @@ class HomeMain: AppCompatActivity() {
     lateinit var re_expend: RecyclerView; lateinit var re_income : RecyclerView;
     val data_ex : ApiObject by lazy { ApiObject() }; val data_in : ApiObject by lazy { ApiObject() };
     val data_calender :ApiObject by lazy { ApiObject() }
-    val Diarybtn : DiaryWriteAct by lazy { DiaryWriteAct() }
-    val Incombtn :IncomeAct by lazy { IncomeAct() }
-    private val datesWithEvent = mutableSetOf<CalendarDay>(); private val DiaryEvent = mutableSetOf<CalendarDay>()
+    val data_list:ApiObject by lazy { ApiObject() };
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -230,6 +231,13 @@ class HomeMain: AppCompatActivity() {
         moreBottomView.menu.add(0, R.id.add_expend, 1, "지출")
         moreBottomView.menu.add(0, R.id.add_diary, 2, "일기")
 
+        // 새로운 BottomNavigationView를 화면에 표시합니다.
+        // 여기서는 예시로 다이얼로그 형태로 표시하였습니다.
+        val dialog = AlertDialog.Builder(this)
+            .setView(moreBottomView)
+            .create()
+        dialog.show()
+
         // 새로운 BottomNavigationView의 클릭 이벤트를 처리합니다.
         moreBottomView.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -246,20 +254,33 @@ class HomeMain: AppCompatActivity() {
                     true
                 }
                 R.id.add_diary -> {
-                    // More 3 메뉴 선택 시 동작 구현
-                    val intent = Intent(this, DiaryWriteAct::class.java)
-                    startActivity(intent)
+                    // Retrofit 서비스 호출
+                    data_list.api.diarywriteEx(6,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
+                        override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
+                            if (response.isSuccessful && response.body() != null) {
+                                // 네트워크 응답이 성공적이고 데이터가 있는 경우
+                                val intent = Intent(this@HomeMain, DiaryWriteAct::class.java)
+                                startActivity(intent)
+                            } else {
+                                // 네트워크 응답이 실패했거나 데이터가 없는 경우
+                                Toast.makeText(this@HomeMain, "이미 저장된 일기가 있습니다.", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss() // 다이얼로그 닫기
+                            }
+                        }
+
+                        override fun onFailure(call: Call<List<DataEx>>, t: Throwable) {
+                            // 네트워크 요청 실패 시
+                            Toast.makeText(this@HomeMain, "네트워크 요청에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            t.printStackTrace()  // 오류 스택 트레이스를 출력하여 디버깅에 도움을 줌
+                            dialog.dismiss() // 다이얼로그 닫기
+                        }
+                    })
                     true
                 }
                 else -> false
             }
         }
-        // 새로운 BottomNavigationView를 화면에 표시합니다.
-        // 여기서는 예시로 다이얼로그 형태로 표시하였습니다.
-        val dialog = AlertDialog.Builder(this)
-            .setView(moreBottomView)
-            .create()
-        dialog.show()
+
     }
 
     private fun getTime(): String? {

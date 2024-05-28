@@ -7,6 +7,21 @@
     android:background="#FAF4E9"
     android:orientation="vertical">
 
+    <!-- 흰색 직사각형 배경 -->
+    <View
+        android:id="@+id/background_rect"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rounded_white_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/calendar_View"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendar_View"
         android:layout_width="406dp"
@@ -71,6 +86,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="400dp"
         android:layout_height="100dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="@+id/scrollView3"
         app:layout_constraintStart_toStartOf="@+id/scrollView3"
         app:layout_constraintTop_toBottomOf="@+id/expend_tt"
@@ -92,6 +108,7 @@
         android:id="@+id/scrollView3"
         android:layout_width="401dp"
         android:layout_height="100dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintTop_toBottomOf="@+id/income_text"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="2dp">
