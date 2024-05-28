@@ -91,9 +91,7 @@
                             android:layout_marginTop="10dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="이번달 소비 순위"
-                            android:textSize="14sp">
-
-                        </TextView>
+                            android:textSize="14sp"/>
 
                         <TextView
                             android:id="@+id/ranking_1"
@@ -103,7 +101,7 @@
                             android:layout_marginTop="40dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="1등"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_text1"
@@ -114,8 +112,7 @@
                             android:layout_marginTop="40dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="식비"
-                            android:textSize="13sp"></TextView>
-
+                            android:textSize="13sp"/>
                         <TextView
                             android:id="@+id/ranking_per1"
                             android:layout_width="wrap_content"
@@ -124,7 +121,7 @@
                             android:layout_marginTop="40dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="40%"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
 
                         <TextView
@@ -135,7 +132,7 @@
                             android:layout_marginTop="65dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="2등"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_text2"
@@ -146,7 +143,7 @@
                             android:layout_marginTop="65dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="교통/차량"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_per2"
@@ -156,7 +153,7 @@
                             android:layout_marginTop="65dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="30%"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_3"
@@ -166,7 +163,7 @@
                             android:layout_marginTop="90dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="3등"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_text3"
@@ -177,7 +174,7 @@
                             android:layout_marginTop="90dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="문화생활"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_per3"
@@ -187,7 +184,7 @@
                             android:layout_marginTop="90dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="19%"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_4"
@@ -197,7 +194,7 @@
                             android:layout_marginTop="115dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="4등"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_text4"
@@ -208,7 +205,7 @@
                             android:layout_marginTop="115dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="문화생활"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_per4"
@@ -218,7 +215,7 @@
                             android:layout_marginTop="115dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="19%"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_5"
@@ -228,7 +225,7 @@
                             android:layout_marginTop="140dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="5등"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_text5"
@@ -239,7 +236,7 @@
                             android:layout_marginTop="140dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="문화생활"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                         <TextView
                             android:id="@+id/ranking_per5"
@@ -249,7 +246,7 @@
                             android:layout_marginTop="140dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="19%"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp"/>
 
                     </RelativeLayout>
 
@@ -269,7 +266,7 @@
                             android:layout_marginTop="15dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="지난달보다\n ' 식비 ' 지출이\n 가장 많이 늘었어요!"
-                            android:textSize="13sp"></TextView>
+                            android:textSize="13sp" />
 
                         <com.github.mikephil.charting.charts.BarChart
                             android:id="@+id/mon_chart2"
