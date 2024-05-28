@@ -237,7 +237,7 @@ class AnalyzeDayAct : AppCompatActivity() {
 
     //수입 표시
     private fun IncomeForDate(date: Date) {
-        val formattedDate = SimpleDateFormat("yy-MM-dd", Locale.KOREAN).format(date)
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
         apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<List<ResponseStatDay>> {
             override fun onResponse(call: Call<List<ResponseStatDay>>, response: Response<List<ResponseStatDay>>) {
@@ -262,7 +262,7 @@ class AnalyzeDayAct : AppCompatActivity() {
 
     //지출 표시
     private fun ExpensesForDate(date: Date) {
-        val formattedDate = SimpleDateFormat("yy-MM-dd", Locale.KOREAN).format(date)
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
         apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<List<ResponseStatDay>> {
             override fun onResponse(call: Call<List<ResponseStatDay>>, response: Response<List<ResponseStatDay>>) {
@@ -287,7 +287,7 @@ class AnalyzeDayAct : AppCompatActivity() {
 
     //지출 리스트
     private fun ExpenseListForDate(date: Date) {
-        val formattedDate = SimpleDateFormat("yy-MM-dd", Locale.KOREAN).format(date)
+        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
         apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<List<ResponseStatDay>> {
             override fun onResponse(call: Call<List<ResponseStatDay>>, response: Response<List<ResponseStatDay>>) {
