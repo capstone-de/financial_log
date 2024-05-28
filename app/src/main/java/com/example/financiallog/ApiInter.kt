@@ -45,7 +45,7 @@ interface ApiInter {
 
     //통계관련
     @GET("/statistics_app/daily")
-    fun getStatisticsDaily(@Query("user") userId: Int, @Query("date") date: String): Call<List<ResponseStatDay>>//일별
+    fun getStatisticsDaily(@Query("user") userId: Int, @Query("date") date: String): Call<ResponseStatDay>//일별
 
     @GET("/statistics_app/weekly")
     fun getStatisticsWeekly(@Query("user") userId: Int, @Query("date") date: String): Call<List<ResponseStatWeek>>//주별
