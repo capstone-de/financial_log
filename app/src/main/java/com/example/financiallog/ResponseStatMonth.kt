@@ -1,19 +1,26 @@
 package com.example.financiallog
 
 data class ResponseStatMonth (
-    val jan: MonthStatistics,
-    val feb: MonthStatistics,
-    val mar: MonthStatistics,
-    val apr: MonthStatistics,
+    val Jan: MonthStatistics? = null,
+    val Feb: MonthStatistics? = null,
+    val Mar: MonthStatistics? = null,
+    val Apr: MonthStatistics? = null,
+    val May: MonthStatistics? = null,
+    val Jun: MonthStatistics? = null,
+    val Jul: MonthStatistics? = null,
+    val Aug: MonthStatistics? = null,
+    val Sep: MonthStatistics? = null,
+    val Oct: MonthStatistics? = null,
+    val Nov: MonthStatistics? = null,
+    val Dec: MonthStatistics? = null,
 
-
-    val category: MonthlyCategory,
-    val satisfaction: Satisfaction
+    val category: MonthlyCategory = MonthlyCategory(emptyList(), emptyList()), // 기본값 설정
+    val satisfaction: Satisfaction? = null
 
 ) {
     data class MonthStatistics(
-        val totalIncome: Int?,
-        val totalExpense: Int?
+        val total_income: Int?,
+        val total_expense: Int?
     )
 
     data class MonthlyCategory(
@@ -23,7 +30,7 @@ data class ResponseStatMonth (
 
     data class MonthCategoryExpense(
         val category: String,
-        val totalExpense: Int?
+        val total_expense: Int?
     )
 
     data class Satisfaction(
@@ -36,6 +43,4 @@ data class ResponseStatMonth (
         val price: Int,
         val satisfaction: Int
     )
-
-
 }

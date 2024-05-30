@@ -21,6 +21,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.Callback
 import retrofit2.Response
@@ -105,7 +106,7 @@ class HomeMain: AppCompatActivity() {
         }*/
 
         // 점 표시
-        data_calender.api.getcalender().enqueue(object : Callback<ResponseCalendar>{
+        data_calender.api.getcalender(6,FormattedYear(),FormattedMonth()).enqueue(object : Callback<ResponseCalendar>{
             @SuppressLint("SuspiciousIndentation")
             override fun onResponse(
                 call: Call<ResponseCalendar>,
@@ -296,6 +297,16 @@ class HomeMain: AppCompatActivity() {
     fun getCurrentFormattedDate(): String {
         val currentDate = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return currentDate.format(formatter)
+    }
+    fun FormattedYear(): String {
+        val currentDate =  LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy")
+        return currentDate.format(formatter)
+    }
+    fun FormattedMonth(): String {
+        val currentDate =  LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("M")
         return currentDate.format(formatter)
     }
 

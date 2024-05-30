@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -268,8 +269,9 @@ class AnalyzeDayAct : AppCompatActivity() {
         apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<ResponseStatDay> {
             override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
-                    val incometv = response.body()!!.totalIncome
-                    incomeTextView.text = incometv.toString()
+                    val incometv = response.body()!!.total_income
+                    val formatincome = NumberFormat.getNumberInstance(Locale.KOREA).format(incometv)
+                    incomeTextView.text = formatincome
 //                    response.body()?.let { data ->
 //                        if (data.isNotEmpty()) {
 //                            incomeTextView.text = data[0].totalIncome.toString()
@@ -295,8 +297,9 @@ class AnalyzeDayAct : AppCompatActivity() {
         apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<ResponseStatDay> {
             override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
-                    val expendsetv = response.body()!!.totalExpenses
-                    expendTextView.text = expendsetv.toString()
+                    val expendsetv = response.body()!!.total_expenses
+                    val formatexpendse = NumberFormat.getNumberInstance(Locale.KOREA).format(expendsetv)
+                    expendTextView.text = formatexpendse
 //                    response.body()?.let { data ->
 //                        if (data.isNotEmpty()) {
 //                            expendTextView.text = data[0].totalExpenses.toString()

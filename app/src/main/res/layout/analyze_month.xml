@@ -11,7 +11,7 @@
         android:id="@+id/monthly_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="159dp"
+        android:layout_marginStart="135dp"
         android:layout_marginTop="146dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="2024년 11월"
@@ -325,19 +325,18 @@
                         android:text="자라"
                         android:textSize="18sp"
                         android:layout_centerVertical="true"
-                        android:layout_marginStart="160dp"
+                        android:layout_marginStart="157dp"
                         />
 
                     <TextView
                         android:id="@+id/month_satis_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="255dp"
                         android:fontFamily="@font/gmarketsansttfmedium"
                         android:text="70,000 원"
-                        android:textSize="18sp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="230dp"
-                        />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/month_satis_per"
@@ -410,7 +409,7 @@
         android:layout_width="156dp"
         android:layout_height="49dp"
         android:layout_marginTop="181dp"
-        android:layout_marginEnd="45dp"
+        android:layout_marginEnd="43dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/analyze_month_expendbox" />

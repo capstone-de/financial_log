@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -81,14 +84,14 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         mFormat = SimpleDateFormat("yyyy년", Locale.KOREAN)
         currentDate = Date()
         yearText.text = mFormat.format(currentDate)
-        year_satText.text = mFormat.format(currentDate)
-        year_expText.text = mFormat.format(currentDate)
+        year_satText.text = mFormat.format(currentDate)+ " \n만족했던 소비"
+        year_expText.text = mFormat.format(currentDate)+ " 소비금액"
 
         year_btn.setOnClickListener { showYearPickerDialog() } // 다른 달 선택 다이얼로그 표시
 
         //apiobject = ApiObject()
 
-        loadDataAndUpdateChart()
+        loadDataAndUpdateChart(selectedYear)
 
 
         //가계부 버튼 클릭 시
@@ -264,6 +267,8 @@ class AnalyzeyearlyAct: AppCompatActivity() {
     }
 
     //private var selectedYear: Date = Date() // 초기화
+    private var selectedYear: Int = Calendar.getInstance().get(Calendar.YEAR)
+
     private fun showYearPickerDialog() {
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
@@ -273,21 +278,22 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("연도 선택")
             .setItems(years) { dialog, which ->
-                val selectedYear = years[which].toInt()
-                yearText.text = selectedYear.toString() + "년"
+                selectedYear = years[which].toInt() // 전역 변수 업데이트
+                yearText.text = "$selectedYear"+"년"
+                year_satText.text = "$selectedYear \n만족했던 소비"
+                year_expText.text = "$selectedYear 소비금액"
 
-                // 여기서 선택한 연도에 해당하는 데이터를 가져오는 함수를 호출하면 됩니다.
-                loadDataAndUpdateChart()
+                // 선택된 연도를 인자로 전달하여 데이터를 로드
+                loadDataAndUpdateChart(selectedYear)
             }
             .show()
     }
 
-    private fun loadDataAndUpdateChart() {
+    private fun loadDataAndUpdateChart(year: Int) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                // 백그라운드 스레드에서 API 호출
                 val response = withContext(Dispatchers.IO) {
-                    apiobject.api.getStatisticsYearly().execute()
+                    apiobject.api.getStatisticsYearly(year.toString()).execute()
                 }
                 if (response.isSuccessful) {
                     val data = response.body()
@@ -296,31 +302,115 @@ class AnalyzeyearlyAct: AppCompatActivity() {
                         updateBarChart(data)
                         updateBarChartCate(data)
                     } else {
-                        Toast.makeText(this@AnalyzeyearlyAct, "데이터가 null입니다.", Toast.LENGTH_SHORT).show()
+                        showError("데이터를 불러오는 데 실패했습니다.")
                     }
                 } else {
-                    Toast.makeText(this@AnalyzeyearlyAct, "API 호출이 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    showError("서버 응답이 실패했습니다.")
                 }
             } catch (e: Exception) {
-                // 오류 처리
-                Toast.makeText(this@AnalyzeyearlyAct, "데이터를 가져오는 동안 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                e.printStackTrace()
+                Log.d("오류", "오류${e.message}")
+                showError("데이터를 불러오는 중 오류가 발생했습니다.")
             }
         }
     }
 
-    //만족했던 카테고리별 레이더 차트
-    private fun updateRadarChart(data: List<ResponseStatYear>) {
-        val radarEntries = ArrayList<RadarEntry>()
+    private fun updateBarChart(data: ResponseStatYear) {
+        val incomeEntries = ArrayList<BarEntry>()
+        val expenseEntries = ArrayList<BarEntry>()
+
+        val monthsData = listOf(
+            data.Jan, data.Feb, data.Mar,
+            data.Apr, data.May, data.Jun,
+            data.Jul, data.Aug, data.Sep,
+            data.Oct, data.Nov, data.Dec
+        )
 
         // 데이터 모델에서 차트에 맞게 데이터 추출
-        data.forEach { item ->
-            val yearlySatisfactionList = item.satisfaction.yearly
-            yearlySatisfactionList.forEach { satisfactionItem ->
-                // 각 항목의 만족도 값을 추출하여 레이더 차트에 추가
-                val satisfactionValue = satisfactionItem.averageSatisfaction.toFloat()
-                radarEntries.add(RadarEntry(satisfactionValue))
-            }
+        monthsData.forEachIndexed { index, monthData ->
+            val totalIncome = monthData.totalIncome ?: 0
+            val totalExpense = monthData.totalExpense ?: 0
+
+            incomeEntries.add(BarEntry(index.toFloat(), totalIncome.toFloat()))
+            expenseEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
+        }
+
+        val incomeDataSet = BarDataSet(incomeEntries, "수입").apply {
+            color = Color.GREEN
+        }
+
+        val expenseDataSet = BarDataSet(expenseEntries, "지출").apply {
+            color = Color.RED
+        }
+
+        val barData = BarData(incomeDataSet, expenseDataSet)
+        year_barChart.data = barData
+
+        // 차트 설명 설정
+        year_barChart.description.apply {
+            text = "(단위:만원)"
+            textSize = 8f
+            textColor = Color.BLACK
+            setPosition(year_barChart.width.toFloat() - 80f, 20f)
+        }
+
+        // X축 설정
+        val xAxis = year_barChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.labelRotationAngle = -10f
+        xAxis.setDrawGridLines(false)
+        xAxis.valueFormatter = IndexAxisValueFormatter(getMonths())
+        year_barChart.axisRight.isEnabled = false // 오른쪽 Y축은 비활성화합니다.
+
+        // 바 차트 스타일 설정
+        val barWidth = 0.3f
+        barData.barWidth = barWidth
+
+        // 그룹화 설정
+        year_barChart.barData.groupBars(0f, 0.4f, 0.1f)
+
+        // 차트 다시 그리기
+        year_barChart.notifyDataSetChanged()
+        year_barChart.invalidate()
+    }
+
+    private fun getMonths(): List<String> {
+        return listOf("1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
+    }
+
+
+
+    private fun showError(message: String) {
+        // 여기에 오류 메시지를 사용자에게 표시하는 로직을 추가하세요.
+        Toast.makeText(this@AnalyzeyearlyAct, message, Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun updateRadarChart(data: ResponseStatYear) {
+        val radarEntries = ArrayList<RadarEntry>()
+        val categories = ArrayList<String>()
+
+        // 카테고리 이름 매핑
+        val categoryMap = mapOf(
+            "tax" to "세금",
+            "food" to "음식",
+            "housing/communication" to "주거/통신",
+            "tranportation/vehicle" to "교통/차량",
+            "education" to "교육",
+            "personal event" to "경조사/회비",
+            "medical" to "병원/약국",
+            "cultural/living" to "문화생활",
+            "shopping" to "쇼핑",
+            "etc" to "기타"
+        )
+
+        // 데이터 모델에서 차트에 맞게 데이터 추출
+        val yearlySatisfactionList = data.satisfaction.yearly
+        yearlySatisfactionList.forEach { satisfactionItem ->
+            // 각 항목의 만족도 값을 추출하여 레이더 차트에 추가
+            val satisfactionValue = satisfactionItem.averageSatisfaction.toFloat()
+            radarEntries.add(RadarEntry(satisfactionValue))
+            // 카테고리 이름을 매핑하여 추가
+            categories.add(categoryMap[satisfactionItem.category] ?: satisfactionItem.category) // 매핑 실패 시 원본 카테고리 이름 사용
         }
 
         val radarDataSet = RadarDataSet(radarEntries, "만족도")
@@ -328,110 +418,92 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         // 차트 스타일 등 설정
         radarDataSet.color = Color.BLUE
         radarDataSet.valueTextColor = Color.BLACK
+        radarDataSet.valueTextSize = 10f
 
         val radarData = RadarData(radarDataSet)
+
+        // 레이더 차트에 데이터를 설정하고 다시 그리기
         sat_raderChart.data = radarData
-        sat_raderChart.invalidate() // 차트 다시 그리기
-    }
-
-    //수입, 지출별 월통계 바차트
-    private fun updateBarChart(data: List<ResponseStatYear>) {
-        val barEntries = ArrayList<BarEntry>()
-
-        val incomeEntries = ArrayList<BarEntry>()
-        val expenseEntries = ArrayList<BarEntry>()
-
-        // 데이터 모델에서 차트에 맞게 데이터 추출
-        data.forEachIndexed { index, item ->
-            val totalIncome = when (index) {
-                0 -> item.jan.totalIncome ?: 0
-                1 -> item.feb.totalIncome ?: 0
-                2 -> item.mar.totalIncome ?: 0
-                3 -> item.apr.totalIncome ?: 0
-                4 -> item.may.totalIncome ?: 0
-                5 -> item.jun.totalIncome ?: 0
-                6 -> item.jul.totalIncome ?: 0
-                7 -> item.aug.totalIncome ?: 0
-                8 -> item.sep.totalIncome ?: 0
-                9 -> item.oct.totalIncome ?: 0
-                10 -> item.nov.totalIncome ?: 0
-                11 -> item.dec.totalIncome ?: 0
-                else -> 0
-            }
-
-            val totalExpense = when (index) {
-                0 -> item.jan.totalExpense ?: 0
-                1 -> item.feb.totalExpense ?: 0
-                2 -> item.mar.totalExpense ?: 0
-                3 -> item.apr.totalExpense ?: 0
-                4 -> item.may.totalExpense ?: 0
-                5 -> item.jun.totalExpense ?: 0
-                6 -> item.jul.totalExpense ?: 0
-                7 -> item.aug.totalExpense ?: 0
-                8 -> item.sep.totalExpense ?: 0
-                9 -> item.oct.totalExpense ?: 0
-                10 -> item.nov.totalExpense ?: 0
-                11 -> item.dec.totalExpense ?: 0
-                else -> 0
-            }
-
-            incomeEntries.add(BarEntry(index.toFloat(), totalIncome.toFloat()))
-            expenseEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
-        }
-
-
-        val incomeDataSet = BarDataSet(incomeEntries, "수입")
-        incomeDataSet.color = Color.GREEN
-
-        val expenseDataSet = BarDataSet(expenseEntries, "지출")
-        expenseDataSet.color = Color.RED
-
-        val barData = BarData(incomeDataSet, expenseDataSet)
-        year_barChart.data = barData
-
-        /*val barDataSet = BarDataSet(barEntries, "월별 수입")
-
-        // 차트 스타일 등 설정
-        barDataSet.color = Color.GREEN
-        barDataSet.valueTextColor = Color.BLACK*/
-
 
         // X축 설정
-        val xAxis = year_barChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.labelRotationAngle = -45f
-        xAxis.setDrawGridLines(false)
-        xAxis.valueFormatter = IndexAxisValueFormatter(getMonths())
+        val xAxis = sat_raderChart.xAxis
+        xAxis.valueFormatter = IndexAxisValueFormatter(categories) // 매핑된 카테고리 이름을 x축 라벨로 설정
+        xAxis.textSize = 10f
+        xAxis.spaceMin = 1f
+        xAxis.spaceMax = 1f
+        xAxis.textColor = Color.BLACK
+        sat_raderChart.legend.isEnabled = false
 
-        //year_barChart.data = barData
-        year_barChart.invalidate() // 차트 다시 그리기
+        // 레이아웃 파라미터 설정
+        val layoutParams = sat_raderChart.layoutParams as LinearLayout.LayoutParams
+        layoutParams.gravity = Gravity.CENTER // 레이더 차트를 중앙에 배치
+        sat_raderChart.layoutParams = layoutParams
+
+        // 차트 다시 그리기
+        sat_raderChart.invalidate()
     }
 
-    private fun getMonths(): List<String> {
-        return listOf("1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
-    }
+    // 수입, 지출별 월통계 바차트
+//    private fun updateBarChart(data: ResponseStatYear) {
+//        val incomeEntries = ArrayList<BarEntry>()
+//        val expenseEntries = ArrayList<BarEntry>()
+//
+//        val monthsData = listOf(
+//            data.jan, data.feb, data.mar,
+//            data.apr, data.may, data.jun,
+//            data.jul, data.aug, data.sep,
+//            data.oct, data.nov, data.dec
+//        )
+//
+//        // 데이터 모델에서 차트에 맞게 데이터 추출
+//        monthsData.forEachIndexed { index, monthData ->
+//            val totalIncome = monthData.totalIncome ?: 0
+//            val totalExpense = monthData.totalExpense ?: 0
+//
+//            incomeEntries.add(BarEntry(index.toFloat(), totalIncome.toFloat()))
+//            expenseEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
+//        }
+//
+//        val incomeDataSet = BarDataSet(incomeEntries, "수입").apply {
+//            color = Color.GREEN
+//        }
+//
+//        val expenseDataSet = BarDataSet(expenseEntries, "지출").apply {
+//            color = Color.RED
+//        }
+//
+//        val barData = BarData(incomeDataSet, expenseDataSet)
+//        year_barChart.data = barData
+//
+//        // X축 설정
+//        val xAxis = year_barChart.xAxis
+//        xAxis.position = XAxis.XAxisPosition.BOTTOM
+//        xAxis.labelRotationAngle = -45f
+//        xAxis.setDrawGridLines(false)
+//        xAxis.valueFormatter = IndexAxisValueFormatter(getMonths())
+//
+//        // 바 차트 스타일 설정
+//        val barWidth = 0.45f
+//        barData.barWidth = barWidth
+//
+//        // 그룹화 설정
+//        year_barChart.barData.groupBars(0f, 0.08f, 0.02f)
+//
+//        year_barChart.invalidate() // 차트 다시 그리기
+//    }
+//
+//    private fun getMonths(): List<String> {
+//        return listOf("1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
+//    }
 
-    //카테고리별 소비금액 바 차트
-    private fun updateBarChartCate(data: List<ResponseStatYear>) {
+    private fun updateBarChartCate(data: ResponseStatYear) {
         val barEntries = ArrayList<BarEntry>()
 
-        // 데이터 모델에서 차트에 맞게 데이터 추출
-        data.forEachIndexed { index, item ->
-            val totalExpense = item.category.yearly[index].totalExpense // 연별 지출을 가져옴
+        // 카테고리별 연간 지출 데이터 추출
+        data.category.yearly.forEachIndexed { index, item ->
+            val totalExpense = item.totalExpense // 연별 지출을 가져옴
             barEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
         }
-
-        /*val radarEntries = ArrayList<RadarEntry>()
-
-        // 데이터 모델에서 차트에 맞게 데이터 추출
-        data.forEach { item ->
-            val yearlySatisfactionList = item.satisfaction.yearly
-            yearlySatisfactionList.forEach { satisfactionItem ->
-                // 각 항목의 만족도 값을 추출하여 레이더 차트에 추가
-                val satisfactionValue = satisfactionItem.averageSatisfaction.toFloat()
-                radarEntries.add(RadarEntry(satisfactionValue))
-            }
-        }*/
 
         val barDataSet = BarDataSet(barEntries, "카테고리별 소비 금액")
 
@@ -444,9 +516,11 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         // X축 설정
         val xAxis = expend_barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.labelRotationAngle = -45f
+        xAxis.labelRotationAngle = -40f
         xAxis.setDrawGridLines(false)
         xAxis.valueFormatter = IndexAxisValueFormatter(getCategory())
+        expend_barChart.axisRight.isEnabled = false
+        expend_barChart.legend.isEnabled = false
 
         expend_barChart.data = barData
         expend_barChart.invalidate() // 차트 다시 그리기
@@ -455,6 +529,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         return listOf("식비", "문화생활", "교통", "생활용품", "마트/편의점", "주거/통신", "교육",
             "경조사/회비", "쇼핑", "기타")
     }
+
 
 
 }

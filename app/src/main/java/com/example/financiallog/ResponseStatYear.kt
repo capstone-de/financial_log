@@ -1,18 +1,18 @@
 package com.example.financiallog
 
 data class ResponseStatYear(
-    val jan: YearStatistics,
-    val feb: YearStatistics,
-    val mar: YearStatistics,
-    val apr: YearStatistics,
-    val may: YearStatistics,
-    val jun: YearStatistics,
-    val jul: YearStatistics,
-    val aug: YearStatistics,
-    val sep: YearStatistics,
-    val oct: YearStatistics,
-    val nov: YearStatistics,
-    val dec: YearStatistics,
+    val Jan: YearStatistics,
+    val Feb: YearStatistics,
+    val Mar: YearStatistics,
+    val Apr: YearStatistics,
+    val May: YearStatistics,
+    val Jun: YearStatistics,
+    val Jul: YearStatistics,
+    val Aug: YearStatistics,
+    val Sep: YearStatistics,
+    val Oct: YearStatistics,
+    val Nov: YearStatistics,
+    val Dec: YearStatistics,
     val category: YearlyCategory,
     val satisfaction: YearlySatisfaction
 ) {
