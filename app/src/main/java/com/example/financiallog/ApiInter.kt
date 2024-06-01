@@ -49,7 +49,7 @@ interface ApiInter {
     fun getStatisticsDaily(@Query("user") userId: Int, @Query("date") date: String): Call<ResponseStatDay>//일별
 
     @GET("/statistics_app/weekly")
-    fun getStatisticsWeekly(@Query("user") userId: Int, @Query("date") date: String): Call<List<ResponseStatWeek>>//주별
+    fun getStatisticsWeekly(@Query("user") userId: Int, @Query("date") date: String): Call<ResponseStatWeek>//주별
 
     @GET("/statistics_app/monthly")
     fun getStatisticsMonthly(@Query("user") userId: Int, @Query("year") year: String, @Query("month") month: String): Call<ResponseStatMonth> //월별
