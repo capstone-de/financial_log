@@ -580,7 +580,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         dataSet.valueTextSize = 10f
 
         val barData = BarData(dataSet)
-        barData.barWidth = 1f // 막대 바를 얇게 설정 (0.2f는 예시값, 필요에 따라 조정 가능)
+        barData.barWidth = 0.1f// 막대 바를 얇게 설정 (0.2f는 예시값, 필요에 따라 조정 가능)
         mon_cateChart.data = barData
 
         // X축 설정

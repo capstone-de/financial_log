@@ -361,6 +361,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         xAxis.setDrawGridLines(false)
         xAxis.valueFormatter = IndexAxisValueFormatter(getMonths())
         year_barChart.axisRight.isEnabled = false // 오른쪽 Y축은 비활성화합니다.
+        year_barChart.legend.isEnabled = false
 
         // 바 차트 스타일 설정
         val barWidth = 0.3f
