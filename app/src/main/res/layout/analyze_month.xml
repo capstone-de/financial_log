@@ -111,7 +111,7 @@
                             android:text="식비"
                             android:textSize="13sp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginStart="75dp"
+                            android:layout_marginStart="35dp"
                             android:layout_marginTop="40dp">
                         </TextView>
                         <TextView
@@ -121,7 +121,7 @@
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="40%"
                             android:textSize="13sp"
-                            android:layout_marginStart="140dp"
+                            android:layout_marginStart="120dp"
                             android:layout_marginTop="40dp">
                         </TextView>
 
@@ -145,7 +145,7 @@
                             android:text="교통/차량"
                             android:textSize="13sp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginStart="75dp"
+                            android:layout_marginStart="35dp"
                             android:layout_marginTop="65dp">
                         </TextView>
                         <TextView
@@ -155,7 +155,7 @@
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="30%"
                             android:textSize="13sp"
-                            android:layout_marginStart="140dp"
+                            android:layout_marginStart="120dp"
                             android:layout_marginTop="65dp">
                         </TextView>
 
@@ -177,7 +177,7 @@
                             android:text="문화생활"
                             android:textSize="13sp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginStart="75dp"
+                            android:layout_marginStart="35dp"
                             android:layout_marginTop="90dp">
                         </TextView>
                         <TextView
@@ -187,7 +187,7 @@
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="19%"
                             android:textSize="13sp"
-                            android:layout_marginStart="140dp"
+                            android:layout_marginStart="120dp"
                             android:layout_marginTop="90dp">
                         </TextView>
 
@@ -209,7 +209,7 @@
                             android:text="문화생활"
                             android:textSize="13sp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginStart="75dp"
+                            android:layout_marginStart="35dp"
                             android:layout_marginTop="115dp">
                         </TextView>
                         <TextView
@@ -219,7 +219,7 @@
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="19%"
                             android:textSize="13sp"
-                            android:layout_marginStart="140dp"
+                            android:layout_marginStart="120dp"
                             android:layout_marginTop="115dp">
                         </TextView>
 
@@ -241,7 +241,7 @@
                             android:text="문화생활"
                             android:textSize="13sp"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginStart="75dp"
+                            android:layout_marginStart="35dp"
                             android:layout_marginTop="140dp">
                         </TextView>
                         <TextView
@@ -251,7 +251,7 @@
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="19%"
                             android:textSize="13sp"
-                            android:layout_marginStart="140dp"
+                            android:layout_marginStart="120dp"
                             android:layout_marginTop="140dp">
                         </TextView>
 
