@@ -369,7 +369,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
     //4개의 월별 그래프
     private fun getMonthStatistics(data: List<ResponseStatMonth>?) {
         // 그래프를 그릴 데이터를 준비합니다.
-        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+        //val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
         val monthStatisticsList = mutableListOf<ResponseStatMonth.MonthStatistics>()
 
         data?.firstOrNull()?.let {
@@ -378,7 +378,6 @@ class AnalyzeMonthAct: AppCompatActivity() {
             monthStatisticsList.add(it.mar)
             monthStatisticsList.add(it.apr)
         }
-
 
         // 막대 그래프를 업데이트합니다.
         val barEntries = monthStatisticsList.mapIndexed { index, monthData ->
@@ -424,7 +423,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
 
     // UI에 상위 5개 카테고리와 해당 비율을 표시하는 함수
     private fun showTop5CategoriesWithRatio(top5CategoriesWithRatio: List<Pair<String, Float>>) {
-        // 각 순위별로 UI에 표시할 View와 Pair<String, Float> 데이터를 연결합니다.
+
 
         val rankingViews = listOf(
             Pair(ranking_cate1, ranking_per1),

@@ -30,3 +30,5 @@ data class ResponseStatWeek (
         val totalExpense: Int
     )
 }
+
+
