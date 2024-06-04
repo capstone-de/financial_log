@@ -336,11 +336,11 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         }
 
         val incomeDataSet = BarDataSet(incomeEntries, "수입").apply {
-            color = Color.GREEN
+            color = Color.parseColor("#4c8df7")
         }
 
         val expenseDataSet = BarDataSet(expenseEntries, "지출").apply {
-            color = Color.RED
+            color = Color.parseColor("#e49995")
         }
 
         val barData = BarData(incomeDataSet, expenseDataSet)
@@ -409,6 +409,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         yearlySatisfactionList.forEach { satisfactionItem ->
             // 각 항목의 만족도 값을 추출하여 레이더 차트에 추가
             val satisfactionValue = satisfactionItem.average_satisfaction.toFloat()
+            println(satisfactionItem.category + " " + satisfactionItem.average_satisfaction)
             radarEntries.add(RadarEntry(satisfactionValue))
             // 카테고리 이름을 매핑하여 추가
             categories.add(categoryMap[satisfactionItem.category] ?: satisfactionItem.category) // 매핑 실패 시 원본 카테고리 이름 사용
@@ -416,8 +417,13 @@ class AnalyzeyearlyAct: AppCompatActivity() {
 
         val radarDataSet = RadarDataSet(radarEntries, "만족도")
 
-        // 차트 스타일 등 설정
-        radarDataSet.color = Color.BLUE
+
+//        radarDataSet.lineWidth = 2f // 기본값은 1f
+
+        radarDataSet.color = Color.parseColor("#4c8df7")
+        radarDataSet.setDrawFilled(true) // 채우기 설정
+        radarDataSet.fillColor = Color.parseColor("#4c8df7") // 채우기 색상
+        radarDataSet.fillAlpha = 100 // 채우기 투명도 (0-255, 0은 완전 투명, 255는 불투명)
         radarDataSet.valueTextColor = Color.BLACK
         radarDataSet.valueTextSize = 10f
 
@@ -425,6 +431,11 @@ class AnalyzeyearlyAct: AppCompatActivity() {
 
         // 레이더 차트에 데이터를 설정하고 다시 그리기
         sat_raderChart.data = radarData
+
+        // Y축 범위 설정
+        val yAxis = sat_raderChart.yAxis
+        yAxis.axisMinimum = 0f
+        yAxis.axisMaximum = 100f
 
         // X축 설정
         val xAxis = sat_raderChart.xAxis
@@ -523,7 +534,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         val barDataSet = BarDataSet(barEntries, "카테고리별 소비 금액")
 
         // 차트 스타일 등 설정
-        barDataSet.color = Color.RED
+        barDataSet.color = Color.parseColor("#e49995")
         barDataSet.valueTextColor = Color.BLACK
 
         val barData = BarData(barDataSet)
