@@ -420,6 +420,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         xAxis.axisMinimum = 0f
         xAxis.axisMaximum = barData.xMax + 1f
         monthChart.axisRight.isEnabled = false
+        monthChart.axisLeft.isEnabled = false
         monthChart.legend.isEnabled = false //범례 지우기
 
         // 월 이름 배열 생성
@@ -590,6 +591,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         xAxis.granularity = 1f
         mon_cateChart.legend.isEnabled = false
         mon_cateChart.axisRight.isEnabled = false
+        mon_cateChart.axisLeft.isEnabled = false
 
         // 카테고리 이름을 X축 레이블로 사용
         xAxis.valueFormatter = IndexAxisValueFormatter(barEntries.map { it.data as String })
