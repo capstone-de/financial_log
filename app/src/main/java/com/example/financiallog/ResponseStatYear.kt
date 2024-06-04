@@ -17,8 +17,8 @@ data class ResponseStatYear(
     val satisfaction: YearlySatisfaction
 ) {
     data class YearStatistics(
-        val totalIncome: Int?,
-        val totalExpense: Int?
+        val total_income: Int?,
+        val total_expense: Int?
     )
 
     data class YearlyCategory(
@@ -27,7 +27,7 @@ data class ResponseStatYear(
 
     data class YearlyCategoryExpense(
         val category: String,
-        val totalExpense: Int
+        val total_expense: Int
     )
 
     data class YearlySatisfaction(
@@ -36,7 +36,7 @@ data class ResponseStatYear(
 
     data class YearlyCategorySatisfaction(
         val category: String,
-        val averageSatisfaction: Double
+        val average_satisfaction: Double
     )
 
 
