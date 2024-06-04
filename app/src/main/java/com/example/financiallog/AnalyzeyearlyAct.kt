@@ -297,6 +297,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
                 }
                 if (response.isSuccessful) {
                     val data = response.body()
+                    Log.d("데이터 받기", data.toString())
                     if (data != null) {
                         updateRadarChart(data)
                         updateBarChart(data)
@@ -327,19 +328,19 @@ class AnalyzeyearlyAct: AppCompatActivity() {
 
         // 데이터 모델에서 차트에 맞게 데이터 추출
         monthsData.forEachIndexed { index, monthData ->
-            val totalIncome = monthData.totalIncome ?: 0
-            val totalExpense = monthData.totalExpense ?: 0
+            val totalIncome = monthData.total_income ?: 0
+            val totalExpense = monthData.total_expense ?: 0
 
             incomeEntries.add(BarEntry(index.toFloat(), totalIncome.toFloat()))
             expenseEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
         }
 
         val incomeDataSet = BarDataSet(incomeEntries, "수입").apply {
-            color = Color.GREEN
+            color = Color.parseColor("#4c8df7")
         }
 
         val expenseDataSet = BarDataSet(expenseEntries, "지출").apply {
-            color = Color.RED
+            color = Color.parseColor("#e49995")
         }
 
         val barData = BarData(incomeDataSet, expenseDataSet)
@@ -407,7 +408,8 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         val yearlySatisfactionList = data.satisfaction.yearly
         yearlySatisfactionList.forEach { satisfactionItem ->
             // 각 항목의 만족도 값을 추출하여 레이더 차트에 추가
-            val satisfactionValue = satisfactionItem.averageSatisfaction.toFloat()
+            val satisfactionValue = satisfactionItem.average_satisfaction.toFloat()
+            println(satisfactionItem.category + " " + satisfactionItem.average_satisfaction)
             radarEntries.add(RadarEntry(satisfactionValue))
             // 카테고리 이름을 매핑하여 추가
             categories.add(categoryMap[satisfactionItem.category] ?: satisfactionItem.category) // 매핑 실패 시 원본 카테고리 이름 사용
@@ -415,8 +417,13 @@ class AnalyzeyearlyAct: AppCompatActivity() {
 
         val radarDataSet = RadarDataSet(radarEntries, "만족도")
 
-        // 차트 스타일 등 설정
-        radarDataSet.color = Color.BLUE
+
+//        radarDataSet.lineWidth = 2f // 기본값은 1f
+
+        radarDataSet.color = Color.parseColor("#4c8df7")
+        radarDataSet.setDrawFilled(true) // 채우기 설정
+        radarDataSet.fillColor = Color.parseColor("#4c8df7") // 채우기 색상
+        radarDataSet.fillAlpha = 100 // 채우기 투명도 (0-255, 0은 완전 투명, 255는 불투명)
         radarDataSet.valueTextColor = Color.BLACK
         radarDataSet.valueTextSize = 10f
 
@@ -424,6 +431,11 @@ class AnalyzeyearlyAct: AppCompatActivity() {
 
         // 레이더 차트에 데이터를 설정하고 다시 그리기
         sat_raderChart.data = radarData
+
+        // Y축 범위 설정
+        val yAxis = sat_raderChart.yAxis
+        yAxis.axisMinimum = 0f
+        yAxis.axisMaximum = 100f
 
         // X축 설정
         val xAxis = sat_raderChart.xAxis
@@ -497,18 +509,32 @@ class AnalyzeyearlyAct: AppCompatActivity() {
 //    }
 
     private fun updateBarChartCate(data: ResponseStatYear) {
-        val barEntries = ArrayList<BarEntry>()
+        val barEntries = mutableListOf<BarEntry>()
 
         // 카테고리별 연간 지출 데이터 추출
-        data.category.yearly.forEachIndexed { index, item ->
-            val totalExpense = item.totalExpense // 연별 지출을 가져옴
+//        data.category.yearly.forEachIndexed { index, item ->
+//            val category = item.category
+//            val totalExpense = item.total_expense // 연별 지출을 가져옴
+//            println(category + " " + totalExpense.toString())
+//            barEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
+//        }
+
+        val categoryOrder = listOf(
+            "tax", "food", "housing/communication", "transportation/vehicle",
+            "education", "personal event", "medical", "cultural/living",
+            "shopping", "etc"
+        )
+
+        categoryOrder.forEachIndexed { index, category ->
+            val item = data.category.yearly.find { it.category == category }
+            val totalExpense = item?.total_expense ?: 0 // 해당 카테고리가 없으면 0으로 설정
             barEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
         }
 
         val barDataSet = BarDataSet(barEntries, "카테고리별 소비 금액")
 
         // 차트 스타일 등 설정
-        barDataSet.color = Color.RED
+        barDataSet.color = Color.parseColor("#e49995")
         barDataSet.valueTextColor = Color.BLACK
 
         val barData = BarData(barDataSet)
@@ -519,6 +545,8 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         xAxis.labelRotationAngle = -40f
         xAxis.setDrawGridLines(false)
         xAxis.valueFormatter = IndexAxisValueFormatter(getCategory())
+        xAxis.granularity = 1f // 레이블 간격을 1로 설정하여 모든 레이블이 표시되도록 함
+        xAxis.labelCount = getCategory().size // 레이블의 개수를 카테고리 수와 동일하게 설정
         expend_barChart.axisRight.isEnabled = false
         expend_barChart.legend.isEnabled = false
 
@@ -526,12 +554,9 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         expend_barChart.invalidate() // 차트 다시 그리기
     }
     private fun getCategory(): List<String> {
-        return listOf("식비", "문화생활", "교통", "생활용품", "마트/편의점", "주거/통신", "교육",
-            "경조사/회비", "쇼핑", "기타")
+        return listOf("세금","음식","주거통신","교통","교육", "경조사","의료","문화생활","쇼핑","기타"
+        )
     }
-
-
-
 }
 
 
