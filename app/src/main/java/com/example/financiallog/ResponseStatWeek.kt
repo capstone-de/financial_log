@@ -1,13 +1,13 @@
 package com.example.financiallog
 
 data class ResponseStatWeek (
-    val mon: DayStatistics? = null,
-    val tue: DayStatistics? = null,
-    val wed: DayStatistics? = null,
-    val thu: DayStatistics? = null,
-    val fri: DayStatistics? = null,
-    val sat: DayStatistics? = null,
-    val sun: DayStatistics? = null,
+    val mon: DayStatistics,
+    val tue: DayStatistics,
+    val wed: DayStatistics,
+    val thu: DayStatistics,
+    val fri: DayStatistics,
+    val sat: DayStatistics,
+    val sun: DayStatistics,
 
     //val category: WeekCategory
 

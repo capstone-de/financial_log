@@ -316,7 +316,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
                     response.body()?.let { data ->
                         Log.d("데이터 받기", data.toString())
 
-                        WeekBarChart(listOf(data))
+                        WeekBarChart(data)
 
                         //WeekExpensePieChart(listOf(data))
                         //WeekIncomePieChart(listOf(data))
@@ -419,7 +419,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
         return listOf("월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일")
     }*/
 
-    private fun WeekBarChart(data: List<ResponseStatWeek>?) {
+    /*private fun WeekBarChart(data: List<ResponseStatWeek>?) {
         val incomeEntries = mutableListOf<BarEntry>()
         val expenseEntries = mutableListOf<BarEntry>()
 
@@ -474,6 +474,56 @@ class AnalyzeWeekAct : AppCompatActivity() {
             setDrawGridLines(false)
             valueFormatter = IndexAxisValueFormatter(getDays())
         }
+
+        weekbarChart.invalidate()
+    }
+
+    private fun getDays(): List<String> {
+        return listOf("월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일")
+    }*/
+
+    private fun WeekBarChart(data: ResponseStatWeek) {
+        val incomeEntries = mutableListOf<BarEntry>()
+        val expenseEntries = mutableListOf<BarEntry>()
+        
+        val daysData = listOf(
+            data.mon, data.tue, data.wed, data.thu,
+            data.fri, data.sat, data.sun
+        )
+        
+        //데이터 모델에서 데이터 추출
+        daysData.forEachIndexed{ index, dayData ->
+            val totalIncome = dayData?.totalIncome ?: 0
+            val totalExpense = dayData?.totalExpense ?: 0
+
+            incomeEntries.add(BarEntry(index.toFloat(), totalIncome.toFloat()))
+            expenseEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
+        }
+
+
+        val incomeDataSet = BarDataSet(incomeEntries, "수입")
+        incomeDataSet.color = Color.parseColor("#6C72FF")
+        incomeDataSet.valueTextColor = Color.BLACK
+        incomeDataSet.valueTextSize = 10f
+
+        val expenseDataSet = BarDataSet(expenseEntries, "지출")
+        expenseDataSet.color = Color.parseColor("#F998B5")
+        expenseDataSet.valueTextColor = Color.BLACK
+        expenseDataSet.valueTextSize = 10f
+
+        val barData = BarData(incomeDataSet, expenseDataSet)
+        weekbarChart.data = barData
+
+        //바 차트
+        barData.barWidth = 0.4f
+        weekbarChart.groupBars(0f, 0.04f, 0.01f)
+        weekbarChart.invalidate()
+
+        //x축
+        val xAxis = weekbarChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setDrawGridLines(false)
+        xAxis.valueFormatter = IndexAxisValueFormatter(getDays())
 
         weekbarChart.invalidate()
     }
