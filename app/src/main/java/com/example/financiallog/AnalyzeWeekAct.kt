@@ -303,17 +303,23 @@ class AnalyzeWeekAct : AppCompatActivity() {
 
 
     private fun getDataForWeek(date: Date) {
-        val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+        val calendar = Calendar.getInstance().apply {
+            time = date
+        }
 
-        apiobject.api.getStatisticsWeekly(6, formattedDate).enqueue(object : Callback<ResponseStatWeek> {
+        val startOfWeek = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+        //val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+
+        apiobject.api.getStatisticsWeekly(6, startOfWeek).enqueue(object : Callback<ResponseStatWeek> {
             override fun onResponse(call: Call<ResponseStatWeek>, response: Response<ResponseStatWeek>) {
                 if (response.isSuccessful) {
                     response.body()?.let { data ->
                         Log.d("데이터 받기", data.toString())
 
                         WeekBarChart(listOf(data))
-                        WeekExpensePieChart(listOf(data))
-                        WeekIncomePieChart(listOf(data))
+
+                        //WeekExpensePieChart(listOf(data))
+                        //WeekIncomePieChart(listOf(data))
                     }
                 } else {
                     // API 호출 실패 처리
@@ -330,7 +336,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
     }
 
     //일별 수입지출 통계
-    private fun WeekBarChart(data: List<ResponseStatWeek>) {
+    /*private fun WeekBarChart(data: List<ResponseStatWeek>) {
 
         val incomeEntries = mutableListOf<BarEntry>()
         val expenseEntries = mutableListOf<BarEntry>()
@@ -411,11 +417,76 @@ class AnalyzeWeekAct : AppCompatActivity() {
     }
     private fun getDays(): List<String> {
         return listOf("월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일")
+    }*/
+
+    private fun WeekBarChart(data: List<ResponseStatWeek>?) {
+        val incomeEntries = mutableListOf<BarEntry>()
+        val expenseEntries = mutableListOf<BarEntry>()
+
+        data?.firstOrNull()?.let { weekData ->
+            for (weekIndex in 0 until 7) {
+                val dayData = when (weekIndex) {
+                    0 -> weekData.mon
+                    1 -> weekData.tue
+                    2 -> weekData.wed
+                    3 -> weekData.thu
+                    4 -> weekData.fri
+                    5 -> weekData.sat
+                    6 -> weekData.sun
+                    else -> null
+                } ?: ResponseStatWeek.DayStatistics(0, 0)
+
+                val totalIncome = dayData.totalIncome ?: 0
+                val totalExpense = dayData.totalExpense ?: 0
+
+
+                val index = weekIndex * 7
+                incomeEntries.add(BarEntry(index.toFloat(), totalIncome.toFloat()))
+                expenseEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
+
+                // 디버깅을 위한 로그 출력
+                Log.d("WeekBarChart", "weekIndex: $weekIndex, totalIncome: $totalIncome, totalExpense: $totalExpense")
+            }
+        }
+
+        val incomeDataSet = BarDataSet(incomeEntries, "수입").apply {
+            color = Color.parseColor("#6C72FF")
+            valueTextColor = Color.BLACK
+            valueTextSize = 10f
+        }
+
+        val expenseDataSet = BarDataSet(expenseEntries, "지출").apply {
+            color = Color.parseColor("#F998B5")
+            valueTextColor = Color.BLACK
+            valueTextSize = 10f
+        }
+
+        val barData = BarData(incomeDataSet, expenseDataSet).apply {
+            barWidth = 0.4f
+        }
+
+        weekbarChart.data = barData
+        weekbarChart.groupBars(0f, 0.04f, 0.01f)
+        weekbarChart.invalidate()
+
+        val xAxis = weekbarChart.xAxis.apply {
+            position = XAxis.XAxisPosition.BOTTOM
+            setDrawGridLines(false)
+            valueFormatter = IndexAxisValueFormatter(getDays())
+        }
+
+        weekbarChart.invalidate()
+    }
+
+    private fun getDays(): List<String> {
+        return listOf("월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일")
     }
 
 
+
+
     // 지출 파이 차트
-    private fun WeekExpensePieChart(data: List<ResponseStatWeek>) {
+    /*private fun WeekExpensePieChart(data: List<ResponseStatWeek>) {
         val entries = mutableListOf<PieEntry>()
         val categoryExpense = mutableMapOf<String, Int>()
 
@@ -525,7 +596,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
         incomePieChart.minAngleForSlices = 15f // 각 파이 조각의 최소 각도를 설정하여 보기 좋게 조정
 
         incomePieChart.invalidate() // Refresh the chart
-    }
+    }*/
 
 
 }

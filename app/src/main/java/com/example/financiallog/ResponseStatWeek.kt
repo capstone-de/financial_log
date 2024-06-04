@@ -1,14 +1,17 @@
 package com.example.financiallog
 
 data class ResponseStatWeek (
-    val mon: DayStatistics,
-    val tue: DayStatistics,
-    val wed: DayStatistics,
-    val thu: DayStatistics,
-    val fri: DayStatistics,
-    val sat: DayStatistics,
-    val sun: DayStatistics,
-    val category: WeekCategory
+    val mon: DayStatistics? = null,
+    val tue: DayStatistics? = null,
+    val wed: DayStatistics? = null,
+    val thu: DayStatistics? = null,
+    val fri: DayStatistics? = null,
+    val sat: DayStatistics? = null,
+    val sun: DayStatistics? = null,
+
+    //val category: WeekCategory
+
+    val category1: WeekCategory = WeekCategory(emptyList(), emptyList()) // 초기화된 변수
 ) {
     data class DayStatistics(
         val totalIncome: Int?,
