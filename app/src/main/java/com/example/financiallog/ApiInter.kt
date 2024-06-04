@@ -30,8 +30,9 @@ interface ApiInter {
                      @Query("date") date: String): Call<ResponseIncome>
 
     //달력
-    @GET("/calendar_app/getCalendar?user=6&year=2024&month=5")
-    fun getcalender():Call<ResponseCalendar>
+    @GET("/calendar_app/getCalendar?")
+    fun getcalender(@Query("user") userId: Int,
+                    @Query("year") year: String,@Query("month") month: String ):Call<ResponseCalendar>
 
     //일기관련
     @POST("/diary_app/saveDiary")
@@ -45,13 +46,13 @@ interface ApiInter {
 
     //통계관련
     @GET("/statistics_app/daily")
-    fun getStatisticsDaily(@Query("user") userId: Int, @Query("date") date: String): Call<List<ResponseStatDay>>//일별
+    fun getStatisticsDaily(@Query("user") userId: Int, @Query("date") date: String): Call<ResponseStatDay>//일별
 
     @GET("/statistics_app/weekly")
     fun getStatisticsWeekly(@Query("user") userId: Int, @Query("date") date: String): Call<ResponseStatWeek>//주별
 
     @GET("/statistics_app/monthly")
-    fun getStatisticsMonthly(@Query("user") userId: Int, @Query("date") date: String): Call<List<ResponseStatMonth>> //월별
+    fun getStatisticsMonthly(@Query("user") userId: Int, @Query("year") year: String, @Query("month") month: String): Call<ResponseStatMonth> //월별
 
     /*@GET("/statistics_app/daily?user=6&date=24-05-10}")
     fun getStatisticsDaily(): Call<List<ResponseStatDay>> //일별
@@ -60,8 +61,8 @@ interface ApiInter {
     fun getStatisticsWeekly(): Call<List<ResponseStatWeek>> //주별
     @GET("/statistics_app/monthly?user=6&year=2024&month=05")
     fun getStatisticsMonthly(): Call<List<ResponseStatMonth>> //월별*/
-    @GET("/statistics_app/yearly?user=6&year=2024")
-    fun getStatisticsYearly(): Call<List<ResponseStatYear>> //연별
+    @GET("/statistics_app/yearly?user=6")
+    fun getStatisticsYearly(@Query("year") year: String): Call<ResponseStatYear> //연별
     @GET("/wordcloud_app/myDiary?user=6")// 나의 현재 트렌드
     fun getStatisticsMyHashtag():Call<ResponseBody>
     @GET("/wordcloud_app/diary") //전체 트렌드

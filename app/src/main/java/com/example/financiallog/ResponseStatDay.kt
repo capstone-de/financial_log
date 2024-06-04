@@ -1,8 +1,8 @@
 package com.example.financiallog
 
 data class ResponseStatDay(
-    val totalIncome: Int,
-    val totalExpenses: Int,
+    val total_income: Int,
+    val total_expenses: Int,
     val expenses: List<DayExpense>
 ){
     data class DayExpense(

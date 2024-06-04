@@ -15,7 +15,7 @@ class ApiObject {
 
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8000/")
+            .baseUrl("http://54.79.124.50/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

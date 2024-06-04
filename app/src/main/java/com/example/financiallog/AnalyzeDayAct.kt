@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -265,20 +266,23 @@ class AnalyzeDayAct : AppCompatActivity() {
     private fun IncomeForDate(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
-        apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<List<ResponseStatDay>> {
-            override fun onResponse(call: Call<List<ResponseStatDay>>, response: Response<List<ResponseStatDay>>) {
+        apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<ResponseStatDay> {
+            override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
-                    response.body()?.let { data ->
-                        if (data.isNotEmpty()) {
-                            incomeTextView.text = data[0].totalIncome.toString()
-                        } else {
-                            incomeTextView.text = "0"
-                        }
-                    }
+                    val incometv = response.body()!!.total_income
+                    val formatincome = NumberFormat.getNumberInstance(Locale.KOREA).format(incometv)
+                    incomeTextView.text = formatincome
+//                    response.body()?.let { data ->
+//                        if (data.isNotEmpty()) {
+//                            incomeTextView.text = data[0].totalIncome.toString()
+//                        } else {
+//                            incomeTextView.text = "0"
+//                        }
+//                    }
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseStatDay>>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseStatDay>, t: Throwable) {
                 // API 호출 실패 처리
                 Log.d("response", "실패$t")
                 Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
@@ -290,20 +294,23 @@ class AnalyzeDayAct : AppCompatActivity() {
     private fun ExpensesForDate(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
-        apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<List<ResponseStatDay>> {
-            override fun onResponse(call: Call<List<ResponseStatDay>>, response: Response<List<ResponseStatDay>>) {
+        apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<ResponseStatDay> {
+            override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
-                    response.body()?.let { data ->
-                        if (data.isNotEmpty()) {
-                            expendTextView.text = data[0].totalExpenses.toString()
-                        } else {
-                            expendTextView.text = "0"
-                        }
-                    }
+                    val expendsetv = response.body()!!.total_expenses
+                    val formatexpendse = NumberFormat.getNumberInstance(Locale.KOREA).format(expendsetv)
+                    expendTextView.text = formatexpendse
+//                    response.body()?.let { data ->
+//                        if (data.isNotEmpty()) {
+//                            expendTextView.text = data[0].totalExpenses.toString()
+//                        } else {
+//                            expendTextView.text = "0"
+//                        }
+//                    }
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseStatDay>>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseStatDay>, t: Throwable) {
                 // API 호출 실패 처리
                 Log.d("response", "실패$t")
                 Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
@@ -315,22 +322,26 @@ class AnalyzeDayAct : AppCompatActivity() {
     private fun ExpenseListForDate(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
-        apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<List<ResponseStatDay>> {
-            override fun onResponse(call: Call<List<ResponseStatDay>>, response: Response<List<ResponseStatDay>>) {
+        apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<ResponseStatDay> {
+            override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
-                    response.body()?.let { data ->
-                        if (data.isNotEmpty()) {
-                            (day_re.adapter as DayExpenseAdapter).updateData(data[0].expenses)
-                            Toast.makeText(applicationContext, "지출 내역을 가져옴", Toast.LENGTH_SHORT).show()
-                        } else {
-                            (day_re.adapter as DayExpenseAdapter).updateData(emptyList())
-                            Toast.makeText(applicationContext, "지출 내역이 없습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                    val expenselistdata = response.body()!!.expenses
+                    val expenseadapter = DayExpenseAdapter(expenselistdata)
+                    day_re.adapter = expenseadapter
+                    Toast.makeText(applicationContext, "지출 내역을 가져옴", Toast.LENGTH_SHORT).show()
+//                    response.body()?.let { data ->
+//                        if (data.isNotEmpty()) {
+//                            (day_re.adapter as DayExpenseAdapter).updateData(data[0].expenses)
+//                            Toast.makeText(applicationContext, "지출 내역을 가져옴", Toast.LENGTH_SHORT).show()
+//                        } else {
+//                            (day_re.adapter as DayExpenseAdapter).updateData(emptyList())
+//                            Toast.makeText(applicationContext, "지출 내역이 없습니다.", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
                 }
             }
 
-            override fun onFailure(call: Call<List<ResponseStatDay>>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseStatDay>, t: Throwable) {
                 // API 호출 실패 처리
                 Log.d("response", "실패$t")
                 Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()

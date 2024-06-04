@@ -506,7 +506,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
         // 파이 차트 스타일 설정
         incomePieChart.setUsePercentValues(true)
         incomePieChart.description.isEnabled = true
-        // incomePieChart.description.text = "카테고리별 수입"
+       // incomePieChart.description.text = "카테고리별 수입"
         // incomePieChart.description.textSize = 12f
 
         // 파이 차트 중앙 구멍 활성화 및 제목 설정
@@ -529,3 +529,4 @@ class AnalyzeWeekAct : AppCompatActivity() {
 
 
 }
+
