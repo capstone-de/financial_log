@@ -396,6 +396,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
         // 차트 스타일 설정
         weekbarChart.description.isEnabled = false // 차트 설명 제거
         weekbarChart.legend.isEnabled = true // 범례 설정 (범례는 유지)
+        weekbarChart.axisRight.isEnabled = false
 
         // 차트 업데이트
         weekbarChart.invalidate()

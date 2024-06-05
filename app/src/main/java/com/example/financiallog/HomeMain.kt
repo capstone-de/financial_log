@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -69,13 +70,13 @@ class HomeMain: AppCompatActivity() {
                             val data = response.body()!!.expense
                             val expendadapter = ExpendAdapter(data)
                             re_expend.adapter = expendadapter
-                            Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
 
                         }
                     }
                     override fun onFailure(call: Call<ResponseExpend>, t: Throwable) {
                         Log.d("response", "실패$t")
-                        Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "선택된 지출 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                     }
 
                 })
@@ -88,13 +89,13 @@ class HomeMain: AppCompatActivity() {
                             val data = response.body()!!.income
                             val incomeadapter = IncomeAdapter(data)
                             re_income.adapter = incomeadapter
-                            Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
+                            //Toast.makeText(applicationContext, "성공", Toast.LENGTH_SHORT).show()
 
                         }
                     }
                     override fun onFailure(call: Call<ResponseIncome>, t: Throwable) {
                         Log.d("response", "실패$t")
-                        Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "선택된 수입 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
                     }
 
                 })
@@ -117,7 +118,7 @@ class HomeMain: AppCompatActivity() {
                     responseCalendar?.let { calendar ->
                         // 노란색 점 표시
                         calendar.diary.forEach { diary ->
-                            calendarView.addDecorator(YellowPointDecorator(diary))
+                            calendarView.addDecorator(RedPointDecorator(diary))
                         }
 
                         // 파란색 점 표시
@@ -127,7 +128,7 @@ class HomeMain: AppCompatActivity() {
 
                         // 빨간색 점 표시
                         calendar.expense.forEach { expense ->
-                            calendarView.addDecorator(RedPointDecorator(expense))
+                            calendarView.addDecorator(YellowPointDecorator(expense))
                         }
                     }
                     calendarView.invalidateDecorators() // 모든 Decorator 추가 후 캘린더 뷰 갱신
@@ -136,10 +137,52 @@ class HomeMain: AppCompatActivity() {
             }
             override fun onFailure(call: Call<ResponseCalendar>, t: Throwable) {
                 Log.d("get main calender", "실패$t")
-                Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "달력의 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
 
         })
+
+        // 달 변경 리스너 설정
+        calendarView.setOnMonthChangedListener { widget, date ->
+            val year = date.year.toString()
+            val month = date.month.toString()// `MaterialCalendarView`의 month는 0부터 시작하므로 +1 해줍니다.
+
+            data_calender.api.getcalender(6,year, month).enqueue(object : Callback<ResponseCalendar>{
+                @SuppressLint("SuspiciousIndentation")
+                override fun onResponse(
+                    call: Call<ResponseCalendar>,
+                    response: Response<ResponseCalendar>
+                ) {
+                    if(response.isSuccessful){
+                        val responseCalendar = response.body()
+                        responseCalendar?.let { calendar ->
+                            // 노란색 점 표시
+                            calendar.diary.forEach { diary ->
+                                calendarView.addDecorator(RedPointDecorator(diary))
+                            }
+
+                            // 파란색 점 표시
+                            calendar.income.forEach { income ->
+                                calendarView.addDecorator(BluePointDecorator(income))
+                            }
+
+                            // 빨간색 점 표시
+                            calendar.expense.forEach { expense ->
+                                calendarView.addDecorator(YellowPointDecorator(expense))
+                            }
+                        }
+                        calendarView.invalidateDecorators() // 모든 Decorator 추가 후 캘린더 뷰 갱신
+
+                    }
+                }
+                override fun onFailure(call: Call<ResponseCalendar>, t: Throwable) {
+                    Log.d("get main calender", "실패$t")
+                    Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                }
+
+            })
+
+        }
 
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
@@ -158,7 +201,7 @@ class HomeMain: AppCompatActivity() {
             }
             override fun onFailure(call: Call<ResponseExpend>, t: Throwable) {
                 Log.d("response", "실패$t")
-                Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "지출 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -181,7 +224,7 @@ class HomeMain: AppCompatActivity() {
             }
             override fun onFailure(call: Call<ResponseIncome>, t: Throwable) {
                 Log.d("response", "실패$t")
-                Toast.makeText(applicationContext, "정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "수입 정보를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
             }
 
         })
@@ -314,7 +357,6 @@ class HomeMain: AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.getDefault())
         return date.format(formatter)
     }
-
     fun LocalDate.toCalendarDay(): CalendarDay = CalendarDay.from(year, monthValue - 1, dayOfMonth)
 
 

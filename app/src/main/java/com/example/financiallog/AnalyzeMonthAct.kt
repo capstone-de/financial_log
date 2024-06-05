@@ -420,7 +420,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         xAxis.axisMinimum = 0f
         xAxis.axisMaximum = barData.xMax + 1f
         monthChart.axisRight.isEnabled = false
-        monthChart.axisLeft.isEnabled = false
+        //monthChart.axisLeft.isEnabled = false
         monthChart.legend.isEnabled = false //범례 지우기
 
         // 월 이름 배열 생성
