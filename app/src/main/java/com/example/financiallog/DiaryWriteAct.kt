@@ -50,7 +50,7 @@ class DiaryWriteAct : AppCompatActivity() {
     lateinit var tag_chip:Chip; lateinit var photo_tv:ImageView; lateinit var ed_tag : EditText;
     lateinit var photo_tv1:ImageView; lateinit var photo_tv2:ImageView;
     lateinit var openchip:Chip; lateinit var privatechip:Chip; lateinit var tag_group:ChipGroup;
-    val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1
+    val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1002
     val list_ex : ApiObject by lazy { ApiObject() };
     private var currentPhotoPath: String? = null
     var hashtaglist = ArrayList<String>()
@@ -153,30 +153,20 @@ class DiaryWriteAct : AppCompatActivity() {
         }
 
         // 사진 버튼 눌렀을 때
-        photo_btn.setOnClickListener(View.OnClickListener{
-
-            //갤러리 열기
+        photo_btn.setOnClickListener {
+            // 갤러리 열기
             val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
 
-            //카메라 열기
+            // 카메라 열기
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
             // 두 가지 Intent 실행
             val chooser = Intent.createChooser(galleryIntent, "Select Image")
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
             startActivityForResult(chooser, PICK_IMAGE_REQUEST)
+        }
 
-
-            //val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            //startActivityForResult(intent, PICK_IMAGE_REQUEST)
-
-            // val intent = Intent(Intent.ACTION_PICK)
-            //intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-            // intent.setAction(Intent.ACTION_PICK);
-            //launcher.launch(intent);
-
-        })
 
         // 저장하기 버튼 눌렀을 때
         diary_save.setOnClickListener(View.OnClickListener {

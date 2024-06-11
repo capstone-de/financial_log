@@ -346,13 +346,13 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         val barData = BarData(incomeDataSet, expenseDataSet)
         year_barChart.data = barData
 
-        // 차트 설명 설정
+        /*// 차트 설명 설정
         year_barChart.description.apply {
             text = "(단위:만원)"
             textSize = 8f
             textColor = Color.BLACK
             setPosition(year_barChart.width.toFloat() - 80f, 20f)
-        }
+        }*/
 
         // X축 설정
         val xAxis = year_barChart.xAxis
@@ -361,6 +361,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         xAxis.setDrawGridLines(false)
         xAxis.valueFormatter = IndexAxisValueFormatter(getMonths())
         year_barChart.axisRight.isEnabled = false // 오른쪽 Y축은 비활성화합니다.
+        year_barChart.legend.isEnabled = false
 
         // 바 차트 스타일 설정
         val barWidth = 0.3f

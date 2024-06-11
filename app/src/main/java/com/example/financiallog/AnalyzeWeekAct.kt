@@ -20,6 +20,7 @@ import java.util.Locale
 
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -318,8 +319,8 @@ class AnalyzeWeekAct : AppCompatActivity() {
 
                         WeekBarChart(data)
 
-                        //WeekExpensePieChart(listOf(data))
-                        //WeekIncomePieChart(listOf(data))
+                        WeekExpensePieChart(listOf(data))
+                        WeekIncomePieChart(listOf(data))
                     }
                 } else {
                     // API 호출 실패 처리
@@ -336,195 +337,68 @@ class AnalyzeWeekAct : AppCompatActivity() {
     }
 
     //일별 수입지출 통계
-    /*private fun WeekBarChart(data: List<ResponseStatWeek>) {
-
-        val incomeEntries = mutableListOf<BarEntry>()
-        val expenseEntries = mutableListOf<BarEntry>()
-
-        data.forEachIndexed { index, item ->
-            val offset = index * 7 // 각 주별 데이터는 7개의 항목이 필요합니다.
-
-            // 월요일 데이터 처리
-            val totalIncomeMon = item.mon?.totalIncome ?: 0
-            incomeEntries.add(BarEntry((offset).toFloat(), totalIncomeMon.toFloat()))
-            val totalExpenseMon = item.mon?.totalExpense ?: 0
-            expenseEntries.add(BarEntry((offset).toFloat(), totalExpenseMon.toFloat()))
-
-            // 화요일 데이터 처리
-            val totalIncomeTue = item.tue?.totalIncome ?: 0
-            incomeEntries.add(BarEntry((offset + 1).toFloat(), totalIncomeTue.toFloat()))
-            val totalExpenseTue = item.tue?.totalExpense ?: 0
-            expenseEntries.add(BarEntry((offset + 1).toFloat(), totalExpenseTue.toFloat()))
-
-            // 수요일 데이터 처리
-            val totalIncomeWed = item.wed?.totalIncome ?: 0
-            incomeEntries.add(BarEntry((offset + 2).toFloat(), totalIncomeWed.toFloat()))
-            val totalExpenseWed = item.wed?.totalExpense ?: 0
-            expenseEntries.add(BarEntry((offset + 2).toFloat(), totalExpenseWed.toFloat()))
-
-            // 목요일 데이터 처리
-            val totalIncomeThu = item.thu?.totalIncome ?: 0
-            incomeEntries.add(BarEntry((offset + 3).toFloat(), totalIncomeThu.toFloat()))
-            val totalExpenseThu = item.thu?.totalExpense ?: 0
-            expenseEntries.add(BarEntry((offset + 3).toFloat(), totalExpenseThu.toFloat()))
-
-            // 금요일 데이터 처리
-            val totalIncomeFri = item.fri?.totalIncome ?: 0
-            incomeEntries.add(BarEntry((offset + 4).toFloat(), totalIncomeFri.toFloat()))
-            val totalExpenseFri = item.fri?.totalExpense ?: 0
-            expenseEntries.add(BarEntry((offset + 4).toFloat(), totalExpenseFri.toFloat()))
-
-            // 토요일 데이터 처리
-            val totalIncomeSat = item.sat?.totalIncome ?: 0
-            incomeEntries.add(BarEntry((offset + 5).toFloat(), totalIncomeSat.toFloat()))
-            val totalExpenseSat = item.sat?.totalExpense ?: 0
-            expenseEntries.add(BarEntry((offset + 5).toFloat(), totalExpenseSat.toFloat()))
-
-            // 일요일 데이터 처리
-            val totalIncomeSun = item.sun?.totalIncome ?: 0
-            incomeEntries.add(BarEntry((offset + 6).toFloat(), totalIncomeSun.toFloat()))
-            val totalExpenseSun = item.sun?.totalExpense ?: 0
-            expenseEntries.add(BarEntry((offset + 6).toFloat(), totalExpenseSun.toFloat()))
-        }
-
-        // 수입 데이터셋 설정
-        val incomeDataSet = BarDataSet(incomeEntries, "수입")
-        incomeDataSet.color = Color.parseColor("#6C72FF") // 수입 색상 설정
-        incomeDataSet.valueTextColor = Color.BLACK
-        incomeDataSet.valueTextSize = 10f
-
-        // 지출 데이터셋 설정
-        val expenseDataSet = BarDataSet(expenseEntries, "지출")
-        expenseDataSet.color = Color.parseColor("#F998B5") // 지출 색상 설정
-        expenseDataSet.valueTextColor = Color.BLACK
-        expenseDataSet.valueTextSize = 10f
-
-        // 수입과 지출을 각각 보여줄 바 차트 데이터 설정
-        val barData = BarData(incomeDataSet, expenseDataSet)
-        barData.barWidth = 0.4f // 막대 너비 설정
-
-        // 바 차트에 데이터 설정 및 업데이트
-        weekbarChart.data = barData
-
-        // X축 설정
-        val xAxis = weekbarChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.setDrawGridLines(false)
-        xAxis.valueFormatter = IndexAxisValueFormatter(getDays())
-
-        weekbarChart.groupBars(0f, 0.04f, 0.01f) // 그룹 간격 설정
-        weekbarChart.invalidate()
-    }
-    private fun getDays(): List<String> {
-        return listOf("월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일")
-    }*/
-
-    /*private fun WeekBarChart(data: List<ResponseStatWeek>?) {
-        val incomeEntries = mutableListOf<BarEntry>()
-        val expenseEntries = mutableListOf<BarEntry>()
-
-        data?.firstOrNull()?.let { weekData ->
-            for (weekIndex in 0 until 7) {
-                val dayData = when (weekIndex) {
-                    0 -> weekData.mon
-                    1 -> weekData.tue
-                    2 -> weekData.wed
-                    3 -> weekData.thu
-                    4 -> weekData.fri
-                    5 -> weekData.sat
-                    6 -> weekData.sun
-                    else -> null
-                } ?: ResponseStatWeek.DayStatistics(0, 0)
-
-                val totalIncome = dayData.totalIncome ?: 0
-                val totalExpense = dayData.totalExpense ?: 0
-
-
-                val index = weekIndex * 7
-                incomeEntries.add(BarEntry(index.toFloat(), totalIncome.toFloat()))
-                expenseEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
-
-                // 디버깅을 위한 로그 출력
-                Log.d("WeekBarChart", "weekIndex: $weekIndex, totalIncome: $totalIncome, totalExpense: $totalExpense")
-            }
-        }
-
-        val incomeDataSet = BarDataSet(incomeEntries, "수입").apply {
-            color = Color.parseColor("#6C72FF")
-            valueTextColor = Color.BLACK
-            valueTextSize = 10f
-        }
-
-        val expenseDataSet = BarDataSet(expenseEntries, "지출").apply {
-            color = Color.parseColor("#F998B5")
-            valueTextColor = Color.BLACK
-            valueTextSize = 10f
-        }
-
-        val barData = BarData(incomeDataSet, expenseDataSet).apply {
-            barWidth = 0.4f
-        }
-
-        weekbarChart.data = barData
-        weekbarChart.groupBars(0f, 0.04f, 0.01f)
-        weekbarChart.invalidate()
-
-        val xAxis = weekbarChart.xAxis.apply {
-            position = XAxis.XAxisPosition.BOTTOM
-            setDrawGridLines(false)
-            valueFormatter = IndexAxisValueFormatter(getDays())
-        }
-
-        weekbarChart.invalidate()
-    }
-
-    private fun getDays(): List<String> {
-        return listOf("월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일")
-    }*/
-
     private fun WeekBarChart(data: ResponseStatWeek) {
         val incomeEntries = mutableListOf<BarEntry>()
         val expenseEntries = mutableListOf<BarEntry>()
-        
+
         val daysData = listOf(
-            data.mon, data.tue, data.wed, data.thu,
-            data.fri, data.sat, data.sun
+            data.Mon, data.Tue, data.Wed, data.Thu,
+            data.Fri, data.Sat, data.Sun
         )
-        
-        //데이터 모델에서 데이터 추출
-        daysData.forEachIndexed{ index, dayData ->
-            val totalIncome = dayData?.totalIncome ?: 0
-            val totalExpense = dayData?.totalExpense ?: 0
+
+        // 데이터 모델에서 데이터 추출
+        daysData.forEachIndexed { index, dayData ->
+            val totalIncome = dayData?.total_income ?: 0
+            val totalExpense = dayData?.total_expense ?: 0
 
             incomeEntries.add(BarEntry(index.toFloat(), totalIncome.toFloat()))
             expenseEntries.add(BarEntry(index.toFloat(), totalExpense.toFloat()))
         }
 
-
         val incomeDataSet = BarDataSet(incomeEntries, "수입")
         incomeDataSet.color = Color.parseColor("#6C72FF")
-        incomeDataSet.valueTextColor = Color.BLACK
-        incomeDataSet.valueTextSize = 10f
+        //incomeDataSet.setDrawValues(false) // 값을 차트 위에 표시하지 않음
+        //incomeDataSet.setBarRounded(true) // 모든 바의 모서리를 라운드 처리
 
         val expenseDataSet = BarDataSet(expenseEntries, "지출")
         expenseDataSet.color = Color.parseColor("#F998B5")
-        expenseDataSet.valueTextColor = Color.BLACK
-        expenseDataSet.valueTextSize = 10f
+        //expenseDataSet.setDrawValues(false) // 값을 차트 위에 표시하지 않음
+        //expenseDataSet.setBarRounded(true) // 모든 바의 모서리를 라운드 처리
 
         val barData = BarData(incomeDataSet, expenseDataSet)
         weekbarChart.data = barData
 
-        //바 차트
-        barData.barWidth = 0.4f
-        weekbarChart.groupBars(0f, 0.04f, 0.01f)
-        weekbarChart.invalidate()
+        // 바 차트
+        val barWidth = 0.3f // 바의 넓이 조절
+        barData.barWidth = barWidth
+        val groupSpace = 1f
+        val barSpace = 0.05f
+        weekbarChart.groupBars(0f, groupSpace, barSpace)
 
-        //x축
+        // x축
         val xAxis = weekbarChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)
         xAxis.valueFormatter = IndexAxisValueFormatter(getDays())
+        xAxis.setDrawAxisLine(false) // x축 선 제거
 
+        /*// y축
+        val yAxisLeft = weekbarChart.axisLeft
+        yAxisLeft.setDrawGridLines(false)
+        yAxisLeft.setDrawAxisLine(false) // y축 왼쪽 선 제거
+        yAxisLeft.setDrawLabels(false) // y축 왼쪽 레이블 제거
+
+        val yAxisRight = weekbarChart.axisRight
+        yAxisRight.setDrawGridLines(false)
+        yAxisRight.setDrawAxisLine(false) // y축 오른쪽 선 제거
+        yAxisRight.setDrawLabels(false) // y축 오른쪽 레이블 제거*/
+
+        // 차트 스타일 설정
+        weekbarChart.description.isEnabled = false // 차트 설명 제거
+        weekbarChart.legend.isEnabled = true // 범례 설정 (범례는 유지)
+        weekbarChart.axisRight.isEnabled = false
+
+        // 차트 업데이트
         weekbarChart.invalidate()
     }
 
@@ -535,35 +409,50 @@ class AnalyzeWeekAct : AppCompatActivity() {
 
 
 
+
+
     // 지출 파이 차트
-    /*private fun WeekExpensePieChart(data: List<ResponseStatWeek>) {
+    private fun WeekExpensePieChart(data: List<ResponseStatWeek>) {
         val entries = mutableListOf<PieEntry>()
         val categoryExpense = mutableMapOf<String, Int>()
+
+        // 카테고리 이름 매핑
+        val categoryMap = mapOf(
+            "tax" to "세금",
+            "food" to "음식",
+            "housing/communication" to "주거/통신",
+            "tranportation/vehicle" to "교통/차량",
+            "education" to "교육",
+            "personal event" to "경조사/회비",
+            "medical" to "병원/약국",
+            "cultural/living" to "문화생활",
+            "shopping" to "쇼핑",
+            "etc" to "기타"
+        )
 
         // 카테고리별 지출 합산
         data.forEach { weekData ->
             weekData.category?.expense?.forEach { expense ->
                 val category = expense.category ?: "Unknown"
-                val totalExpense = expense.totalExpense ?: 0
+                val totalExpense = expense.total_expense ?: 0
                 categoryExpense[category] = categoryExpense.getOrDefault(category, 0) + totalExpense
             }
         }
-        if (categoryExpense.isEmpty()) {
-            Log.e("AnalyzeWeekAct", "No income data available for pie chart. Adding test data.")
-            // 테스트 데이터 추가
-            categoryExpense["Food"] = 200
-            categoryExpense["Transportation"] = 100
-            categoryExpense["Entertainment"] = 50
 
+        if (categoryExpense.isEmpty()) {
+            Log.e("AnalyzeWeekAct", "지출 데이터가 없습니다.")
         }
 
         categoryExpense.forEach { (category, totalExpense) ->
-            entries.add(PieEntry(totalExpense.toFloat(), category))
+            // 카테고리 이름을 한글로 매핑
+            val categoryName = categoryMap[category] ?: category
+            entries.add(PieEntry(totalExpense.toFloat(), categoryName))
         }
 
         // 파이 데이터셋 생성 및 설정
-        val dataSet = PieDataSet(entries, "주간 카테고리별 지출")
-        dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList() // 색상 설정
+        val dataSet = PieDataSet(entries, "")
+        dataSet.colors = ColorTemplate.VORDIPLOM_COLORS.toList() // 색상 설정
+        dataSet.setDrawValues(false) // 파이 조각 위 숫자값 숨기기
 
         // 파이 차트에 데이터 설정
         val pieData = PieData(dataSet)
@@ -572,11 +461,9 @@ class AnalyzeWeekAct : AppCompatActivity() {
         // 파이 차트 스타일 및 라벨 설정
         expensePieChart.setUsePercentValues(true)
         expensePieChart.description.isEnabled = true
-        expensePieChart.description.text = "주간 카테고리별 지출"
-        expensePieChart.description.textSize = 12f
-        expensePieChart.setEntryLabelColor(Color.BLACK)
-        expensePieChart.setEntryLabelTextSize(12f)
 
+        // 차트 위의 라벨 숨기기
+        expensePieChart.setDrawEntryLabels(false)
 
         // 파이 차트 중앙 구멍 활성화 및 제목 설정
         expensePieChart.isDrawHoleEnabled = true
@@ -586,9 +473,20 @@ class AnalyzeWeekAct : AppCompatActivity() {
         expensePieChart.setCenterTextSize(15f)
         expensePieChart.setCenterTextColor(Color.BLACK)
 
-        //차트 업데이트
-        expensePieChart.invalidate() // Refresh the chart
+        // 범례 설정
+        val legend = expensePieChart.legend
+        legend.isEnabled = true
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+        legend.orientation = Legend.LegendOrientation.HORIZONTAL
+        legend.setDrawInside(false)
+        legend.textSize = 12f
+
+        // 차트 업데이트
+        expensePieChart.invalidate()
     }
+
+
 
 
     // 수입 파이 차트
@@ -596,39 +494,54 @@ class AnalyzeWeekAct : AppCompatActivity() {
         val entries = mutableListOf<PieEntry>()
         val categoryIncome = mutableMapOf<String, Int>()
 
+        // 카테고리 이름 매핑
+        val categoryMap = mapOf(
+
+            "salary" to "월급",
+            "etc" to "기타"
+            //"additionalincome" to "부수입",
+            //"financialincome" to "금융수입"
+
+        )
+
         data.forEach { weekData ->
             weekData.category?.income?.forEach { income ->
                 val category = income.category ?: "Unknown"
-                val totalIncome = income.totalIncome ?: 0
+                val totalIncome = income.total_income ?: 0
                 categoryIncome[category] = categoryIncome.getOrDefault(category, 0) + totalIncome
             }
         }
 
         if (categoryIncome.isEmpty()) {
-            Log.e("AnalyzeWeekAct", "No income data available for pie chart.")
-            // 테스트 데이터 추가
-            categoryIncome["Salary"] = 5000
-            categoryIncome["Investment"] = 2000
-            categoryIncome["Freelance"] = 3000
+            Log.e("AnalyzeWeekAct", "수입 데이터가 없습니다.")
         }
 
         categoryIncome.forEach { (category, totalIncome) ->
-            entries.add(PieEntry(totalIncome.toFloat(), category))
+
+            val categoryName = categoryMap[category] ?: category
+            entries.add(PieEntry(totalIncome.toFloat(), categoryName))
         }
 
-        val dataSet = PieDataSet(entries, "수입")
-        dataSet.colors = ColorTemplate.JOYFUL_COLORS.toList()
-        dataSet.valueTextColor = Color.BLACK
-        dataSet.valueTextSize = 12f
+        // 파이 데이터셋 생성 및 설정
+        val dataSet = PieDataSet(entries, "")
+        //다른색 dataSet.colors = ColorTemplate.JOYFUL_COLORS.toList()
+        dataSet.colors = ColorTemplate.LIBERTY_COLORS.toList()
+        dataSet.setDrawValues(false) // 파이 조각 위 숫자값 숨기기
 
+
+        //dataSet.valueTextColor = Color.BLACK
+        //dataSet.valueTextSize = 12f
+
+        // 파이 차트에 데이터 설정
         val pieData = PieData(dataSet)
         incomePieChart.data = pieData
 
-        // 파이 차트 스타일 설정
+        // 파이 차트 스타일 및 라벨 설정
         incomePieChart.setUsePercentValues(true)
         incomePieChart.description.isEnabled = true
-       // incomePieChart.description.text = "카테고리별 수입"
-        // incomePieChart.description.textSize = 12f
+
+        // 차트 위의 라벨 숨기기
+        incomePieChart.setDrawEntryLabels(false)
 
         // 파이 차트 중앙 구멍 활성화 및 제목 설정
         incomePieChart.isDrawHoleEnabled = true
@@ -638,16 +551,18 @@ class AnalyzeWeekAct : AppCompatActivity() {
         incomePieChart.setCenterTextSize(15f)
         incomePieChart.setCenterTextColor(Color.BLACK)
 
-        // 라벨 설정
-        incomePieChart.setEntryLabelColor(Color.BLACK)
-        incomePieChart.setEntryLabelTextSize(12f)
+        // 범례 설정
+        val legend = incomePieChart.legend
+        legend.isEnabled = true
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+        legend.orientation = Legend.LegendOrientation.HORIZONTAL
+        legend.setDrawInside(false)
+        legend.textSize = 12f
 
-        // 파이 조각의 최소 각도 설정 (기본값은 0f)
-        incomePieChart.minAngleForSlices = 15f // 각 파이 조각의 최소 각도를 설정하여 보기 좋게 조정
 
-        incomePieChart.invalidate() // Refresh the chart
-    }*/
-
+        // 차트 업데이트
+        incomePieChart.invalidate()
+    }
 
 }
-

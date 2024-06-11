@@ -14,7 +14,7 @@ data class ResponseStatMonth (
     val Nov: MonthStatistics? = null,
     val Dec: MonthStatistics? = null,
 
-    val category: MonthlyCategory = MonthlyCategory(emptyList(), emptyList()), // 기본값 설정
+    val category: MonthlyCategory, // 기본값 설정
     val satisfaction: Satisfaction? = null
 
 ) {
@@ -24,13 +24,13 @@ data class ResponseStatMonth (
     )
 
     data class MonthlyCategory(
-        val lastMonth: List<MonthCategoryExpense>,
-        val thisMonth: List<MonthCategoryExpense>
+        val last_month: List<MonthCategoryExpense>,
+        val this_month: List<MonthCategoryExpense>
     )
 
     data class MonthCategoryExpense(
         val category: String,
-        val total_expense: Int?
+        val total_expense: Int
     )
 
     data class Satisfaction(
