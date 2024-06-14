@@ -2,9 +2,10 @@ package com.example.financiallog
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -18,24 +19,21 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.VolleyLog.TAG
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.nio.file.Files.list
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -167,55 +165,41 @@ class DiaryWriteAct : AppCompatActivity() {
             startActivityForResult(chooser, PICK_IMAGE_REQUEST)
         }
 
-
         // 저장하기 버튼 눌렀을 때
-        diary_save.setOnClickListener(View.OnClickListener {
+        diary_save.setOnClickListener {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
             val date = dateFormat.format(Date())
             val content = ed_diary.text.toString()
             val privacy = diarychip
             val hashtag = hashtaglist
-            val files = arrayOf(photo_tv,photo_tv1,photo_tv2)
 
-            var input = HashMap<String, Any>()
-            var tag = HashMap<String, Any>()
-            var file = ArrayList<String>()
-            input.put("user", "6")
-            input.put("date", date.toString())
-            input.put("contents", content)
-            input.put("privacy", privacy.toString())
-            if (hashtag.isEmpty()){
-                input.put("hastag",hashtaglist)
-            } else{
-                Log.d("hashtag is not empty", hashtaglist.toString())
-//                tag["hashtag"] = hashtag
-                input.put("hastag",hashtaglist)
-            }
-            if(files.isEmpty()){
-                input.put("file",file)
-            }else {
-//                file["file"] = files
-                input.put("file",file)
-            }
-            //input.put("hastag", hashtag)
-            //input.put("file", Difile.toString())
-            Log.d("diary input", input.toString())
-            apiobject.api.insertDi(input)!!.enqueue(object : Callback<PostDiary>{
+            val input = HashMap<String, Any>()
+            input["user"] = "6"
+            input["date"] = date.toString()
+            input["contents"] = content
+            input["privacy"] = privacy.toString()
+            input["hashtag"] = hashtag
+
+            val imageUris = listOfNotNull(photo_tv.tag as? Uri, photo_tv1.tag as? Uri, photo_tv2.tag as? Uri)
+            val files = imageUris.mapNotNull { createPartFromFile(this, it, "files") }
+
+            input["file"] = files
+
+            apiobject.api.insertDi(input)!!.enqueue(object : Callback<PostDiary> {
                 override fun onResponse(call: Call<PostDiary>, response: Response<PostDiary>) {
                     if (response.isSuccessful) {
                         Log.d("test", response.body().toString())
-                        var data = response.body() // GsonConverter를 사용해 데이터매핑
-                        var intnet = Intent(applicationContext,SaveDiary::class.java)
-                        startActivity(intnet)
+                        val intent = Intent(applicationContext, SaveDiary::class.java)
+                        startActivity(intent)
                     }
                 }
+
                 override fun onFailure(call: Call<PostDiary>, t: Throwable) {
                     Log.d("test", "실패$t")
                 }
             })
-            // val intent = Intent(this, SaveDiary::class.java)
-            //  startActivity(intent)
-        })
+        }
+
     }
 
     private fun addHashtag(hashtag: String) {
@@ -232,26 +216,33 @@ class DiaryWriteAct : AppCompatActivity() {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
             if (data?.clipData != null) {
-                // 여러 장 선택
                 val count = data.clipData?.itemCount ?: 0
                 for (i in 0 until count) {
                     val imageUri = data.clipData?.getItemAt(i)?.uri
-                    // 이미지뷰에 이미지 설정
-                    photo_tv.setImageURI(imageUri)
-                    photo_tv1.setImageURI(imageUri)
-                    photo_tv2.setImageURI(imageUri)
+                    when (i) {
+                        0 -> {
+                            photo_tv.setImageURI(imageUri)
+                            photo_tv.tag = imageUri
+                        }
+                        1 -> {
+                            photo_tv1.setImageURI(imageUri)
+                            photo_tv1.tag = imageUri
+                        }
+                        2 -> {
+                            photo_tv2.setImageURI(imageUri)
+                            photo_tv2.tag = imageUri
+                        }
+                    }
                 }
             } else {
-                // 단일 이미지 선택
                 val imageUri = data?.data
                 photo_tv.setImageURI(imageUri)
+                photo_tv.tag = imageUri
             }
         } else if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
-            // 카메라로 찍은 사진 처리
             val imageBitmap = BitmapFactory.decodeFile(currentPhotoPath)
             photo_tv.setImageBitmap(imageBitmap)
-            //val imageBitmap = data?.extras?.get("data") as Bitmap
-            //photo_tv.setImageBitmap(imageBitmap)
+            photo_tv.tag = Uri.fromFile(File(currentPhotoPath))
         }
     }
 
@@ -302,5 +293,22 @@ class DiaryWriteAct : AppCompatActivity() {
         return currentDate.format(formatter)
     }
 
+    fun getFileFromUri(context: Context, uri: Uri): File? {
+        val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, filePathColumn, null, null, null)
+        cursor?.moveToFirst()
+        val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
+        val filePath = columnIndex?.let { cursor.getString(it) }
+        cursor?.close()
+        return if (filePath != null) File(filePath) else null
+    }
+    fun createPartFromFile(context: Context, uri: Uri, partName: String): MultipartBody.Part? {
+        val file = getFileFromUri(context, uri)
+        return file?.let {
+            val mediaType = context.contentResolver.getType(uri)?.toMediaTypeOrNull() ?: "image/*".toMediaTypeOrNull()
+            val requestFile = RequestBody.create(mediaType, it)
+            MultipartBody.Part.createFormData(partName, it.name, requestFile)
+        }
+    }
 
 }
