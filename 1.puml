@@ -1,0 +1,53 @@
+@startuml
+class com.example.financiallog.AnalyzeMonthAct {
++ TextView monthText
++ TextView income_text
++ TextView expend_text
++ SimpleDateFormat mFormat
++ Date currentDate
++ BarChart monthChart
++ BarChart mon_cateChart
++ TextView ranking_cate1
++ TextView ranking_text1
++ TextView ranking_per1
++ TextView ranking_cate2
++ TextView ranking_text2
++ TextView ranking_per2
++ TextView ranking_cate3
++ TextView ranking_text3
++ TextView ranking_per3
++ TextView ranking_cate4
++ TextView ranking_text4
++ TextView ranking_per4
++ TextView ranking_cate5
++ TextView ranking_text5
++ TextView ranking_per5
++ TextView satisfaction_cate
++ TextView satisfaction_bname
++ TextView satisfaction_price
++ TextView satisfaction_per
++ TextView satisfaction_textS
++ TextView satisfaction_textE
++ Date selectedMonth
++ ApiObject apiobject
++  categoryMap
++ void onCreate(Bundle?)
+- void showMoreMenu()
++ String getCurrentFormattedDate()
+- void showMonthPickerDialog()
+- void getDataForMonth(Int,Int)
+- void showToast(String)
+- ResponseStatMonth.MonthlyCategory createMonthlyCategory(ResponseStatMonth)
+- void getMonthStatistics(List<ResponseStatMonth>?)
+- void updateIncomeAndExpense(List<ResponseStatMonth>?,Int)
+- List<Pair<String, Float>> getTop5CategoriesWithRatio(List<ResponseStatMonth.MonthCategoryExpense>?)
+- void showTop5CategoriesWithRatio(List<Pair<String, Float>>)
+- void updateBarChart(ResponseStatMonth.MonthlyCategory)
+- void month_bestsatisfaction(ResponseStatMonth)
+}
+
+
+
+
+androidx.appcompat.app.AppCompatActivity <|-- com.example.financiallog.AnalyzeMonthAct
+@enduml
