@@ -117,12 +117,12 @@
                     android:gravity = ""/>
 
                 <com.github.mikephil.charting.charts.RadarChart
-                    android:id="@+id/chart3"
-                    android:layout_width="256dp"
-                    android:layout_height="195dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_gravity="center" />
+                        android:id="@+id/chart3"
+                        android:layout_width="256dp"
+                        android:layout_height="175dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_gravity="center" />
             </LinearLayout>
 
             <LinearLayout
