@@ -24,6 +24,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import java.io.InputStream
+
 
 class ExpendAct : AppCompatActivity() {
 
@@ -40,7 +47,10 @@ class ExpendAct : AppCompatActivity() {
 
     lateinit var foodchip:Chip; lateinit var cultualchip:Chip; lateinit var taxchip:Chip; lateinit var livingchip:Chip;
     lateinit var educhip:Chip; lateinit var dueschip:Chip; lateinit var medicalchip:Chip; lateinit var shoppingchip:Chip;
-    lateinit var trafficchip:Chip; lateinit var etcchip:Chip;
+    lateinit var trafficchip:Chip; lateinit var etcchip:Chip; lateinit var receiptbtn:Button;
+
+    private val PICK_IMAGE = 1001 // 이미지 요청 코드
+    private lateinit var getImageLauncher: ActivityResultLauncher<Intent>
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +86,7 @@ class ExpendAct : AppCompatActivity() {
         seek_per =findViewById<TextView>(R.id.totalTv)
         textView = findViewById<TextView>(R.id.ex_satis_ed)
         val user = intent.getIntExtra("user",0)
+        receiptbtn = findViewById<Button>(R.id.receipt_expend)
 
 
         //수입 버튼
@@ -95,6 +106,31 @@ class ExpendAct : AppCompatActivity() {
             val intent = Intent(this, HomeMain::class.java)
             startActivity(intent)
         })
+
+        // ActivityResultLauncher 초기화
+        getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                val selectedImageUri: Uri? = data?.data
+                if (selectedImageUri != null) {
+                    // URI에서 InputStream 가져오기 및 비트맵 생성
+                    contentResolver.openInputStream(selectedImageUri)?.use { inputStream ->
+                        val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+                        // OCR 처리 메서드 호출
+                        uploadImageToCLOVA(bitmap) // 비트맵을 Clova OCR API로 업로드
+                    }
+                }
+            }
+        }
+
+        // 영수증 버튼 클릭 리스너
+        receiptbtn.setOnClickListener {
+            // 갤러리에서 이미지 선택을 위한 인텐트
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            getImageLauncher.launch(intent)
+        }
+
 
         //카테고리 선택 시
         var Chipchoose: String? = null
@@ -293,4 +329,11 @@ class ExpendAct : AppCompatActivity() {
          }
         dialog.show()
     }
+
+
+    // OCR 처리 메서드
+    private fun uploadImageToCLOVA(bitmap: Bitmap) {
+        // 클로바 OCR API 호출 코드
+    }
 }
+
