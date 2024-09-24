@@ -40,7 +40,7 @@ class ExpendAct : AppCompatActivity() {
 
     lateinit var foodchip:Chip; lateinit var cultualchip:Chip; lateinit var taxchip:Chip; lateinit var livingchip:Chip;
     lateinit var educhip:Chip; lateinit var dueschip:Chip; lateinit var medicalchip:Chip; lateinit var shoppingchip:Chip;
-    lateinit var trafficchip:Chip; lateinit var etcchip:Chip;
+    lateinit var trafficchip:Chip; lateinit var etcchip:Chip; lateinit var receiptbtn:Button;
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +76,7 @@ class ExpendAct : AppCompatActivity() {
         seek_per =findViewById<TextView>(R.id.totalTv)
         textView = findViewById<TextView>(R.id.ex_satis_ed)
         val user = intent.getIntExtra("user",0)
+        receiptbtn = findViewById<Button>(R.id.receipt_expend)
 
 
         //수입 버튼
@@ -95,6 +96,9 @@ class ExpendAct : AppCompatActivity() {
             val intent = Intent(this, HomeMain::class.java)
             startActivity(intent)
         })
+
+        // 영수증 버튼
+        receiptbtn.setOnClickListener({})
 
         //카테고리 선택 시
         var Chipchoose: String? = null
