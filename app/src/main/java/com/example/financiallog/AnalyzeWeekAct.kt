@@ -230,7 +230,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
 
                 R.id.add_diary -> {
                     // Retrofit 서비스 호출
-                    apiobject.api.diarywriteEx(6,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
+                    apiobject.api.diarywriteEx(1,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
                         override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
                             if (response.isSuccessful && response.body() != null) {
                                 // 네트워크 응답이 성공적이고 데이터가 있는 경우

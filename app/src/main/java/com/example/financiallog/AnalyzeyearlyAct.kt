@@ -230,7 +230,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
                 }
                 R.id.add_diary -> {
                     // Retrofit 서비스 호출
-                    apiobject.api.diarywriteEx(6,getCurrentFormattedDate()).enqueue(object :
+                    apiobject.api.diarywriteEx(1,getCurrentFormattedDate()).enqueue(object :
                         Callback<List<DataEx>> {
                         override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
                             if (response.isSuccessful && response.body() != null) {

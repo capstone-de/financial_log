@@ -20,8 +20,7 @@
             android:padding="8dp"
             tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
             tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="3dp"
-            tools:listitem="@layout/feed_list" />
+            tools:layout_editor_absoluteY="3dp"/>
 
     </ScrollView>
 

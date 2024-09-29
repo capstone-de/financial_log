@@ -89,7 +89,7 @@ class DiaryWriteAct : AppCompatActivity() {
 
         // 지출 내역 불러오기
         re_expend.layoutManager = LinearLayoutManager(this)
-        list_ex.api.getExpendAll(6,getCurrentFormattedDate()).enqueue(object : Callback<ResponseExpend> {
+        list_ex.api.getExpendAll(1,getCurrentFormattedDate()).enqueue(object : Callback<ResponseExpend> {
             override fun onResponse(
                 call: Call<ResponseExpend>,
                 response: Response<ResponseExpend>
@@ -174,7 +174,7 @@ class DiaryWriteAct : AppCompatActivity() {
             val hashtag = hashtaglist
 
             val input = HashMap<String, Any>()
-            input["user"] = "6"
+            input["user"] = "1"
             input["date"] = date.toString()
             input["contents"] = content
             input["privacy"] = privacy.toString()

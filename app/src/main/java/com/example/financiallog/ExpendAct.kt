@@ -201,7 +201,7 @@ class ExpendAct : AppCompatActivity() {
             val Exsatis = textView.text.toString()
 
             var input = HashMap<String, Any>()
-            input.put("user","6")
+            input.put("user","1")
             input.put("price",Exmoney)
             input.put("date", date.toString())
             input.put("category", Excate.toString())
