@@ -323,7 +323,7 @@
         tools:ignore="MissingConstraints" />
 
     <android.widget.Button
-            android:id="@+id/receipt_expend"
+            android:id="@+id/save_expend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="51dp"
@@ -340,7 +340,7 @@
             tools:ignore="MissingConstraints" />
 
     <android.widget.Button
-            android:id="@+id/save_expend"
+            android:id="@+id/receipt_expend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="51dp"
@@ -354,7 +354,7 @@
             app:layout_constraintTop_toBottomOf="@+id/seekBar"
             app:layout_constraintVertical_bias="0.261"
             tools:ignore="MissingConstraints"
-            app:layout_constraintEnd_toStartOf="@+id/receipt_expend" />
+            app:layout_constraintEnd_toStartOf="@+id/save_expend" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
