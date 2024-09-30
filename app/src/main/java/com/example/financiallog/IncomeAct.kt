@@ -47,7 +47,7 @@ class IncomeAct : AppCompatActivity() {
         extrachip = findViewById(R.id.extra_in)
         financialchip = findViewById(R.id.financial_in)
         etc_chip = findViewById(R.id.etc_1)
-        btn_save = findViewById<Button>(R.id.receipt_expend)
+        btn_save = findViewById<Button>(R.id.save_expend)
 
         //카테고리 선택 시
 //        var IncomeChip :String? =null
