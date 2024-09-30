@@ -406,10 +406,6 @@ class AnalyzeWeekAct : AppCompatActivity() {
     }
 
 
-
-
-
-
     // 지출 파이 차트
     private fun WeekExpensePieChart(data: List<ResponseStatWeek>) {
         val entries = mutableListOf<PieEntry>()
