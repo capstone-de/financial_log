@@ -17,8 +17,8 @@
 
     <TextView
         android:id="@+id/feed_text"
-        android:layout_width="235dp"
-        android:layout_height="100dp"
+        android:layout_width="233dp"
+        android:layout_height="110dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="일기 내용을 적어주세요"
@@ -56,8 +56,8 @@
         android:id="@+id/tag_dr"
         android:layout_width="300dp"
         android:layout_height="30dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="60dp"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="# 건대입구역"
         android:textColor="#624E19"

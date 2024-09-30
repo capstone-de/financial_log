@@ -230,7 +230,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
                 }
                 R.id.add_diary -> {
                     // Retrofit 서비스 호출
-                    apiobject.api.diarywriteEx(6,getCurrentFormattedDate()).enqueue(object :
+                    apiobject.api.diarywriteEx(1,getCurrentFormattedDate()).enqueue(object :
                         Callback<List<DataEx>> {
                         override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
                             if (response.isSuccessful && response.body() != null) {
@@ -346,25 +346,35 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         val barData = BarData(incomeDataSet, expenseDataSet)
         year_barChart.data = barData
 
-        // 차트 설명 설정
+        /*// 차트 설명 설정
         year_barChart.description.apply {
             text = "(단위:만원)"
             textSize = 8f
             textColor = Color.BLACK
             setPosition(year_barChart.width.toFloat() - 80f, 20f)
-        }
+        }*/
 
         // X축 설정
         val xAxis = year_barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.labelRotationAngle = -10f
+        xAxis.labelRotationAngle = -40f
         xAxis.setDrawGridLines(false)
         xAxis.valueFormatter = IndexAxisValueFormatter(getMonths())
-        year_barChart.axisRight.isEnabled = false // 오른쪽 Y축은 비활성화합니다.
+        xAxis.granularity = 1f // 레이블 간격을 1로 설정하여 모든 레이블이 표시되도록 함
+        xAxis.labelCount = getMonths().size // 레이블의 개수를 카테고리 수와 동일하게 설정
+        year_barChart.axisRight.isEnabled = false
         year_barChart.legend.isEnabled = false
+//        // X축 설정
+//        val xAxis = year_barChart.xAxis
+//        xAxis.position = XAxis.XAxisPosition.BOTTOM
+//        xAxis.labelRotationAngle = -10f
+//        xAxis.setDrawGridLines(false)
+//        xAxis.valueFormatter = IndexAxisValueFormatter(getMonths())
+//        year_barChart.axisRight.isEnabled = false // 오른쪽 Y축은 비활성화합니다.
+//        year_barChart.legend.isEnabled = false
 
         // 바 차트 스타일 설정
-        val barWidth = 0.3f
+        val barWidth = 0.2f
         barData.barWidth = barWidth
 
         // 그룹화 설정

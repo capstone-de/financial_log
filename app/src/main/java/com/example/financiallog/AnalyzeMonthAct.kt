@@ -239,7 +239,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
                 }
                 R.id.add_diary -> {
                     // Retrofit 서비스 호출
-                    apiobject.api.diarywriteEx(6,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
+                    apiobject.api.diarywriteEx(1,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
                         override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
                             if (response.isSuccessful && response.body() != null) {
                                 // 네트워크 응답이 성공적이고 데이터가 있는 경우
@@ -300,7 +300,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         val yearStr = year.toString()
         val monthStr = month.toString().padStart(2, '0')
 
-        apiobject.api.getStatisticsMonthly(6, yearStr, monthStr).enqueue(object : Callback<ResponseStatMonth> {
+        apiobject.api.getStatisticsMonthly(1, yearStr, monthStr).enqueue(object : Callback<ResponseStatMonth> {
             override fun onResponse(call: Call<ResponseStatMonth>, response: Response<ResponseStatMonth>) {
                 if (response.isSuccessful) {
                     response.body()?.let { data ->
@@ -420,6 +420,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         xAxis.axisMinimum = 0f
         xAxis.axisMaximum = barData.xMax + 1f
         monthChart.axisRight.isEnabled = false
+        //monthChart.axisLeft.isEnabled = false
         monthChart.legend.isEnabled = false //범례 지우기
 
         // 월 이름 배열 생성
@@ -590,6 +591,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         xAxis.granularity = 1f
         mon_cateChart.legend.isEnabled = false
         mon_cateChart.axisRight.isEnabled = false
+        mon_cateChart.axisLeft.isEnabled = false
 
         // 카테고리 이름을 X축 레이블로 사용
         xAxis.valueFormatter = IndexAxisValueFormatter(barEntries.map { it.data as String })

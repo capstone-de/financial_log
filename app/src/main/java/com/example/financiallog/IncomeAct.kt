@@ -116,7 +116,7 @@ class IncomeAct : AppCompatActivity() {
             val Inmemo = ed_memo.text.toString()
 
             var input = HashMap<String, String>()
-            input.put("user", "4")
+            input.put("user", "1")
             input.put("price", Inmoney)
             input.put("date", Incul.toString())
             input.put("category", Incate.toString())
