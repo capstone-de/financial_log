@@ -93,13 +93,13 @@ class DiaryListAdapter(private val dataList: ArrayList<ResponseDiary>) : Recycle
             itemView.findViewById<TextView>(R.id.nickname_view).text = item.nickname
 
             itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                ", "
+                " "
             } else {
                 "#" + item.hashtag.joinToString(" #")
             }
 
             // 이미지 뷰는 필요 없으므로 숨김 처리
-            itemView.findViewById<ImageView>(R.id.feed_image).visibility = View.GONE
+           // itemView.findViewById<ImageView>(R.id.feed_image).visibility = View.GONE
         }
     }
 

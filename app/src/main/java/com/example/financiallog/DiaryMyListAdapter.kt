@@ -61,7 +61,7 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
             itemView.findViewById<TextView>(R.id.day_tv).text = formattedDate
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
             itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                ", "
+                " "
             } else {
                 "#" + item.hashtag.joinToString(" #")
             }
@@ -86,13 +86,13 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
             itemView.findViewById<TextView>(R.id.day_tv).text = formattedDate
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
             itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                ", "
+                " "
             } else {
                 "#" + item.hashtag.joinToString(" #")
             }
 
             // 이미지 뷰는 필요 없으므로 숨김 처리
-            itemView.findViewById<ImageView>(R.id.feed_image).visibility = View.GONE
+            //itemView.findViewById<ImageView>(R.id.feed_image).visibility = View.GONE
         }
     }
 
