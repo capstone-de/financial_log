@@ -9,6 +9,7 @@ data class ResponseMyDiary(
     data class DataMyDi(
         val date : String,
         val contents : String,
-        val hashtag : List<String>
+        val hashtag : List<String>,
+        val image: List<String>
     )
 }

@@ -17,7 +17,7 @@ class BluePointDecorator(private val dateString: String) : DayViewDecorator {
     }
 
     override fun decorate(view: DayViewFacade) {
-        view.addSpan(BlueDotSpanSide(Color.BLUE, 5f, 10f)) // 파란색 점
+        view.addSpan(BlueDotSpanSide(Color.parseColor("#4c8df7"), 8f, 10f)) // 파란색 점
     }
 }
 

@@ -62,8 +62,8 @@
         android:id="@+id/btn_analyze"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginStart="108dp"
         android:layout_marginTop="27dp"
+        android:layout_marginStart="115dp"
         android:background="@drawable/btn_analyze"
         android:fontFamily="@font/gmarketsansttfmedium"
         android:text="가계부"
@@ -152,7 +152,7 @@
         android:layout_height="400dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tabLayout"
         app:layout_constraintVertical_bias="1.0">
