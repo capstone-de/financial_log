@@ -1,96 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FAF4E9">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FAF4E9">
 
 
     <android.widget.Button
-        android:id="@+id/btn_analyze"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="27dp"
-        android:background="@drawable/btn_analyze1"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="가계부"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.362"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+            android:id="@+id/btn_analyze"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="27dp"
+            android:background="@drawable/btn_analyze1"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="가계부"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.362"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
 
     <android.widget.Button
-        android:id="@+id/btn_diary"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="108dp"
-        android:background="@drawable/btn_analyze"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="일기"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+            android:id="@+id/btn_diary"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginEnd="108dp"
+            android:background="@drawable/btn_analyze"
+            android:fontFamily="@font/gmarketsansttfmedium"
+            android:text="일기"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
 
 
-    <TextView
-        android:id="@+id/diary_text1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="98dp"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="나의 관심사"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <HorizontalScrollView
+            android:layout_width="362dp"
+            android:layout_height="450dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="91dp">
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="335dp"
-        android:layout_height="257dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/diary_text1"
-        app:srcCompat="@drawable/analyze_diary_box"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"/>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/diary_text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="13dp"
-        android:fontFamily="@font/gmarketsansttfmedium"
-        android:text="해시태그트렌드"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="426dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="325dp"
-        android:layout_height="253dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/diary_text2"
-        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-        app:srcCompat="@drawable/analyze_diary_box" />
+                <TextView
+                        android:id="@+id/diary_text1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/gmarketsansttfmedium"
+                        android:text="나의 관심사" />
+
+                <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="335dp"
+                        android:layout_height="257dp"
+                        android:layout_marginTop="12dp"
+                        app:srcCompat="@drawable/analyze_diary_box"
+                        tools:ignore="SpeakableTextPresentCheck,MissingConstraints" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp">
+
+
+                <TextView
+                        android:id="@+id/diary_text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/gmarketsansttfmedium"
+                        android:text="해시태그트렌드" />
+
+                <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="325dp"
+                        android:layout_height="253dp"
+                        android:layout_marginTop="12dp"
+                        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
+                        app:srcCompat="@drawable/analyze_diary_box" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp">
+
+                <TextView
+                        android:id="@+id/diary_text3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/gmarketsansttfmedium"
+                        android:text="감정소비분석" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                        android:background="@drawable/analyze_view"
+                        android:id="@+id/chart1"
+                        android:layout_width="256dp"
+                        android:layout_height="175dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_gravity="center" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_view"
-        android:layout_width="409dp"
-        android:layout_height="86dp"
-        android:layout_marginBottom="1dp"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/menu_bottom"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="1dp" />
+            android:id="@+id/bottom_view"
+            android:layout_width="409dp"
+            android:layout_height="86dp"
+            android:layout_marginBottom="1dp"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_bottom"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="1dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
