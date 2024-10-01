@@ -356,39 +356,5 @@
             tools:ignore="MissingConstraints"
             app:layout_constraintEnd_toStartOf="@+id/save_expend" />
 
-    <android.widget.Button
-            android:id="@+id/receipt_expend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="51dp"
-            android:layout_marginBottom="32dp"
-            android:background="@drawable/btn_save"
-            android:fontFamily="@font/gmarketsansttfmedium"
-            android:text="저장"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.749"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekBar"
-            app:layout_constraintVertical_bias="0.261"
-            tools:ignore="MissingConstraints" />
-
-    <android.widget.Button
-            android:id="@+id/save_expend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="51dp"
-            android:layout_marginBottom="32dp"
-            android:background="@drawable/receipt_btn"
-            android:fontFamily="@font/gmarketsansttfmedium"
-            android:text="영수증 입력"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.675"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekBar"
-            app:layout_constraintVertical_bias="0.261"
-            tools:ignore="MissingConstraints"
-            app:layout_constraintEnd_toStartOf="@+id/receipt_expend" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
