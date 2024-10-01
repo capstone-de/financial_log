@@ -49,7 +49,7 @@ class ExpendAct : AppCompatActivity() {
     lateinit var educhip:Chip; lateinit var dueschip:Chip; lateinit var medicalchip:Chip; lateinit var shoppingchip:Chip;
     lateinit var trafficchip:Chip; lateinit var etcchip:Chip; lateinit var receiptbtn:Button;
 
-    private val PICK_IMAGE = 1001 // 이미지 요청 코드
+
     private lateinit var getImageLauncher: ActivityResultLauncher<Intent>
 
     @SuppressLint("MissingInflatedId")
