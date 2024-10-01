@@ -46,10 +46,6 @@ class MyPage : AppCompatActivity() {
         user_nickname = findViewById<TextView>(R.id.textView3)
         //btn_more = findViewById<Button>(R.id.imageButton4)
 
-        // 날짜
-//        mFormat = SimpleDateFormat("yyyy.MM.dd")
-//        year_tv.setText(getTime())
-
         // 팔로워 사람 선택 시 조회
 
         //팔로잉 사람 선택 시 조회
@@ -65,6 +61,7 @@ class MyPage : AppCompatActivity() {
                 response: Response<ResponseMyDiary>
 
             ) {
+                Log.d("data응답", "응답 코드: ${response.code()}")
                 Log.d("data",response.body().toString())
                 if(response.isSuccessful){
                     val nicknamedata = response.body()!!.nickname

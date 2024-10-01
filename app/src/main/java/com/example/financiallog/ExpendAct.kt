@@ -29,7 +29,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import java.io.InputStream
 
 
 class ExpendAct : AppCompatActivity() {
@@ -40,7 +39,7 @@ class ExpendAct : AppCompatActivity() {
     lateinit var alone_chip: CheckBox; lateinit var seek_bar:SeekBar; lateinit var seek_zero : TextView;
     lateinit var seek_per :TextView; val apiobject : ApiObject by lazy { ApiObject() };
     lateinit var textView:TextView; lateinit var group_expend : ChipGroup;
-//    var followers = listOf("User1", "User2", "User3", "User4");
+    //    var followers = listOf("User1", "User2", "User3", "User4");
     var followers: MutableList<String> = mutableListOf()
     var together = ArrayList<String>()
     //var adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
@@ -48,7 +47,6 @@ class ExpendAct : AppCompatActivity() {
     lateinit var foodchip:Chip; lateinit var cultualchip:Chip; lateinit var taxchip:Chip; lateinit var livingchip:Chip;
     lateinit var educhip:Chip; lateinit var dueschip:Chip; lateinit var medicalchip:Chip; lateinit var shoppingchip:Chip;
     lateinit var trafficchip:Chip; lateinit var etcchip:Chip; lateinit var receiptbtn:Button;
-
 
     private lateinit var getImageLauncher: ActivityResultLauncher<Intent>
 
@@ -89,6 +87,7 @@ class ExpendAct : AppCompatActivity() {
         receiptbtn = findViewById<Button>(R.id.receipt_expend)
 
 
+
         //수입 버튼
         income_btn.setOnClickListener(View.OnClickListener {
             val intent = Intent(this, IncomeAct::class.java)
@@ -123,7 +122,7 @@ class ExpendAct : AppCompatActivity() {
             }
         }
 
-        // 영수증 버튼 클릭 리스너
+        // 영수증 버튼 클릭
         receiptbtn.setOnClickListener {
             // 갤러리에서 이미지 선택을 위한 인텐트
             val intent = Intent(Intent.ACTION_PICK)
@@ -299,7 +298,7 @@ class ExpendAct : AppCompatActivity() {
 
 
     }
-     fun showFollowersDialog() {
+    fun showFollowersDialog() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.followers_list)
         val listView: ListView = dialog.findViewById(R.id.listView)
@@ -308,25 +307,25 @@ class ExpendAct : AppCompatActivity() {
         var adapter = FollowerAdapter(this, android.R.layout.simple_list_item_1, followers )
         listView.adapter = adapter
 
-         listView.setOnItemClickListener { parent, view, position, id ->
-             // 클릭된 아이템의 텍스트 가져오기
-             val selectedFollower = followers[position]
-             Toast.makeText(this, "Selected follower: $selectedFollower", Toast.LENGTH_SHORT).show()
-             // 선택된 팔로워의 텍스트를 사용할 수 있도록 처리
- //            together.add(selectedFollower)
-             Log.d("----selected together----", together.toString())
-             // 선택된 팔로워 목록에 추가/제거
-             if (together.contains(selectedFollower)) {
-                 together.remove(selectedFollower)
-             } else {
-                 together.add(selectedFollower)
-             }
-             // 선택된 팔로워 목록 표시
-             val selectedFollowersText = together.joinToString(", ")
-             ed_toget.setText(selectedFollowersText)
- //            ed_toget.setText(selectedFollower) // Display the selected follower on the screen
-             dialog.dismiss() // 다이얼로그 닫기
-         }
+        listView.setOnItemClickListener { parent, view, position, id ->
+            // 클릭된 아이템의 텍스트 가져오기
+            val selectedFollower = followers[position]
+            Toast.makeText(this, "Selected follower: $selectedFollower", Toast.LENGTH_SHORT).show()
+            // 선택된 팔로워의 텍스트를 사용할 수 있도록 처리
+            //            together.add(selectedFollower)
+            Log.d("----selected together----", together.toString())
+            // 선택된 팔로워 목록에 추가/제거
+            if (together.contains(selectedFollower)) {
+                together.remove(selectedFollower)
+            } else {
+                together.add(selectedFollower)
+            }
+            // 선택된 팔로워 목록 표시
+            val selectedFollowersText = together.joinToString(", ")
+            ed_toget.setText(selectedFollowersText)
+            //            ed_toget.setText(selectedFollower) // Display the selected follower on the screen
+            dialog.dismiss() // 다이얼로그 닫기
+        }
         dialog.show()
     }
 
@@ -336,4 +335,3 @@ class ExpendAct : AppCompatActivity() {
         // 클로바 OCR API 호출 코드
     }
 }
-

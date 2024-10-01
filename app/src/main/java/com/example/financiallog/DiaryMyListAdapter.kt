@@ -12,9 +12,92 @@ import android.widget.ImageView
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): RecyclerView.Adapter<DiaryMyListAdapter.DiaryViewHolder>() {
+class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class DiaryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    companion object {
+        private const val TYPE_WITH_IMAGE = 1
+        private const val TYPE_WITHOUT_IMAGE = 2
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (data[position].image.isNotEmpty()) {
+            TYPE_WITH_IMAGE
+        } else {
+            TYPE_WITHOUT_IMAGE
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == TYPE_WITH_IMAGE) {
+            val itemView = LayoutInflater.from(parent.context).inflate(R.layout.diary_list, parent, false)
+            DiaryViewHolderWithImage(itemView)
+        } else {
+            val itemView = LayoutInflater.from(parent.context).inflate(R.layout.diary_list_without_image, parent, false)
+            DiaryViewHolderWithoutImage(itemView)
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = data[position]
+        if (holder is DiaryViewHolderWithImage) {
+            holder.bind(item)
+        } else if (holder is DiaryViewHolderWithoutImage) {
+            holder.bind(item)
+        }
+    }
+
+    // 이미지가 있는 경우의 ViewHolder
+    class DiaryViewHolderWithImage(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: ResponseMyDiary.DataMyDi) {
+            val dateFormatInput = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+            val dateFormatOutput = SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREA)
+            val date = dateFormatInput.parse(item.date)
+            val formattedDate = dateFormatOutput.format(date)
+
+            itemView.findViewById<TextView>(R.id.day_tv).text = formattedDate
+            itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
+            itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
+                ", "
+            } else {
+                "#" + item.hashtag.joinToString(" #")
+            }
+
+            val imageView = itemView.findViewById<ImageView>(R.id.feed_image)
+            val firstImageBase64 = item.image[0]
+            val decodedBytes = Base64.decode(firstImageBase64, Base64.DEFAULT)
+            val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+            imageView.setImageBitmap(bitmap)
+            imageView.visibility = View.VISIBLE
+        }
+    }
+
+    // 이미지가 없는 경우의 ViewHolder
+    class DiaryViewHolderWithoutImage(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bind(item: ResponseMyDiary.DataMyDi) {
+            val dateFormatInput = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+            val dateFormatOutput = SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREA)
+            val date = dateFormatInput.parse(item.date)
+            val formattedDate = dateFormatOutput.format(date)
+
+            itemView.findViewById<TextView>(R.id.day_tv).text = formattedDate
+            itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
+            itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
+                ", "
+            } else {
+                "#" + item.hashtag.joinToString(" #")
+            }
+
+            // 이미지 뷰는 필요 없으므로 숨김 처리
+            itemView.findViewById<ImageView>(R.id.feed_image).visibility = View.GONE
+        }
+    }
+
+
+    /*class DiaryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(item:ResponseMyDiary.DataMyDi){
             // 날짜 형식을 변환하여 TextView에 설정
             val dateFormatInput = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
@@ -62,7 +145,7 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
     override fun onBindViewHolder(holder:DiaryViewHolder, position: Int) {
         val item = data[position]
         holder.bind(item)
-    }
+    }*/
 
 
 }

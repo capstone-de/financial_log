@@ -222,7 +222,7 @@ class AnalyzeDayAct : AppCompatActivity() {
 
                 R.id.add_diary -> {
                     // Retrofit 서비스 호출
-                    apiobject.api.diarywriteEx(6,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
+                    apiobject.api.diarywriteEx(1,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
                         override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
                             if (response.isSuccessful && response.body() != null) {
                                 // 네트워크 응답이 성공적이고 데이터가 있는 경우
@@ -266,7 +266,7 @@ class AnalyzeDayAct : AppCompatActivity() {
     private fun IncomeForDate(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
-        apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<ResponseStatDay> {
+        apiobject.api.getStatisticsDaily(1, formattedDate).enqueue(object : Callback<ResponseStatDay> {
             override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
                     val incometv = response.body()!!.total_income
@@ -294,7 +294,7 @@ class AnalyzeDayAct : AppCompatActivity() {
     private fun ExpensesForDate(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
-        apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<ResponseStatDay> {
+        apiobject.api.getStatisticsDaily(1, formattedDate).enqueue(object : Callback<ResponseStatDay> {
             override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
                     val expendsetv = response.body()!!.total_expenses
@@ -322,7 +322,7 @@ class AnalyzeDayAct : AppCompatActivity() {
     private fun ExpenseListForDate(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
-        apiobject.api.getStatisticsDaily(6, formattedDate).enqueue(object : Callback<ResponseStatDay> {
+        apiobject.api.getStatisticsDaily(1, formattedDate).enqueue(object : Callback<ResponseStatDay> {
             override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
                     val expenselistdata = response.body()!!.expenses
