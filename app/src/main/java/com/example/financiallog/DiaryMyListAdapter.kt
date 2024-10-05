@@ -53,7 +53,6 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
         }
     }
 
-
     class DiaryViewHolderWithImage(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: ResponseMyDiary.DataMyDi) {
             val dateFormatInput = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
@@ -64,34 +63,28 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
             itemView.findViewById<TextView>(R.id.day_tv).text = formattedDate
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
 
-            // 데이터를 생성하는 부분에서 해시태그 로그 출력
-            Log.d("DataCreation", "Hashtags: ${item.hashtag}")
+            // 해시태그 로그 출력
+            Log.d("DiaryViewHolder", "Hashtag List: ${item.hashtag.joinToString(", ")}")
+            item.hashtag.forEachIndexed { index, hashtag ->
+                Log.d("DiaryViewHolder", "Hashtag at index $index: $hashtag")
+            }
+            Log.d("DiaryViewHolder", "Hashtag Type: ${item.hashtag::class.simpleName}")
+            item.hashtag.forEach { hashtag ->
+                Log.d("DiaryViewHolder", "Hashtag Element: $hashtag") // 각 요소 로그 출력
+            }
+            Log.d("DiaryViewHolder", "Hashtag List: ${item.hashtag}")
 
-//            // 해시태그 로깅
-//            Log.d("DiaryViewHolder", "Hashtags: ${item.hashtag.joinToString(" ") { "#$it" }}") // 공백으로 구분하여 출력
-//
-//            // 해시태그 수동 생성
-//            val hashtagsBuilder = StringBuilder()
-//            if (item.hashtag.isNotEmpty()) {
-//                for (hashtag in item.hashtag) {
-//                    hashtagsBuilder.append("#").append(hashtag).append(" ") // 공백 추가
-//                }
-//            }
-//
-//            val hashtags = hashtagsBuilder.toString().trim() // 마지막 공백 제거
-//            itemView.findViewById<TextView>(R.id.tag_dr).text = hashtags
-
-
-            // 해시태그 표시
-            val hashtags = if (item.hashtag.isEmpty()) {
-                " "
+            // 해시태그 생성
+            val hashtags = if (item.hashtag.isNotEmpty()) {
+                item.hashtag.flatMap { it.split(",").map { hashtag -> "#${hashtag.trim()}" } } // 각 해시태그를 개별적으로 처리
+                    .joinToString(", ") // 쉼표로 구분
             } else {
-                item.hashtag.joinToString(", "){ "#$it" } // 각 해시태그 앞에 # 추가하고 공백으로 구분
+                "" // 해시태그가 없을 경우 빈 문자열 추가
             }
             itemView.findViewById<TextView>(R.id.tag_dr).text = hashtags
 
+            // 해시태그 로그 출력
             Log.d("DiaryViewHolder", "Final Hashtags: $hashtags")
-
 
             val imageView = itemView.findViewById<ImageView>(R.id.feed_image)
 
@@ -106,7 +99,6 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
         }
     }
 
-
     class DiaryViewHolderWithoutImage(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: ResponseMyDiary.DataMyDi) {
             val dateFormatInput = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
@@ -117,15 +109,14 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
             itemView.findViewById<TextView>(R.id.day_tv).text = formattedDate
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
 
-            // 해시태그 표시
-            itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                " "
+            // 해시태그 생성
+            val hashtags = if (item.hashtag.isNotEmpty()) {
+                item.hashtag.flatMap { it.split(",").map { hashtag -> "#${hashtag.trim()}" } } // 각 해시태그를 개별적으로 처리
+                    .joinToString(", ") // 쉼표로 구분
             } else {
-                item.hashtag.joinToString(" ") { "#$it" } // 각 해시태그 앞에 # 추가하고 공백으로 구분
+                "" // 해시태그가 없을 경우 빈 문자열 추가
             }
-
-            // 이미지 뷰는 필요 없으므로 숨김 처리
-            // itemView.findViewById<ImageView>(R.id.feed_image).visibility = View.GONE
+            itemView.findViewById<TextView>(R.id.tag_dr).text = hashtags
         }
     }
 

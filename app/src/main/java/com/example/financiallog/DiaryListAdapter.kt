@@ -62,11 +62,14 @@ class DiaryListAdapter(private val dataList: ArrayList<ResponseDiary>) : Recycle
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
             itemView.findViewById<TextView>(R.id.nickname_view).text = item.nickname
 
-            itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                ", "
+            // 해시태그 생성
+            val hashtags = if (item.hashtag.isNotEmpty()) {
+                item.hashtag.flatMap { it.split(",").map { hashtag -> "#${hashtag.trim()}" } } // 각 해시태그를 개별적으로 처리
+                    .joinToString(", ") // 쉼표로 구분
             } else {
-                "#" + item.hashtag.joinToString(" #")
+                "" // 해시태그가 없을 경우 빈 문자열 추가
             }
+            itemView.findViewById<TextView>(R.id.tag_dr).text = hashtags
 
             val imageView = itemView.findViewById<ImageView>(R.id.feed_image)
 
@@ -93,14 +96,15 @@ class DiaryListAdapter(private val dataList: ArrayList<ResponseDiary>) : Recycle
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
             itemView.findViewById<TextView>(R.id.nickname_view).text = item.nickname
 
-            itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                " "
+            // 해시태그 생성
+            val hashtags = if (item.hashtag.isNotEmpty()) {
+                item.hashtag.flatMap { it.split(",").map { hashtag -> "#${hashtag.trim()}" } } // 각 해시태그를 개별적으로 처리
+                    .joinToString(", ") // 쉼표로 구분
             } else {
-                "#" + item.hashtag.joinToString(" #")
+                "" // 해시태그가 없을 경우 빈 문자열 추가
             }
+            itemView.findViewById<TextView>(R.id.tag_dr).text = hashtags
 
-            // 이미지 뷰는 필요 없으므로 숨김 처리
-           // itemView.findViewById<ImageView>(R.id.feed_image).visibility = View.GONE
         }
     }
 
