@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.graphics.BitmapFactory
 import android.util.Base64
+import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -68,15 +69,15 @@ class DiaryListAdapter(private val dataList: ArrayList<ResponseDiary>) : Recycle
             }
 
             val imageView = itemView.findViewById<ImageView>(R.id.feed_image)
-            val firstImageBase64 = item.image[0]
 
-            // Base64 문자열을 디코딩하여 비트맵으로 변환
-            val decodedBytes = Base64.decode(firstImageBase64, Base64.DEFAULT)
-            val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-
-            // 비트맵을 ImageView에 설정
-            imageView.setImageBitmap(bitmap)
-            imageView.visibility = View.VISIBLE
+            // 이미지 URL을 사용하여 Glide로 이미지 로드
+            if (item.image.isNotEmpty()) {
+                Glide.with(itemView.context)
+                    .load(item.image[0]) // URL 로드
+                    .error(R.drawable.btn_x) // 오류 시 대체 이미지 설정
+                    .into(imageView) // ImageView에 설정
+                imageView.visibility = View.VISIBLE
+            }
         }
     }
 
