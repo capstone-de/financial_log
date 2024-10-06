@@ -61,7 +61,6 @@ class MyPage : AppCompatActivity() {
                 response: Response<ResponseMyDiary>
 
             ) {
-                Log.d("data응답", "응답 코드: ${response.code()}")
                 Log.d("data",response.body().toString())
                 if(response.isSuccessful){
                     val nicknamedata = response.body()!!.nickname
@@ -78,6 +77,9 @@ class MyPage : AppCompatActivity() {
                     mypage_list.adapter = mylistadapter
 
                     Toast.makeText(applicationContext, "모든 정보를 가져왔습니다.", Toast.LENGTH_SHORT).show()
+                }else {
+                    // 에러 처리
+                    Log.e("API_ERROR", "Error: ${response.code()}")
                 }
             }
             override fun onFailure(call: Call<ResponseMyDiary>, t: Throwable) {
@@ -158,7 +160,7 @@ class MyPage : AppCompatActivity() {
                 }
                 R.id.add_diary -> {
                     // Retrofit 서비스 호출
-                    list_data.api.diarywriteEx(6,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
+                    list_data.api.diarywriteEx(1,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
                         override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
                             if (response.isSuccessful && response.body() != null) {
                                 // 네트워크 응답이 성공적이고 데이터가 있는 경우

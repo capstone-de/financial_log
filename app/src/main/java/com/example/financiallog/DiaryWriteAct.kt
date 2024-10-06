@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -33,7 +35,9 @@ import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -165,32 +169,45 @@ class DiaryWriteAct : AppCompatActivity() {
             startActivityForResult(chooser, PICK_IMAGE_REQUEST)
         }
 
-        // 저장하기 버튼 눌렀을 때
         diary_save.setOnClickListener {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd")
             val date = dateFormat.format(Date())
             val content = ed_diary.text.toString()
-            val privacy = diarychip
-            val hashtag = hashtaglist
+            val privacy = diarychip.toString()
+            // List<String> 형태로 변환
+            val hashtags = hashtaglist.joinToString(", ") // 리스트를 문자열로 변환
 
-            val input = HashMap<String, Any>()
-            input["user"] = "1"
-            input["date"] = date.toString()
-            input["contents"] = content
-            input["privacy"] = privacy.toString()
-            input["hashtag"] = hashtag
+            // RequestBody 생성
+            val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "1")
+            val datePart = RequestBody.create("text/plain".toMediaTypeOrNull(), date)
+            val contentsPart = RequestBody.create("text/plain".toMediaTypeOrNull(), content)
+            val privacyPart = RequestBody.create("text/plain".toMediaTypeOrNull(), privacy)
+            val hashtagsPart = RequestBody.create("text/plain".toMediaTypeOrNull(), hashtags) // RequestBody로 생성
 
+
+            // 이미지 URI를 Bitmap으로 변환
             val imageUris = listOfNotNull(photo_tv.tag as? Uri, photo_tv1.tag as? Uri, photo_tv2.tag as? Uri)
-            val files = imageUris.mapNotNull { createPartFromFile(this, it, "files") }
 
-            input["file"] = files
+            // 파일들을 전송하기 위한 리스트
+            val files = imageUris.mapNotNull { uri ->
+                val bitmap = uriToBitmap(uri)
+                bitmap?.let {
+                    val file = createFileFromBitmap(bitmap) // Bitmap을 파일로 변환하는 메서드
+                    val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), file)
+                    MultipartBody.Part.createFormData("image", file.name, requestFile) // MultipartBody.Part 생성
+                }
+            }
 
-            apiobject.api.insertDi(input)!!.enqueue(object : Callback<PostDiary> {
+            // API 호출
+            apiobject.api.insertDi(userPart, datePart, contentsPart, privacyPart, hashtagsPart, files)!!.enqueue(object : Callback<PostDiary> {
                 override fun onResponse(call: Call<PostDiary>, response: Response<PostDiary>) {
                     if (response.isSuccessful) {
                         Log.d("test", response.body().toString())
                         val intent = Intent(applicationContext, SaveDiary::class.java)
                         startActivity(intent)
+                    } else {
+                        // 에러 처리
+                        Log.e("API_ERROR", "Error: ${response.code()}")
                     }
                 }
 
@@ -309,6 +326,36 @@ class DiaryWriteAct : AppCompatActivity() {
             val requestFile = RequestBody.create(mediaType, it)
             MultipartBody.Part.createFormData(partName, it.name, requestFile)
         }
+    }
+
+    // URI를 Bitmap으로 변환하는 메서드
+    private fun uriToBitmap(uri: Uri): Bitmap? {
+        return try {
+            val inputStream = contentResolver.openInputStream(uri)
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    // Bitmap을 RequestBody로 변환하는 메서드
+    private fun createPartFromBitmap(bitmap: Bitmap, partName: String): RequestBody {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val requestFile = RequestBody.create(
+            "image/jpeg".toMediaTypeOrNull(),
+            byteArrayOutputStream.toByteArray()
+        )
+        return requestFile
+    }
+    // Bitmap을 파일로 변환하는 메서드
+    private fun createFileFromBitmap(bitmap: Bitmap): File {
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${System.currentTimeMillis()}.jpg")
+        FileOutputStream(file).use { out ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+        }
+        return file
     }
 
 }

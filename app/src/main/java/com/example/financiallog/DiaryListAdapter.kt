@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.graphics.BitmapFactory
 import android.util.Base64
+import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -61,22 +62,25 @@ class DiaryListAdapter(private val dataList: ArrayList<ResponseDiary>) : Recycle
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
             itemView.findViewById<TextView>(R.id.nickname_view).text = item.nickname
 
-            itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                ", "
+            // 해시태그 생성
+            val hashtags = if (item.hashtag.isNotEmpty()) {
+                item.hashtag.flatMap { it.split(",").map { hashtag -> "#${hashtag.trim()}" } } // 각 해시태그를 개별적으로 처리
+                    .joinToString(", ") // 쉼표로 구분
             } else {
-                "#" + item.hashtag.joinToString(" #")
+                "" // 해시태그가 없을 경우 빈 문자열 추가
             }
+            itemView.findViewById<TextView>(R.id.tag_dr).text = hashtags
 
             val imageView = itemView.findViewById<ImageView>(R.id.feed_image)
-            val firstImageBase64 = item.image[0]
 
-            // Base64 문자열을 디코딩하여 비트맵으로 변환
-            val decodedBytes = Base64.decode(firstImageBase64, Base64.DEFAULT)
-            val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-
-            // 비트맵을 ImageView에 설정
-            imageView.setImageBitmap(bitmap)
-            imageView.visibility = View.VISIBLE
+            // 이미지 URL을 사용하여 Glide로 이미지 로드
+            if (item.image.isNotEmpty()) {
+                Glide.with(itemView.context)
+                    .load(item.image[0]) // URL 로드
+                    .error(R.drawable.btn_x) // 오류 시 대체 이미지 설정
+                    .into(imageView) // ImageView에 설정
+                imageView.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -92,14 +96,15 @@ class DiaryListAdapter(private val dataList: ArrayList<ResponseDiary>) : Recycle
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
             itemView.findViewById<TextView>(R.id.nickname_view).text = item.nickname
 
-            itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                ", "
+            // 해시태그 생성
+            val hashtags = if (item.hashtag.isNotEmpty()) {
+                item.hashtag.flatMap { it.split(",").map { hashtag -> "#${hashtag.trim()}" } } // 각 해시태그를 개별적으로 처리
+                    .joinToString(", ") // 쉼표로 구분
             } else {
-                "#" + item.hashtag.joinToString(" #")
+                "" // 해시태그가 없을 경우 빈 문자열 추가
             }
+            itemView.findViewById<TextView>(R.id.tag_dr).text = hashtags
 
-            // 이미지 뷰는 필요 없으므로 숨김 처리
-            itemView.findViewById<ImageView>(R.id.feed_image).visibility = View.GONE
         }
     }
 

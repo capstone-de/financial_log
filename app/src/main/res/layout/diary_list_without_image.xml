@@ -17,7 +17,7 @@
 
     <TextView
             android:id="@+id/feed_text"
-            android:layout_width="374dp"
+            android:layout_width="350dp"
             android:layout_height="110dp"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/gmarketsansttfmedium"
