@@ -4,6 +4,7 @@ import FollowerAdapter
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -27,8 +28,12 @@ import java.util.Date
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import android.Manifest
 
 
 class ExpendAct : AppCompatActivity() {
@@ -49,6 +54,7 @@ class ExpendAct : AppCompatActivity() {
     lateinit var trafficchip:Chip; lateinit var etcchip:Chip; lateinit var receiptbtn:Button;
 
     private lateinit var getImageLauncher: ActivityResultLauncher<Intent>
+    private val REQUEST_CAMERA_PERMISSION = 101
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +113,7 @@ class ExpendAct : AppCompatActivity() {
         })
 
         // ActivityResultLauncher 초기화
-        getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        /*getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val data: Intent? = result.data
                 val selectedImageUri: Uri? = data?.data
@@ -120,14 +126,55 @@ class ExpendAct : AppCompatActivity() {
                     }
                 }
             }
+        }*/
+
+        // 카메라 권한 체크
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+        }
+
+        // ActivityResultLauncher 초기화
+        getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent? = result.data
+                val selectedImageUri: Uri? = data?.data
+
+                // 카메라에서 촬영한 경우
+                if (data?.extras?.get("data") != null) {
+                    val bitmap = data.extras?.get("data") as Bitmap
+                    // OCR 처리 메서드 호출
+                    uploadImageToCLOVA(bitmap) // 비트맵을 Clova OCR API로 업로드
+                }
+
+                // 갤러리에서 선택한 경우
+                else if (selectedImageUri != null) {
+                    // URI에서 InputStream 가져오기 및 비트맵 생성
+                    contentResolver.openInputStream(selectedImageUri)?.use { inputStream ->
+                        val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+                        // OCR 처리 메서드 호출
+                        uploadImageToCLOVA(bitmap) // 비트맵을 Clova OCR API로 업로드
+                    }
+                }
+            }
         }
 
         // 영수증 버튼 클릭
         receiptbtn.setOnClickListener {
-            // 갤러리에서 이미지 선택을 위한 인텐트
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            getImageLauncher.launch(intent)
+            // 갤러리와 카메라를 선택할 수 있는 Intent 생성
+            val galleryIntent = Intent(Intent.ACTION_PICK)
+            galleryIntent.type = "image/*"
+
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                // 두 가지 Intent 실행
+                val chooser = Intent.createChooser(galleryIntent, "Select Image")
+                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
+                getImageLauncher.launch(chooser)
+            } else {
+                // 카메라 권한 요청
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+            }
         }
 
 
@@ -297,6 +344,17 @@ class ExpendAct : AppCompatActivity() {
         })
 
 
+    }
+    // 권한 요청 결과 처리
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "카메라 권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
     fun showFollowersDialog() {
         val dialog = Dialog(this)
