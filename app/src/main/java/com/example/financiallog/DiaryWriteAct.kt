@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -21,6 +22,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +44,7 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.Manifest
 
 class DiaryWriteAct : AppCompatActivity() {
 
@@ -56,6 +60,7 @@ class DiaryWriteAct : AppCompatActivity() {
     val list_ex : ApiObject by lazy { ApiObject() };
     private var currentPhotoPath: String? = null
     var hashtaglist = ArrayList<String>()
+    private val REQUEST_CAMERA_PERMISSION = 101
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,12 +134,6 @@ class DiaryWriteAct : AppCompatActivity() {
                 }
             }
         }
-        /*if (openchip.isChecked){
-            diarychip = openchip.text.toString()
-        }else if (privatechip.isChecked){
-            diarychip = privatechip.text.toString()
-        }*/
-
 
         //해시태그 추가하기
         ed_tag.setOnEditorActionListener{ _, actionId, event ->
@@ -152,6 +151,11 @@ class DiaryWriteAct : AppCompatActivity() {
             }
             false
 
+        }
+
+        // 카메라 권한 요청
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
         }
 
         // 사진 버튼 눌렀을 때
@@ -238,30 +242,44 @@ class DiaryWriteAct : AppCompatActivity() {
                     val imageUri = data.clipData?.getItemAt(i)?.uri
                     when (i) {
                         0 -> {
-                            photo_tv.setImageURI(imageUri)
+                            val bitmap = decodeSampledBitmapFromUri(imageUri!!, photo_tv.width, photo_tv.height)
+                            photo_tv.setImageBitmap(bitmap)
                             photo_tv.tag = imageUri
                         }
                         1 -> {
-                            photo_tv1.setImageURI(imageUri)
+                            val bitmap = decodeSampledBitmapFromUri(imageUri!!, photo_tv1.width, photo_tv1.height)
+                            photo_tv1.setImageBitmap(bitmap)
                             photo_tv1.tag = imageUri
                         }
                         2 -> {
-                            photo_tv2.setImageURI(imageUri)
+                            val bitmap = decodeSampledBitmapFromUri(imageUri!!, photo_tv2.width, photo_tv2.height)
+                            photo_tv2.setImageBitmap(bitmap)
                             photo_tv2.tag = imageUri
+                        }
+                        else -> {
+                            Toast.makeText(this, "최대 3장까지만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             } else {
                 val imageUri = data?.data
-                photo_tv.setImageURI(imageUri)
+                val bitmap = decodeSampledBitmapFromUri(imageUri!!, photo_tv.width, photo_tv.height)
+                photo_tv.setImageBitmap(bitmap)
                 photo_tv.tag = imageUri
             }
         } else if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
-            val imageBitmap = BitmapFactory.decodeFile(currentPhotoPath)
-            photo_tv.setImageBitmap(imageBitmap)
-            photo_tv.tag = Uri.fromFile(File(currentPhotoPath))
+            // 카메라에서 찍은 경우
+            if (currentPhotoPath != null) {
+                val imageBitmap = BitmapFactory.decodeFile(currentPhotoPath)
+                photo_tv.setImageBitmap(imageBitmap)
+                photo_tv.tag = Uri.fromFile(File(currentPhotoPath))
+            } else {
+                Log.e("DiaryWriteAct", "currentPhotoPath is null")
+            }
         }
     }
+
+
 
     fun removeHashTag(chip: Chip) {
         tag_group.removeView(chip)
@@ -286,23 +304,6 @@ class DiaryWriteAct : AppCompatActivity() {
         var mNow = System.currentTimeMillis()
         today = Date(mNow)
         return mFormat.format(today)
-    }
-    private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(packageManager) != null) {
-            val photoFile = createImageFile()
-            currentPhotoPath = photoFile.absolutePath
-            val photoURI = FileProvider.getUriForFile(this, "com.example.android.fileprovider", photoFile)
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-            startActivityForResult(takePictureIntent, 101)
-        }
-    }
-    private fun createImageFile(): File {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir).apply {
-            currentPhotoPath = absolutePath
-        }
     }
     fun getCurrentFormattedDate(): String {
         val currentDate = LocalDate.now()
@@ -356,6 +357,59 @@ class DiaryWriteAct : AppCompatActivity() {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
         }
         return file
+    }
+
+    private fun decodeSampledBitmapFromUri(uri: Uri, reqWidth: Int, reqHeight: Int): Bitmap? {
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+        BitmapFactory.decodeStream(contentResolver.openInputStream(uri), null, options)
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false
+        return BitmapFactory.decodeStream(contentResolver.openInputStream(uri), null, options)
+    }
+
+    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        val height = options.outHeight
+        val width = options.outWidth
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        return inSampleSize
+    }
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
+            // 파일 생성
+            val photoFile: File? = createImageFile() // 이미지 파일 생성 메서드
+            // 사진 파일의 URI를 가져와서 인텐트에 추가
+            photoFile?.also {
+                currentPhotoPath = it.absolutePath
+                val photoURI: Uri = FileProvider.getUriForFile(this, "com.example.financiallog.fileprovider", it)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, 101)
+            }
+        }
+    }
+
+    // 이미지 파일 생성 메서드
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
     }
 
 }
