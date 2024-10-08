@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 import android.graphics.BitmapFactory
 import android.util.Base64
+import android.util.Log
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -43,6 +45,7 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = data[position]
+        Log.d("Adapter", "Binding item: $item") // 아이템 로그 출력
         if (holder is DiaryViewHolderWithImage) {
             holder.bind(item)
         } else if (holder is DiaryViewHolderWithoutImage) {
@@ -50,7 +53,6 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
         }
     }
 
-    // 이미지가 있는 경우의 ViewHolder
     class DiaryViewHolderWithImage(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: ResponseMyDiary.DataMyDi) {
             val dateFormatInput = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
@@ -60,22 +62,43 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
 
             itemView.findViewById<TextView>(R.id.day_tv).text = formattedDate
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
-            itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                ", "
-            } else {
-                "#" + item.hashtag.joinToString(" #")
+
+            // 해시태그 로그 출력
+            Log.d("DiaryViewHolder", "Hashtag List: ${item.hashtag.joinToString(", ")}")
+            item.hashtag.forEachIndexed { index, hashtag ->
+                Log.d("DiaryViewHolder", "Hashtag at index $index: $hashtag")
             }
+            Log.d("DiaryViewHolder", "Hashtag Type: ${item.hashtag::class.simpleName}")
+            item.hashtag.forEach { hashtag ->
+                Log.d("DiaryViewHolder", "Hashtag Element: $hashtag") // 각 요소 로그 출력
+            }
+            Log.d("DiaryViewHolder", "Hashtag List: ${item.hashtag}")
+
+            // 해시태그 생성
+            val hashtags = if (item.hashtag.isNotEmpty()) {
+                item.hashtag.flatMap { it.split(",").map { hashtag -> "#${hashtag.trim()}" } } // 각 해시태그를 개별적으로 처리
+                    .joinToString(", ") // 쉼표로 구분
+            } else {
+                "" // 해시태그가 없을 경우 빈 문자열 추가
+            }
+            itemView.findViewById<TextView>(R.id.tag_dr).text = hashtags
+
+            // 해시태그 로그 출력
+            Log.d("DiaryViewHolder", "Final Hashtags: $hashtags")
 
             val imageView = itemView.findViewById<ImageView>(R.id.feed_image)
-            val firstImageBase64 = item.image[0]
-            val decodedBytes = Base64.decode(firstImageBase64, Base64.DEFAULT)
-            val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
-            imageView.setImageBitmap(bitmap)
-            imageView.visibility = View.VISIBLE
+
+            // 이미지 URL을 사용하여 Glide로 이미지 로드
+            if (item.image.isNotEmpty()) {
+                Glide.with(itemView.context)
+                    .load(item.image[0]) // URL 로드
+                    .error(R.drawable.btn_x) // 오류 시 대체 이미지 설정
+                    .into(imageView) // ImageView에 설정
+                imageView.visibility = View.VISIBLE
+            }
         }
     }
 
-    // 이미지가 없는 경우의 ViewHolder
     class DiaryViewHolderWithoutImage(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: ResponseMyDiary.DataMyDi) {
             val dateFormatInput = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
@@ -85,17 +108,17 @@ class DiaryMyListAdapter(private val data: List<ResponseMyDiary.DataMyDi>): Recy
 
             itemView.findViewById<TextView>(R.id.day_tv).text = formattedDate
             itemView.findViewById<TextView>(R.id.feed_text).text = item.contents
-            itemView.findViewById<TextView>(R.id.tag_dr).text = if (item.hashtag.isEmpty()) {
-                ", "
-            } else {
-                "#" + item.hashtag.joinToString(" #")
-            }
 
-            // 이미지 뷰는 필요 없으므로 숨김 처리
-            itemView.findViewById<ImageView>(R.id.feed_image).visibility = View.GONE
+            // 해시태그 생성
+            val hashtags = if (item.hashtag.isNotEmpty()) {
+                item.hashtag.flatMap { it.split(",").map { hashtag -> "#${hashtag.trim()}" } } // 각 해시태그를 개별적으로 처리
+                    .joinToString(", ") // 쉼표로 구분
+            } else {
+                "" // 해시태그가 없을 경우 빈 문자열 추가
+            }
+            itemView.findViewById<TextView>(R.id.tag_dr).text = hashtags
         }
     }
-
 
     /*class DiaryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         fun bind(item:ResponseMyDiary.DataMyDi){

@@ -29,11 +29,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import java.io.ByteArrayOutputStream
 
 
 class ExpendAct : AppCompatActivity() {
@@ -336,33 +331,7 @@ class ExpendAct : AppCompatActivity() {
 
 
     // OCR 처리 메서드
-   private fun uploadImageToCLOVA(bitmap: Bitmap) {
-        // 비트맵을 JPEG로 압축하여 ByteArray로 변환
-        /*val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val imageBytes = baos.toByteArray()
-
-        // MultipartBody.Part로 변환
-        val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageBytes)
-        val body = MultipartBody.Part.createFormData("file", "image.jpg", requestFile)
-
-        // API 호출
-        apiobject.api.uploadImage(body).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    val result = response.body()
-                    // OCR 응답 결과 처리
-                    Log.d("OCR Result", result.toString())
-                    // 필요한 경우 결과를 UI에 표시
-                } else {
-                    Log.e("OCR Error", "Response not successful: ${response.errorBody()?.string()}")
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e("OCR Error", "Failed to upload image", t)
-            }
-        })*/
+    private fun uploadImageToCLOVA(bitmap: Bitmap) {
+        // 클로바 OCR API 호출 코드
     }
-
 }

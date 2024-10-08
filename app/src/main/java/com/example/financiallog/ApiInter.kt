@@ -43,8 +43,14 @@ interface ApiInter {
                     @Query("year") year: String,@Query("month") month: String ):Call<ResponseCalendar>
 
     //일기관련
+    @Multipart
     @POST("/diary_app/saveDiary")
-    fun insertDi(@Body map: HashMap<String, Any>): Call<PostDiary>?
+    fun insertDi(@Part("user") user: RequestBody,
+                 @Part("date") date: RequestBody,
+                 @Part("contents") contents: RequestBody,
+                 @Part("privacy") privacy: RequestBody,
+                 @Part("hashtag") hashtag: RequestBody,
+                 @Part files: List<MultipartBody.Part>): Call<PostDiary>?
     @GET("/diary_app/saveDiary?")
     fun diarywriteEx(@Query("user") userId: Int, @Query("date") date: String): Call<List<DataEx>>
     @GET("/diary_app/diaryList?user=1")

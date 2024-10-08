@@ -1,5 +1,6 @@
 package com.example.financiallog
 
+import android.media.Image
 import java.nio.file.Files
 import java.util.Date
 
@@ -9,6 +10,6 @@ data class PostDiary(
     val contents : String,
     val privacy : String,
     val hastag : String,
-    val file : Files
+    val image : Image
 
     )
