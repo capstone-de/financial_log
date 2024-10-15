@@ -47,7 +47,8 @@ interface ApiInter {
                  @Part("contents") contents: RequestBody,
                  @Part("privacy") privacy: RequestBody,
                  @Part("hashtag") hashtag: RequestBody,
-                 @Part files: List<MultipartBody.Part>): Call<PostDiary>?
+                 @Part files: List<MultipartBody.Part>,
+                 @Part("location") location : RequestBody): Call<PostDiary>?
     @GET("/diary_app/saveDiary?")
     fun diarywriteEx(@Query("user") userId: Int, @Query("date") date: String): Call<List<DataEx>>
     @GET("/diary_app/diaryList?user=1")

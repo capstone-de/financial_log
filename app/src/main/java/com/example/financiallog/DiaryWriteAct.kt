@@ -58,8 +58,8 @@ class DiaryWriteAct : AppCompatActivity() {
     lateinit var photo_tv1:ImageView; lateinit var photo_tv2:ImageView;
     lateinit var openchip:Chip; lateinit var privatechip:Chip; lateinit var tag_group:ChipGroup;
     val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1002
-    val list_ex : ApiObject by lazy { ApiObject() };
-    private var currentPhotoPath: String? = null;  private lateinit var textView: TextView
+    val list_ex : ApiObject by lazy { ApiObject() }; lateinit var ed_loc: EditText;
+    private var currentPhotoPath: String? = null;  private lateinit var text_location: TextView
     var hashtaglist = ArrayList<String>()
     private val REQUEST_CAMERA_PERMISSION = 101
     private val districts = arrayOf(
@@ -162,8 +162,9 @@ class DiaryWriteAct : AppCompatActivity() {
         }
 
         // 위치 추가하기
-        textView = findViewById(R.id.textView)
-        textView.setOnClickListener {
+        text_location = findViewById(R.id.text_location)
+        ed_loc = findViewById(R.id.ed_loc)
+        ed_loc.setOnClickListener {
             showDistrictDialog()
         }
 
@@ -195,7 +196,7 @@ class DiaryWriteAct : AppCompatActivity() {
             val privacy = diarychip.toString()
             // List<String> 형태로 변환
             val hashtags = hashtaglist.joinToString(", ") // 리스트를 문자열로 변환
-            val location = textView.text.toString() // TextView의 텍스트를 location에 저장
+            val location = ed_loc.text.toString() // TextView의 텍스트를 location에 저장
 
             // RequestBody 생성
             val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "1")
@@ -220,7 +221,7 @@ class DiaryWriteAct : AppCompatActivity() {
             }
 
             // API 호출
-            apiobject.api.insertDi(userPart, datePart, contentsPart, privacyPart, hashtagsPart, files)!!.enqueue(object : Callback<PostDiary> {
+            apiobject.api.insertDi(userPart, datePart, contentsPart, privacyPart, hashtagsPart, files,locationPart)!!.enqueue(object : Callback<PostDiary> {
                 override fun onResponse(call: Call<PostDiary>, response: Response<PostDiary>) {
                     if (response.isSuccessful) {
                         Log.d("test", response.body().toString())
@@ -243,7 +244,8 @@ class DiaryWriteAct : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("서울시 구 선택")
             .setItems(districts) { dialog, which ->
-                textView.text = districts[which]
+                // 선택한 구를 EditText에 설정
+                ed_loc.setText(districts[which])
             }
         builder.create().show()
     }
