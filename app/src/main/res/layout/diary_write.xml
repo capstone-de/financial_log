@@ -209,7 +209,7 @@
             android:fontFamily="@font/gmarketsansttfmedium"
             android:id="@+id/text_location"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="145dp"
+            android:layout_marginBottom="100dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="45dp" />
 
@@ -219,7 +219,7 @@
             android:layout_height="48dp"
             android:fontFamily="@font/gmarketsansttfmedium"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="133dp"
+            android:layout_marginBottom="98dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="98dp" />
 

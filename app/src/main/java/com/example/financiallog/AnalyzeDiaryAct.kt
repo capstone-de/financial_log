@@ -12,16 +12,29 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.charts.ScatterChart
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.ScatterData
+import com.github.mikephil.charting.data.ScatterDataSet
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import okhttp3.ResponseBody
+import org.json.JSONArray
+import org.json.JSONObject
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class AnalyzeDiaryAct: AppCompatActivity() {
-    val hashtag_data : ApiObject by lazy { ApiObject() };
+    val hashtag_data : ApiObject by lazy { ApiObject() }; lateinit var mFormat: SimpleDateFormat;
+    lateinit var currentDate: Date; var selectedMonth: Date = Date(); lateinit var diary_chat1: ScatterChart;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.analyze_diary)
@@ -32,6 +45,36 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         val diary_text2 = findViewById<TextView>(R.id.diary_text2)
         val diary_view1 = findViewById<ImageView>(R.id.imageView5)
         val diary_view2 = findViewById<ImageView>(R.id.imageView6)
+
+        //감정소비분석
+        val diary_text3 = findViewById<TextView>(R.id.diary_text3)
+        diary_chat1 = findViewById<ScatterChart>(R.id.chart1)
+
+        //위치소비분석
+        //val diary_text4 = findViewById<TextView>(R.id.diary_text4)
+        //val diary_chat2 = findViewById<ScatterChart>(R.id.chart2)
+
+        //val monthText = findViewById<TextView>(R.id.monthly_tv)
+
+        // 날짜 표시
+        mFormat = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
+        currentDate = Date()
+        //monthText.text = mFormat.format(currentDate)
+
+        //month_btn.setOnClickListener { showMonthPickerDialog() } // 다른 달 선택 다이얼로그 표시
+
+        //selectedMonth = Date() // 오늘 날짜로 초기화
+        val calendar = Calendar.getInstance() // 현재 날짜와 시간으로 초기화된 Calendar 인스턴스를 가져옵니다.
+        val year = calendar.get(Calendar.YEAR) // 연도를 가져옵니다.
+        val month = calendar.get(Calendar.MONTH) + 1 // 월을 가져옵니다. (Calendar.MONTH는 0부터 시작하므로 +1을 해줍니다.)
+
+
+        //감정소비분석차트
+        getDataForSentiment(year,month) // 오늘 날짜 데이터 불러오기
+
+        //위치소비분석차트
+        getDataForLocation(year,month)
+
 
         //가계부 버튼 클릭 시
         analyze_btn.setOnClickListener(View.OnClickListener{
@@ -188,5 +231,88 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return currentDate.format(formatter)
     }
+
+    private fun showMonthPickerDialog() {
+        val calendar = Calendar.getInstance()
+
+        // 다이얼로그에 표시할 월 목록 생성
+        val months = (1..12).map { month -> "${String.format("%02d", month)}월" }.toTypedArray()
+
+        AlertDialog.Builder(this)
+            .setTitle("달 선택")
+            .setItems(months) { _, which ->
+                calendar.set(Calendar.MONTH, which)
+                val year = calendar.get(Calendar.YEAR)
+                val month = which + 1 // Calendar.MONTH는 0부터 시작하므로 +1 필요
+                // 사용자가 선택한 달로 selectedMonth 업데이트
+                selectedMonth = calendar.time
+
+                // 선택한 달에 해당하는 데이터로 업데이트
+                getDataForSentiment(year, month)
+                getDataForLocation(year, month)
+            }
+            .show()
+    }
+    // 데이터 가져오기
+    private fun getDataForSentiment(year: Int, month: Int) {
+        val yearStr = year.toString()
+        val monthStr = month.toString().padStart(2, '0')
+
+        hashtag_data.api.getsentimentAnalysis(1, yearStr, monthStr).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { data ->
+                        Log.d("데이터 받기", data.toString())
+
+                        // JSON 파싱 및 데이터 업데이트
+                        val jsonObject = JSONObject(data.string())
+                        val coordinates = jsonObject.getJSONArray("coordinate")
+                        val correlation = jsonObject.getDouble("correlation")
+
+                        // 차트를 업데이트
+                        updateEmotionConsumptionChart(coordinates)
+
+                    } ?: run {
+                        // 응답은 성공적이지만 body가 null인 경우 처리
+                    }
+                } else {
+                    // 응답 실패 처리
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                // API 호출 실패 처리
+                Log.e("API 호출 실패", t.message.toString())
+            }
+        })
+    }
+
+    // 감정 소비 분석 차트 업데이트
+    private fun updateEmotionConsumptionChart(coordinates: JSONArray) {
+        val entries = ArrayList<Entry>()
+
+        // 데이터 포인트 추가
+        for (i in 0 until coordinates.length()) {
+            val point = coordinates.getJSONArray(i)
+            val xValue = point.getDouble(0).toFloat()  // 감정 분석 결과 (x)
+            val yValue = point.getDouble(1).toFloat()  // 금액 (y)
+            entries.add(Entry(xValue, yValue))
+        }
+
+        val dataSet = ScatterDataSet(entries, "감정 소비 분석")
+        dataSet.color = ColorTemplate.COLORFUL_COLORS[0]
+        dataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE)
+        dataSet.scatterShapeSize = 10f
+
+        val scatterData = ScatterData(dataSet)
+        diary_chat1.data = scatterData
+        diary_chat1.invalidate() // 차트 업데이트
+    }
+
+    private fun getDataForLocation(year: Int, month: Int) {
+        val yearStr = year.toString()
+        val monthStr = month.toString().padStart(2, '0')
+    }
+
 
 }
