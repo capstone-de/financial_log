@@ -51,17 +51,18 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         diary_chat1 = findViewById<ScatterChart>(R.id.chart1)
 
         //위치소비분석
-        //val diary_text4 = findViewById<TextView>(R.id.diary_text4)
+        val diary_text4 = findViewById<TextView>(R.id.diary_text_loc)
         //val diary_chat2 = findViewById<ScatterChart>(R.id.chart2)
 
-        //val monthText = findViewById<TextView>(R.id.monthly_tv)
+        val monthText = findViewById<TextView>(R.id.monthly_tv_emo)
+        val monthText1 = findViewById<TextView>(R.id.monthly_tv_loc)
 
         // 날짜 표시
         mFormat = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
         currentDate = Date()
-        //monthText.text = mFormat.format(currentDate)
+        monthText.text = mFormat.format(currentDate)
 
-        //month_btn.setOnClickListener { showMonthPickerDialog() } // 다른 달 선택 다이얼로그 표시
+        monthText.setOnClickListener { showMonthPickerDialog() } // 다른 달 선택 다이얼로그 표시
 
         //selectedMonth = Date() // 오늘 날짜로 초기화
         val calendar = Calendar.getInstance() // 현재 날짜와 시간으로 초기화된 Calendar 인스턴스를 가져옵니다.
