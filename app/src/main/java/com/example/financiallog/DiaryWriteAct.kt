@@ -45,6 +45,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import android.Manifest
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DiaryWriteAct : AppCompatActivity() {
 
@@ -56,6 +57,7 @@ class DiaryWriteAct : AppCompatActivity() {
     lateinit var tag_chip:Chip; lateinit var photo_tv:ImageView; lateinit var ed_tag : EditText;
     lateinit var photo_tv1:ImageView; lateinit var photo_tv2:ImageView;
     lateinit var openchip:Chip; lateinit var privatechip:Chip; lateinit var tag_group:ChipGroup;
+    lateinit var ed_loc : EditText; lateinit var textlocation : TextView;
     val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1002
     val list_ex : ApiObject by lazy { ApiObject() };
     private var currentPhotoPath: String? = null
@@ -83,6 +85,8 @@ class DiaryWriteAct : AppCompatActivity() {
         photo_tv = findViewById<ImageView>(R.id.diary_image1)
         photo_tv1 = findViewById<ImageView>(R.id.diary_image2)
         photo_tv2 = findViewById<ImageView>(R.id.diary_image3)
+        textlocation = findViewById<TextView>(R.id.text_location)
+        ed_loc = findViewById<EditText>(R.id.ed_loc)
 
 
         // X 버튼을 눌렀을 때
@@ -151,6 +155,11 @@ class DiaryWriteAct : AppCompatActivity() {
             }
             false
 
+        }
+
+        // 위치 추가
+        ed_loc.setOnClickListener {
+            location_listdialog()
         }
 
         // 카메라 권한 요청
@@ -299,6 +308,24 @@ class DiaryWriteAct : AppCompatActivity() {
             ed_tag.text.clear() // 입력창 초기화
         }
     }
+
+    // 위치 선택 다이얼로그
+    fun location_listdialog() {
+        val items = arrayOf(
+            "종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구",
+            "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구",
+            "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구"
+        )
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle("지역을 선택해주세요")
+            .setItems(items) { dialog, which ->
+                // 선택한 구를 입력창에 표시 (또는 변수에 저장)
+                ed_loc.setText(items[which])
+            }
+            .show()
+    }
+
 
     private fun getTime(): String? {
         var mNow = System.currentTimeMillis()
