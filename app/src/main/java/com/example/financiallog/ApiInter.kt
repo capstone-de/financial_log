@@ -92,9 +92,11 @@ interface ApiInter {
     fun signUp(@Body map: HashMap<String, Any>): Call<PostExpend>?
 
     //클로바 ocr
+
+
     /*@Multipart
     @POST("/clova-ocr/v1/ocr") // 클로바 OCR API 엔드포인트
-    @Headers("Content-Type: application/json", "X-OCR-API-Key: YOUR_API_KEY") // API 키를 여기에 입력하세요.
     fun uploadImage(@Part file: MultipartBody.Part): Call<ResponseBody>*/
+
 
 }
