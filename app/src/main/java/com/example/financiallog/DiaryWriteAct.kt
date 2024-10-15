@@ -1,5 +1,6 @@
 package com.example.financiallog
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -7,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -21,6 +23,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,7 +32,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -44,8 +46,6 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import android.Manifest
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DiaryWriteAct : AppCompatActivity() {
 
@@ -57,12 +57,18 @@ class DiaryWriteAct : AppCompatActivity() {
     lateinit var tag_chip:Chip; lateinit var photo_tv:ImageView; lateinit var ed_tag : EditText;
     lateinit var photo_tv1:ImageView; lateinit var photo_tv2:ImageView;
     lateinit var openchip:Chip; lateinit var privatechip:Chip; lateinit var tag_group:ChipGroup;
-    lateinit var ed_loc : EditText; lateinit var textlocation : TextView;
     val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1002
-    val list_ex : ApiObject by lazy { ApiObject() };
-    private var currentPhotoPath: String? = null
+    val list_ex : ApiObject by lazy { ApiObject() }; lateinit var ed_loc: EditText;
+    private var currentPhotoPath: String? = null;  private lateinit var text_location: TextView
     var hashtaglist = ArrayList<String>()
     private val REQUEST_CAMERA_PERMISSION = 101
+    private val districts = arrayOf(
+        "종로구", "중구", "용산구", "성동구", "광진구",
+        "동대문구", "중랑구", "성북구", "강북구", "도봉구",
+        "노원구", "은평구", "서대문구", "마포구", "양천구",
+        "강서구", "구로구", "금천구", "영등포구", "동작구",
+        "관악구", "서초구", "강남구", "송파구", "강동구"
+    )
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,8 +91,6 @@ class DiaryWriteAct : AppCompatActivity() {
         photo_tv = findViewById<ImageView>(R.id.diary_image1)
         photo_tv1 = findViewById<ImageView>(R.id.diary_image2)
         photo_tv2 = findViewById<ImageView>(R.id.diary_image3)
-        textlocation = findViewById<TextView>(R.id.text_location)
-        ed_loc = findViewById<EditText>(R.id.ed_loc)
 
 
         // X 버튼을 눌렀을 때
@@ -157,10 +161,13 @@ class DiaryWriteAct : AppCompatActivity() {
 
         }
 
-        // 위치 추가
+        // 위치 추가하기
+        text_location = findViewById(R.id.text_location)
+        ed_loc = findViewById(R.id.ed_loc)
         ed_loc.setOnClickListener {
-            location_listdialog()
+            showDistrictDialog()
         }
+
 
         // 카메라 권한 요청
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -189,6 +196,7 @@ class DiaryWriteAct : AppCompatActivity() {
             val privacy = diarychip.toString()
             // List<String> 형태로 변환
             val hashtags = hashtaglist.joinToString(", ") // 리스트를 문자열로 변환
+            val location = ed_loc.text.toString() // TextView의 텍스트를 location에 저장
 
             // RequestBody 생성
             val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "1")
@@ -196,6 +204,7 @@ class DiaryWriteAct : AppCompatActivity() {
             val contentsPart = RequestBody.create("text/plain".toMediaTypeOrNull(), content)
             val privacyPart = RequestBody.create("text/plain".toMediaTypeOrNull(), privacy)
             val hashtagsPart = RequestBody.create("text/plain".toMediaTypeOrNull(), hashtags) // RequestBody로 생성
+            val locationPart = RequestBody.create("text/plain".toMediaTypeOrNull(), location)
 
 
             // 이미지 URI를 Bitmap으로 변환
@@ -212,7 +221,7 @@ class DiaryWriteAct : AppCompatActivity() {
             }
 
             // API 호출
-            apiobject.api.insertDi(userPart, datePart, contentsPart, privacyPart, hashtagsPart, files)!!.enqueue(object : Callback<PostDiary> {
+            apiobject.api.insertDi(userPart, datePart, contentsPart, privacyPart, hashtagsPart, files,locationPart)!!.enqueue(object : Callback<PostDiary> {
                 override fun onResponse(call: Call<PostDiary>, response: Response<PostDiary>) {
                     if (response.isSuccessful) {
                         Log.d("test", response.body().toString())
@@ -231,6 +240,15 @@ class DiaryWriteAct : AppCompatActivity() {
         }
 
     }
+    private fun showDistrictDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("서울시 구 선택")
+            .setItems(districts) { dialog, which ->
+                // 선택한 구를 EditText에 설정
+                ed_loc.setText(districts[which])
+            }
+        builder.create().show()
+    }
 
     private fun addHashtag(hashtag: String) {
         val chip = Chip(this)
@@ -244,50 +262,67 @@ class DiaryWriteAct : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
-            if (data?.clipData != null) {
-                val count = data.clipData?.itemCount ?: 0
-                for (i in 0 until count) {
-                    val imageUri = data.clipData?.getItemAt(i)?.uri
-                    when (i) {
-                        0 -> {
-                            val bitmap = decodeSampledBitmapFromUri(imageUri!!, photo_tv.width, photo_tv.height)
-                            photo_tv.setImageBitmap(bitmap)
-                            photo_tv.tag = imageUri
-                        }
-                        1 -> {
-                            val bitmap = decodeSampledBitmapFromUri(imageUri!!, photo_tv1.width, photo_tv1.height)
-                            photo_tv1.setImageBitmap(bitmap)
-                            photo_tv1.tag = imageUri
-                        }
-                        2 -> {
-                            val bitmap = decodeSampledBitmapFromUri(imageUri!!, photo_tv2.width, photo_tv2.height)
-                            photo_tv2.setImageBitmap(bitmap)
-                            photo_tv2.tag = imageUri
-                        }
-                        else -> {
-                            Toast.makeText(this, "최대 3장까지만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show()
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PICK_IMAGE_REQUEST) {
+                // 선택된 인텐트가 갤러리인지 확인
+                if (data?.clipData != null) {
+                    val count = data.clipData!!.itemCount
+                    for (i in 0 until count) {
+                        val imageUri = data.clipData!!.getItemAt(i).uri
+                        // 각 이미지 뷰에 비트맵 설정
+                        when (i) {
+                            0 -> {
+                                val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv.width, photo_tv.height)
+                                photo_tv.setImageBitmap(bitmap)
+                                photo_tv.tag = imageUri
+                            }
+                            1 -> {
+                                val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv1.width, photo_tv1.height)
+                                photo_tv1.setImageBitmap(bitmap)
+                                photo_tv1.tag = imageUri
+                            }
+                            2 -> {
+                                val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv2.width, photo_tv2.height)
+                                photo_tv2.setImageBitmap(bitmap)
+                                photo_tv2.tag = imageUri
+                            }
+                            else -> {
+                                Toast.makeText(this, "최대 3장까지만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
+                } else if (data != null) {
+                    // 단일 이미지 선택
+                    val imageUri = data.data
+                    if (imageUri != null) {
+                        val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv.width, photo_tv.height)
+                        photo_tv.setImageBitmap(bitmap)
+                        photo_tv.tag = imageUri
+                    } else {
+                        Log.e("DiaryWriteAct", "Single image URI is null")
+                    }
                 }
-            } else {
-                val imageUri = data?.data
-                val bitmap = decodeSampledBitmapFromUri(imageUri!!, photo_tv.width, photo_tv.height)
-                photo_tv.setImageBitmap(bitmap)
-                photo_tv.tag = imageUri
+            } else if (requestCode == 101) { // 카메라에서 촬영한 경우
+                Log.d("DiaryWriteAct", "Current photo path: $currentPhotoPath")
+                if (!currentPhotoPath.isNullOrEmpty()) {
+                    val imageBitmap = BitmapFactory.decodeFile(currentPhotoPath)
+                    if (imageBitmap != null) {
+                        photo_tv.setImageBitmap(imageBitmap)
+                        photo_tv.tag = Uri.fromFile(File(currentPhotoPath))
+
+                        // 갤러리에 이미지 추가
+                        MediaScannerConnection.scanFile(this, arrayOf(currentPhotoPath), null, null)
+                    } else {
+                        Log.e("DiaryWriteAct", "Image bitmap is null")
+                    }
+                } else {
+                    Log.e("DiaryWriteAct", "currentPhotoPath is null or empty")
+                }
             }
-        } else if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
-            // 카메라에서 찍은 경우
-            if (currentPhotoPath != null) {
-                val imageBitmap = BitmapFactory.decodeFile(currentPhotoPath)
-                photo_tv.setImageBitmap(imageBitmap)
-                photo_tv.tag = Uri.fromFile(File(currentPhotoPath))
-            } else {
-                Log.e("DiaryWriteAct", "currentPhotoPath is null")
-            }
+        } else {
+            Log.e("DiaryWriteAct", "Result not OK: $resultCode")
         }
     }
-
 
 
     fun removeHashTag(chip: Chip) {
@@ -308,24 +343,6 @@ class DiaryWriteAct : AppCompatActivity() {
             ed_tag.text.clear() // 입력창 초기화
         }
     }
-
-    // 위치 선택 다이얼로그
-    fun location_listdialog() {
-        val items = arrayOf(
-            "종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구",
-            "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구",
-            "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구"
-        )
-
-        MaterialAlertDialogBuilder(this)
-            .setTitle("지역을 선택해주세요")
-            .setItems(items) { dialog, which ->
-                // 선택한 구를 입력창에 표시 (또는 변수에 저장)
-                ed_loc.setText(items[which])
-            }
-            .show()
-    }
-
 
     private fun getTime(): String? {
         var mNow = System.currentTimeMillis()
@@ -381,7 +398,7 @@ class DiaryWriteAct : AppCompatActivity() {
     private fun createFileFromBitmap(bitmap: Bitmap): File {
         val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${System.currentTimeMillis()}.jpg")
         FileOutputStream(file).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
         }
         return file
     }
@@ -421,7 +438,7 @@ class DiaryWriteAct : AppCompatActivity() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             // 파일 생성
-            val photoFile: File? = createImageFile() // 이미지 파일 생성 메서드
+            val photoFile: File? = createImageFile()
             // 사진 파일의 URI를 가져와서 인텐트에 추가
             photoFile?.also {
                 currentPhotoPath = it.absolutePath
@@ -436,7 +453,9 @@ class DiaryWriteAct : AppCompatActivity() {
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
+        val imageFile = File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
+        Log.d("DiaryWriteAct", "Image file created: ${imageFile.absolutePath}") // 로그 추가
+        return imageFile
     }
 
 }
