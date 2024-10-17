@@ -53,7 +53,7 @@ dependencies {
     implementation ("com.android.volley:volley:1.2.1")
     implementation ("com.github.PhilJay:MpAndroidChart:v3.1.0") //chart
     implementation ("com.github.bumptech.glide:glide:4.12.0")
-    implementation ("com.google.android.gms:play-services-maps:latest_version")// Google Maps
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")// Google Maps
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

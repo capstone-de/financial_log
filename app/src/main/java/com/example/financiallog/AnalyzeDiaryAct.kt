@@ -18,6 +18,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.data.ScatterDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import okhttp3.ResponseBody
 import org.json.JSONArray
@@ -35,6 +36,7 @@ import java.util.Locale
 class AnalyzeDiaryAct: AppCompatActivity() {
     val hashtag_data : ApiObject by lazy { ApiObject() }; lateinit var mFormat: SimpleDateFormat;
     lateinit var currentDate: Date; var selectedMonth: Date = Date(); lateinit var diary_chat1: ScatterChart;
+    lateinit var mMap: GoogleMap; lateinit var monthText: TextView; lateinit var monthText1: TextView;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.analyze_diary)
@@ -49,20 +51,23 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         //감정소비분석
         val diary_text3 = findViewById<TextView>(R.id.diary_text3)
         diary_chat1 = findViewById<ScatterChart>(R.id.chart1)
+        val emotion_result = findViewById<TextView>(R.id.diary_emotion_result)
 
         //위치소비분석
         val diary_text4 = findViewById<TextView>(R.id.diary_text_loc)
         //val diary_chat2 = findViewById<ScatterChart>(R.id.chart2)
 
-        val monthText = findViewById<TextView>(R.id.monthly_tv_emo)
-        val monthText1 = findViewById<TextView>(R.id.monthly_tv_loc)
+        monthText = findViewById(R.id.monthly_tv_emo)
+        monthText1 = findViewById(R.id.monthly_tv_loc)
 
         // 날짜 표시
         mFormat = SimpleDateFormat("yyyy년 MM월", Locale.KOREAN)
         currentDate = Date()
         monthText.text = mFormat.format(currentDate)
+        monthText1.text = mFormat.format(currentDate)
 
         monthText.setOnClickListener { showMonthPickerDialog() } // 다른 달 선택 다이얼로그 표시
+        monthText1.setOnClickListener { showMonthPickerDialog() }
 
         //selectedMonth = Date() // 오늘 날짜로 초기화
         val calendar = Calendar.getInstance() // 현재 날짜와 시간으로 초기화된 Calendar 인스턴스를 가져옵니다.
@@ -247,6 +252,8 @@ class AnalyzeDiaryAct: AppCompatActivity() {
                 val month = which + 1 // Calendar.MONTH는 0부터 시작하므로 +1 필요
                 // 사용자가 선택한 달로 selectedMonth 업데이트
                 selectedMonth = calendar.time
+                monthText.text = SimpleDateFormat("yyyy년 MM월", Locale.getDefault()).format(selectedMonth)
+                monthText1.text = SimpleDateFormat("yyyy년 MM월", Locale.getDefault()).format(selectedMonth)
 
                 // 선택한 달에 해당하는 데이터로 업데이트
                 getDataForSentiment(year, month)
