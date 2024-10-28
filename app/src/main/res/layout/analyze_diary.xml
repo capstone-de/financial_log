@@ -50,6 +50,7 @@
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
                 android:orientation="horizontal">
 
             <LinearLayout
@@ -114,14 +115,35 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp">
 
-                <TextView
-                        android:id="@+id/monthly_tv_emo"
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:fontFamily="@font/gmarketsansttfmedium"
-                        android:text="2024년 11월"
-                        android:textSize="16sp" />
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/monthly_tv_emo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="60dp"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="2024년 11월"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="12dp" />
+
+                    <ImageButton
+                            android:id="@+id/m_underButton"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintStart_toEndOf="@id/monthly_tv_emo"
+
+                            app:srcCompat="@drawable/analyze_under"
+                            tools:ignore="SpeakableTextPresentCheck"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
                 <TextView
@@ -138,7 +160,7 @@
                         android:id="@+id/chart1"
                         android:layout_width="256dp"
                         android:layout_height="175dp"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="20dp"
                         android:layout_gravity="center" />
 
@@ -162,14 +184,33 @@
                     android:layout_height="match_parent"
                     android:layout_marginRight="20dp">
 
-                <TextView
-                        android:id="@+id/monthly_tv_loc"
+                <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:fontFamily="@font/gmarketsansttfmedium"
-                        android:text="2024년 11월"
-                        android:textSize="16sp" />
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/monthly_tv_loc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/gmarketsansttfmedium"
+                            android:text="2024년 11월"
+                            android:textSize="16sp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginStart="4dp" />
+
+                    <ImageButton
+                            android:id="@+id/m_underButton_loc"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintStart_toEndOf="@id/monthly_tv_loc"
+                            app:srcCompat="@drawable/analyze_under"
+                            tools:ignore="SpeakableTextPresentCheck"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <TextView
@@ -186,6 +227,8 @@
                         android:layout_width="335dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
