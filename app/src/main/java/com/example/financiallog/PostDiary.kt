@@ -10,6 +10,6 @@ data class PostDiary(
     val contents : String,
     val privacy : String,
     val hastag : String,
-    val image : Image
-
+    val image : Image,
+    val gu : String
     )

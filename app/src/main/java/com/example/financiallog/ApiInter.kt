@@ -50,7 +50,8 @@ interface ApiInter {
                  @Part("contents") contents: RequestBody,
                  @Part("privacy") privacy: RequestBody,
                  @Part("hashtag") hashtag: RequestBody,
-                 @Part files: List<MultipartBody.Part>): Call<PostDiary>?
+                 @Part files: List<MultipartBody.Part>,
+                 @Part("location") location : RequestBody): Call<PostDiary>?
     @GET("/diary_app/saveDiary?")
     fun diarywriteEx(@Query("user") userId: Int, @Query("date") date: String): Call<List<DataEx>>
     @GET("/diary_app/diaryList?user=1")
@@ -82,6 +83,13 @@ interface ApiInter {
     fun getStatisticsMyHashtag():Call<ResponseBody>
     @GET("/wordcloud_app/diary") //전체 트렌드
     fun getStatisticsHashtag():Call<ResponseBody>
+    @GET("statistics_app/sentimentAnalysis") //감정분석
+    fun getsentimentAnalysis(@Query("user") userId: Int, @Query("year") year: String, @Query("month") month: String ):Call<ResponseSentiment>
+    //지도 위 차트(user, year, month)
+
+    @GET("statistics_app/sentimentAnalysis") //위치소비분석
+    fun getLocationAnalysis(@Query("user") userId: Int, @Query("year") year: String, @Query("month") month: String ):Call<ResponseLocation>
+
 
     //로그인
     @GET("/login/signIn")
