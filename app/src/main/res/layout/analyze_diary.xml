@@ -221,10 +221,10 @@
                         android:text="위치소비분석" />
 
                 <com.github.mikephil.charting.charts.BubbleChart
-                        android:background="@drawable/analyze_view"
+                        android:background="@drawable/analyze_diary_box3"
                         android:id="@+id/chart2"
-                        android:layout_width="256dp"
-                        android:layout_height="175dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="20dp"
