@@ -196,7 +196,7 @@ class DiaryWriteAct : AppCompatActivity() {
             val privacy = diarychip.toString()
             // List<String> 형태로 변환
             val hashtags = hashtaglist.joinToString(", ") // 리스트를 문자열로 변환
-            val location = ed_loc.text.toString() // TextView의 텍스트를 location에 저장
+            val gu = ed_loc.text.toString() // TextView의 텍스트를 location에 저장
 
             // RequestBody 생성
             val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "1")
@@ -204,7 +204,7 @@ class DiaryWriteAct : AppCompatActivity() {
             val contentsPart = RequestBody.create("text/plain".toMediaTypeOrNull(), content)
             val privacyPart = RequestBody.create("text/plain".toMediaTypeOrNull(), privacy)
             val hashtagsPart = RequestBody.create("text/plain".toMediaTypeOrNull(), hashtags) // RequestBody로 생성
-            val locationPart = RequestBody.create("text/plain".toMediaTypeOrNull(), location)
+            val guPart = RequestBody.create("text/plain".toMediaTypeOrNull(), gu)
 
 
             // 이미지 URI를 Bitmap으로 변환
@@ -221,7 +221,7 @@ class DiaryWriteAct : AppCompatActivity() {
             }
 
             // API 호출
-            apiobject.api.insertDi(userPart, datePart, contentsPart, privacyPart, hashtagsPart, files,locationPart)!!.enqueue(object : Callback<PostDiary> {
+            apiobject.api.insertDi(userPart, datePart, contentsPart, privacyPart, hashtagsPart, files,guPart)!!.enqueue(object : Callback<PostDiary> {
                 override fun onResponse(call: Call<PostDiary>, response: Response<PostDiary>) {
                     if (response.isSuccessful) {
                         Log.d("test", response.body().toString())

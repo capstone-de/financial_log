@@ -11,5 +11,5 @@ data class PostDiary(
     val privacy : String,
     val hastag : String,
     val image : Image,
-    val location : String
+    val gu : String
     )
