@@ -20,7 +20,11 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.data.ScatterDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -37,7 +41,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class AnalyzeDiaryAct: AppCompatActivity() {
+class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
     val hashtag_data : ApiObject by lazy { ApiObject() }; lateinit var mFormat: SimpleDateFormat;
     lateinit var currentDate: Date; var selectedMonth: Date = Date(); lateinit var diary_chat1: ScatterChart;
     lateinit var mMap: GoogleMap; lateinit var monthText: TextView; lateinit var monthText1: TextView; lateinit var emotion_result: TextView;
@@ -83,6 +87,11 @@ class AnalyzeDiaryAct: AppCompatActivity() {
 
         btn1.setOnClickListener { showMonthPickerDialog(true) } // btn1 클릭 시 다이얼로그 표시
         btn2.setOnClickListener { showMonthPickerDialog(false) } // btn2 클릭 시 다이얼로그 표시
+
+        // Google Map 준비
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapView) as MapView
+        mapFragment.onCreate(savedInstanceState) // MapView 생명주기 관리
+        mapFragment.getMapAsync(this) // OnMapReadyCallback 콜백 요청
 
         //selectedMonth = Date() // 오늘 날짜로 초기화
         val calendar = Calendar.getInstance() // 현재 날짜와 시간으로 초기화된 Calendar 인스턴스를 가져옵니다.
@@ -377,12 +386,12 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         val monthStr = month.toString().padStart(2, '0')
 
         // API 호출로 서울시 구의 소비 데이터 가져오기
-        hashtag_data.api.getLocationAnalysis(1,yearStr, monthStr).enqueue(object : Callback<ResponseLocation> {
+        hashtag_data.api.getLocationAnalysis(1, yearStr, monthStr).enqueue(object : Callback<ResponseLocation> {
             override fun onResponse(call: Call<ResponseLocation>, response: Response<ResponseLocation>) {
                 if (response.isSuccessful) {
                     response.body()?.let { data ->
-                        val locationData = data.locationData // 구별 소비 데이터
-                        drawBubbleChartOnMap(locationData)
+                        //val locationData = data.locationData // 구별 소비 데이터
+                        //drawBubbleChartOnMap(locationData)
                     }
                 } else {
                     Log.e("location API 오류", "응답 실패: ${response.errorBody()?.string()}")
@@ -395,23 +404,34 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         })
     }
 
-    private fun drawBubbleChartOnMap(locationData: List<LocationData>) {
+    /*private fun drawBubbleChartOnMap(locationData: List<LocationData>) {
         locationData.forEach { location ->
-            val position = LatLng(location.latitude, location.longitude)
-            val bubbleSize = location.spending.toFloat() // 소비 금액에 따라 버블 크기 설정
+            val position = districtCoordinates[location.district] // 구 이름으로 좌표 얻기
+            if (position != null) {
+                val bubbleSize = calculateBubbleSize(location.spending) // 소비 금액에 따라 버블 크기 설정
 
-            // 버블 추가
-            mMap.addCircle(
-                CircleOptions()
-                    .center(position)
-                    .radius(bubbleSize) // 소비 금액에 비례한 반경
-                    .fillColor(Color.argb(100, 255, 0, 0)) // 반투명 빨간색
-                    .strokeColor(Color.RED)
-                    .strokeWidth(1f)
-            )
+                // 버블 추가
+                mMap.addCircle(
+                    CircleOptions()
+                        .center(position)
+                        .radius(bubbleSize.toDouble()) // 소비 금액에 비례한 반경
+                        .fillColor(Color.argb(100, 255, 0, 0)) // 반투명 빨간색
+                        .strokeColor(Color.RED)
+                        .strokeWidth(1f)
+                )
+            }
         }
+    }*/
+
+    private fun calculateBubbleSize(amount: Float): Float {
+        // 금액에 따라 버블 크기를 스케일링
+        return amount / 1000 // 적절한 스케일링 적용
     }
 
-
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        // 서울시 중심으로 카메라 이동
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.5665, 126.978), 10F))
+    }
 
 }
