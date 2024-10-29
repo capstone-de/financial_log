@@ -84,7 +84,7 @@ interface ApiInter {
     fun getsentimentAnalysis(@Query("user") userId: Int, @Query("year") year: String, @Query("month") month: String ):Call<ResponseSentiment>
     //지도 위 차트(user, year, month)
 
-    @GET("statistics_app/sentimentAnalysis") //위치소비분석
+    @GET("statistics_app/locationAnalysis") //위치소비분석
     fun getLocationAnalysis(@Query("user") userId: Int, @Query("year") year: String, @Query("month") month: String ):Call<ResponseLocation>
 
 
