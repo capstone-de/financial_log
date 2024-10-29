@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.github.mikephil.charting.charts.BubbleChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.ScatterChart
 import com.github.mikephil.charting.data.Entry
@@ -45,7 +46,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
     val hashtag_data : ApiObject by lazy { ApiObject() }; lateinit var mFormat: SimpleDateFormat;
     lateinit var currentDate: Date; var selectedMonth: Date = Date(); lateinit var diary_chat1: ScatterChart;
     lateinit var mMap: GoogleMap; lateinit var monthText: TextView; lateinit var monthText1: TextView; lateinit var emotion_result: TextView;
-    lateinit var btn1 :ImageButton; lateinit var btn2 :ImageButton;
+    lateinit var btn1 :ImageButton; lateinit var btn2 :ImageButton; lateinit var diary_chat2 : BubbleChart;
     private var selectedMonthForBtn1: Date? = null
     private var selectedMonthForBtn2: Date? = null
     // 구와 좌표 매핑
@@ -74,7 +75,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
 
         //위치소비분석
         val diary_text4 = findViewById<TextView>(R.id.diary_text_loc)
-        //val diary_chat2 = findViewById<ScatterChart>(R.id.chart2)
+        diary_chat2 = findViewById(R.id.chart2)
 
         monthText = findViewById(R.id.monthly_tv_emo)
         monthText1 = findViewById(R.id.monthly_tv_loc)
