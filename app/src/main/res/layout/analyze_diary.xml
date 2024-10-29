@@ -171,8 +171,6 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/gmarketsansttfmedium"
-                        android:textColor='#000000'
-                        android:background="#2EFF6A6A"
                         android:text="감정소비분석결과 : " />
 
 
