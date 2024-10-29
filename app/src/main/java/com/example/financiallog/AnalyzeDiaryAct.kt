@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -37,6 +38,9 @@ class AnalyzeDiaryAct: AppCompatActivity() {
     val hashtag_data : ApiObject by lazy { ApiObject() }; lateinit var mFormat: SimpleDateFormat;
     lateinit var currentDate: Date; var selectedMonth: Date = Date(); lateinit var diary_chat1: ScatterChart;
     lateinit var mMap: GoogleMap; lateinit var monthText: TextView; lateinit var monthText1: TextView; lateinit var emotion_result: TextView;
+    lateinit var btn1 :ImageButton; lateinit var btn2 :ImageButton;
+    private var selectedMonthForBtn1: Date? = null
+    private var selectedMonthForBtn2: Date? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.analyze_diary)
@@ -47,6 +51,8 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         val diary_text2 = findViewById<TextView>(R.id.diary_text2)
         val diary_view1 = findViewById<ImageView>(R.id.imageView5)
         val diary_view2 = findViewById<ImageView>(R.id.imageView6)
+        btn1 = findViewById(R.id.m_underButton)
+        btn2= findViewById(R.id.m_underButton_loc)
 
         //감정소비분석
         val diary_text3 = findViewById<TextView>(R.id.diary_text3)
@@ -66,8 +72,8 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         monthText.text = mFormat.format(currentDate)
         monthText1.text = mFormat.format(currentDate)
 
-        monthText.setOnClickListener { showMonthPickerDialog() } // 다른 달 선택 다이얼로그 표시
-        monthText1.setOnClickListener { showMonthPickerDialog() }
+        btn1.setOnClickListener { showMonthPickerDialog(true) } // btn1 클릭 시 다이얼로그 표시
+        btn2.setOnClickListener { showMonthPickerDialog(false) } // btn2 클릭 시 다이얼로그 표시
 
         //selectedMonth = Date() // 오늘 날짜로 초기화
         val calendar = Calendar.getInstance() // 현재 날짜와 시간으로 초기화된 Calendar 인스턴스를 가져옵니다.
@@ -238,7 +244,7 @@ class AnalyzeDiaryAct: AppCompatActivity() {
         return currentDate.format(formatter)
     }
 
-    private fun showMonthPickerDialog() {
+    private fun showMonthPickerDialog(isForBtn1: Boolean) {
         val calendar = Calendar.getInstance()
 
         // 다이얼로그에 표시할 월 목록 생성
@@ -250,14 +256,19 @@ class AnalyzeDiaryAct: AppCompatActivity() {
                 calendar.set(Calendar.MONTH, which)
                 val year = calendar.get(Calendar.YEAR)
                 val month = which + 1 // Calendar.MONTH는 0부터 시작하므로 +1 필요
-                // 사용자가 선택한 달로 selectedMonth 업데이트
-                selectedMonth = calendar.time
-                monthText.text = SimpleDateFormat("yyyy년 MM월", Locale.getDefault()).format(selectedMonth)
-                monthText1.text = SimpleDateFormat("yyyy년 MM월", Locale.getDefault()).format(selectedMonth)
 
                 // 선택한 달에 해당하는 데이터로 업데이트
-                getDataForSentiment(year, month)
-                getDataForLocation(year, month)
+                if (isForBtn1) {
+                    selectedMonthForBtn1 = calendar.time
+                    monthText.text = SimpleDateFormat("yyyy년 MM월", Locale.getDefault()).format(selectedMonthForBtn1)
+                    getDataForSentiment(year, month)
+                    getDataForLocation(year, month)
+                } else {
+                    selectedMonthForBtn2 = calendar.time
+                    monthText1.text = SimpleDateFormat("yyyy년 MM월", Locale.getDefault()).format(selectedMonthForBtn2)
+                    getDataForSentiment(year, month)
+                    getDataForLocation(year, month)
+                }
             }
             .show()
     }
