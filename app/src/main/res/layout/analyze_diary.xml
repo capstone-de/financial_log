@@ -220,19 +220,15 @@
                         android:fontFamily="@font/gmarketsansttfmedium"
                         android:text="위치소비분석" />
 
-                <ImageView
-                        android:id="@+id/imageView7"
-                        android:layout_width="335dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="20dp"
+                <com.github.mikephil.charting.charts.BubbleChart
+                        android:background="@drawable/analyze_view"
+                        android:id="@+id/chart2"
+                        android:layout_width="256dp"
+                        android:layout_height="175dp"
                         android:layout_marginLeft="10dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/diary_text2"
-                        tools:ignore="SpeakableTextPresentCheck,MissingConstraints"
-                        app:srcCompat="@drawable/analyze_diary_box2" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_gravity="center" />
 
 
             </LinearLayout>
