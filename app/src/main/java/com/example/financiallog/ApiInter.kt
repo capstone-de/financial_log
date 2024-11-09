@@ -4,6 +4,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -48,7 +49,8 @@ interface ApiInter {
                  @Part("privacy") privacy: RequestBody,
                  @Part("hashtag") hashtag: RequestBody,
                  @Part files: List<MultipartBody.Part>,
-                 @Part("location") location : RequestBody): Call<PostDiary>?
+                 @Part("gu") gu : RequestBody): Call<PostDiary>?
+
     @GET("/diary_app/saveDiary?")
     fun diarywriteEx(@Query("user") userId: Int, @Query("date") date: String): Call<List<DataEx>>
     @GET("/diary_app/diaryList?user=1")
@@ -85,7 +87,7 @@ interface ApiInter {
     //지도 위 차트(user, year, month)
 
     @GET("statistics_app/locationAnalysis") //위치소비분석
-    fun getLocationAnalysis(@Query("user") userId: Int, @Query("year") year: String, @Query("month") month: String ):Call<ResponseLocation>
+    fun getLocationAnalysis(@Query("user") userId: Int, @Query("year") year: String, @Query("month") month: String ): Call<List<ResponseLocation>>
 
 
     //로그인

@@ -220,14 +220,16 @@
                         android:fontFamily="@font/gmarketsansttfmedium"
                         android:text="위치소비분석" />
 
-                <com.github.mikephil.charting.charts.BubbleChart
-                        android:background="@drawable/analyze_diary_box3"
-                        android:id="@+id/chart2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="350dp"
+                        android:layout_height="300dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="20dp"
+
+
                         android:layout_gravity="center" />
 
             </LinearLayout>

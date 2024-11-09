@@ -103,6 +103,10 @@
                     android:resource="@xml/file_paths" />
         </provider>
 
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyCmDvUjx8Ab93d4cb3RFqyLuuwYQkK6Piw" />
+
     </application>
 
 </manifest>

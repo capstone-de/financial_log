@@ -1,6 +1,6 @@
 package com.example.financiallog
 
 data class ResponseLocation (
-    val coordinate: List<List<Double>>,
-    val correlation: Double
+    val gu: String,
+    val total_expenditure: Int
 )
