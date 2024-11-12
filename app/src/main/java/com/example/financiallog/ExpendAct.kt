@@ -388,8 +388,99 @@ class ExpendAct : AppCompatActivity() {
     }
 
 
-    // OCR 처리 메서드
+    // OCR 처리 메서드 초안
     private fun uploadImageToCLOVA(bitmap: Bitmap) {
-        // 클로바 OCR API 호출 코드
+        /*val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageBytes = baos.toByteArray()
+
+        // MultipartBody.Part로 변환
+        val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageBytes)
+        val body = MultipartBody.Part.createFormData("file", "image.jpg", requestFile)
+
+        // API 호출
+        apiobject.api.uploadImage(body).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { responseBody ->
+                        // JSON 문자열로 변환
+                        val jsonString = responseBody.string()
+
+                        // JSON 파싱
+                        val jsonObject = JSONObject(jsonString)
+                        val images = jsonObject.getJSONArray("images")
+
+                        if (images.length() > 0) {
+                            val fields = images.getJSONObject(0).getJSONArray("fields")
+                            val extractedData = mutableMapOf<String, String>()
+
+                            for (i in 0 until fields.length()) {
+                                val field = fields.getJSONObject(i)
+                                val fieldName = field.getString("name")
+                                val fieldValue = field.getString("inferText")
+
+                                // 필요한 필드만 저장 (예: 가격, 상호명, 날짜 등)
+                                when (fieldName) {
+                                    "거래일자" -> extractedData["date"] = fieldValue
+                                    "가게명" -> extractedData["shopName"] = fieldValue
+                                    "총액" -> extractedData["amount"] = fieldValue
+                                }
+                            }
+
+                            // UI 업데이트
+                            updateUIWithExtractedData(extractedData)
+                        }
+                    }
+                } else {
+                    Log.e("OCR Error", "Response not successful: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("OCR Error", "Failed to upload image", t)
+            }
+        })*/
     }
+
+
+
+    // 클로바 OCR 응답을 처리하는 메서드
+    /*private fun handleOCRResponse(response: ResponseBody) {
+         val jsonString = response.string()
+         val jsonObject = JSONObject(jsonString)
+
+         // 영수증 데이터 추출
+         val images = jsonObject.getJSONArray("images")
+         if (images.length() > 0) {
+             val fields = images.getJSONObject(0).getJSONArray("fields")
+             val extractedData = mutableMapOf<String, String>()
+
+             for (i in 0 until fields.length()) {
+                 val field = fields.getJSONObject(i)
+                 val fieldName = field.getString("name")
+                 val fieldValue = field.getString("inferText")
+
+                 // 필요한 필드만 저장 (예: 가격, 상호명, 날짜 등)
+                 when (fieldName) {
+                     "거래일자" -> extractedData["date"] = fieldValue
+                     "가게명" -> extractedData["shopName"] = fieldValue
+                     "총액" -> extractedData["amount"] = fieldValue
+                 }
+             }
+
+             // UI 업데이트 및 데이터 입력
+             updateUIWithExtractedData(extractedData)
+         }
+     }*/
+
+    /*private fun updateUIWithExtractedData(data: Map<String, String>) {
+        // 예시: EditText에 데이터 자동 입력
+        //val dateEditText: EditText = findViewById(R.id.date_edit_text)
+        val shopNameEditText: EditText = findViewById(R.id.name_shop_ed)
+        val amountEditText: EditText = findViewById(R.id.money_ed)
+
+        //dateEditText.setText(data["date"])
+        shopNameEditText.setText(data["shopName"])
+        amountEditText.setText(data["amount"])
+    }*/
 }

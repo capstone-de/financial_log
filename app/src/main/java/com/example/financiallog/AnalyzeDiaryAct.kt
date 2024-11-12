@@ -282,7 +282,9 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
                             if (responseData.total_expenditure > 0) {
                                 val location = districtCoordinates[responseData.gu]
                                 if (location != null) {
-                                    addBubbleMarker(location, responseData.total_expenditure)
+                                    // 지역 이름과 소비 금액을 함께 전달
+                                    addBubbleMarker(location, responseData.total_expenditure, responseData.gu)
+
                                 }
                             }
                         }
@@ -302,13 +304,13 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
 
 
     //버블마커 추가 함수
-    private fun addBubbleMarker(location: LatLng, spendingAmount: Int) {
+    private fun addBubbleMarker(location: LatLng, spendingAmount: Int, gu: String) {
         val icon = BitmapDescriptorFactory.fromBitmap(createCircleMarker(spendingAmount))
 
         val markerOptions = MarkerOptions()
             .position(location)
             .icon(icon)
-            .title("소비금액: $spendingAmount 원")
+            .title("위치: $gu, 소비금액: $spendingAmount 원")
 
         mMap.addMarker(markerOptions) // mMap에 마커 추가
     }
@@ -325,7 +327,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
         val paint = Paint()
 
         // 마커 색상 설정
-        paint.color = Color.RED
+        paint.color = Color.parseColor("#FF6A6A");
         canvas.drawCircle((size / 2).toFloat(), (size / 2).toFloat(), (size / 2).toFloat(), paint) // 동그란 마커 그리기
 
         // 소비금액을 텍스트로 추가
