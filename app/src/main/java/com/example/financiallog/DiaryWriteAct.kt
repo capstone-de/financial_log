@@ -182,6 +182,7 @@ class DiaryWriteAct : AppCompatActivity() {
 
             // 카메라 열기
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            dispatchTakePictureIntent()  // 카메라 인텐트 실행을 위한 메서드 호출
 
             // 두 가지 Intent 실행
             val chooser = Intent.createChooser(galleryIntent, "Select Image")
@@ -214,14 +215,14 @@ class DiaryWriteAct : AppCompatActivity() {
             val files = imageUris.mapNotNull { uri ->
                 val bitmap = uriToBitmap(uri)
                 bitmap?.let {
-                    val file = createFileFromBitmap(bitmap) // Bitmap을 파일로 변환하는 메서드
-                    val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), file)
-                    MultipartBody.Part.createFormData("image", file.name, requestFile) // MultipartBody.Part 생성
+                    // 비트맵을 압축하여 파일로 변환
+                    val requestFile = createPartFromBitmap(it, "image")
+                    MultipartBody.Part.createFormData("image", "image_${System.currentTimeMillis()}.jpg", requestFile) // MultipartBody.Part 생성
                 }
             }
 
             // API 호출
-            apiobject.api.insertDi(userPart, datePart, contentsPart, privacyPart, hashtagsPart, files,guPart)!!.enqueue(object : Callback<PostDiary> {
+            apiobject.api.insertDi(userPart, datePart, contentsPart, privacyPart, hashtagsPart, files, guPart)!!.enqueue(object : Callback<PostDiary> {
                 override fun onResponse(call: Call<PostDiary>, response: Response<PostDiary>) {
                     if (response.isSuccessful) {
                         Log.d("test", response.body().toString())
@@ -259,17 +260,17 @@ class DiaryWriteAct : AppCompatActivity() {
 
     }
 
+    // 사진 촬영 후 ImageView에 설정하기 위한 메서드
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == PICK_IMAGE_REQUEST) {
-                // 선택된 인텐트가 갤러리인지 확인
+                // 갤러리에서 이미지를 가져온 경우
                 if (data?.clipData != null) {
                     val count = data.clipData!!.itemCount
                     for (i in 0 until count) {
                         val imageUri = data.clipData!!.getItemAt(i).uri
-                        // 각 이미지 뷰에 비트맵 설정
                         when (i) {
                             0 -> {
                                 val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv.width, photo_tv.height)
@@ -294,30 +295,28 @@ class DiaryWriteAct : AppCompatActivity() {
                 } else if (data != null) {
                     // 단일 이미지 선택
                     val imageUri = data.data
-                    if (imageUri != null) {
-                        val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv.width, photo_tv.height)
+                    imageUri?.let {
+                        val bitmap = decodeSampledBitmapFromUri(it, photo_tv.width, photo_tv.height)
                         photo_tv.setImageBitmap(bitmap)
-                        photo_tv.tag = imageUri
-                    } else {
-                        Log.e("DiaryWriteAct", "Single image URI is null")
+                        photo_tv.tag = it
                     }
                 }
             } else if (requestCode == 101) { // 카메라에서 촬영한 경우
-                Log.d("DiaryWriteAct", "Current photo path: $currentPhotoPath")
-                if (!currentPhotoPath.isNullOrEmpty()) {
-                    val imageBitmap = BitmapFactory.decodeFile(currentPhotoPath)
+                currentPhotoPath?.let {
+                    // 파일 경로에서 원하는 크기로 이미지 로드
+                    val imageBitmap = decodeSampledBitmapFromFile(it, photo_tv.width, photo_tv.height)
                     if (imageBitmap != null) {
                         photo_tv.setImageBitmap(imageBitmap)
-                        photo_tv.tag = Uri.fromFile(File(currentPhotoPath))
+                        photo_tv.tag = Uri.fromFile(File(it))
 
                         // 갤러리에 이미지 추가
-                        MediaScannerConnection.scanFile(this, arrayOf(currentPhotoPath), null, null)
+                        MediaScannerConnection.scanFile(this, arrayOf(it), null) { path, uri ->
+                            Log.d("DiaryWriteAct", "Image scanned into gallery: $path")
+                        }
                     } else {
                         Log.e("DiaryWriteAct", "Image bitmap is null")
                     }
-                } else {
-                    Log.e("DiaryWriteAct", "currentPhotoPath is null or empty")
-                }
+                } ?: Log.e("DiaryWriteAct", "currentPhotoPath is null or empty")
             }
         } else {
             Log.e("DiaryWriteAct", "Result not OK: $resultCode")
@@ -387,7 +386,7 @@ class DiaryWriteAct : AppCompatActivity() {
     // Bitmap을 RequestBody로 변환하는 메서드
     private fun createPartFromBitmap(bitmap: Bitmap, partName: String): RequestBody {
         val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, byteArrayOutputStream)
         val requestFile = RequestBody.create(
             "image/jpeg".toMediaTypeOrNull(),
             byteArrayOutputStream.toByteArray()
@@ -403,6 +402,23 @@ class DiaryWriteAct : AppCompatActivity() {
         return file
     }
 
+    // 카메라로 촬영한 이미지 파일을 비트맵으로 변환하여 ImageView 크기에 맞게 조정하는 함수
+    private fun decodeSampledBitmapFromFile(filePath: String, reqWidth: Int, reqHeight: Int): Bitmap? {
+        // 첫 번째 디코딩을 통해 이미지 사이즈만 가져오기
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+        BitmapFactory.decodeFile(filePath, options)
+
+        // 적절한 inSampleSize 계산
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight)
+
+        // inSampleSize 설정 후 실제 디코딩
+        options.inJustDecodeBounds = false
+        return BitmapFactory.decodeFile(filePath, options)
+    }
+
+    //갤러리 사진
     private fun decodeSampledBitmapFromUri(uri: Uri, reqWidth: Int, reqHeight: Int): Bitmap? {
         val options = BitmapFactory.Options().apply {
             inJustDecodeBounds = true
@@ -434,12 +450,12 @@ class DiaryWriteAct : AppCompatActivity() {
         }
         return inSampleSize
     }
+    // 카메라 인텐트 실행을 위한 메서드
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             // 파일 생성
             val photoFile: File? = createImageFile()
-            // 사진 파일의 URI를 가져와서 인텐트에 추가
             photoFile?.also {
                 currentPhotoPath = it.absolutePath
                 val photoURI: Uri = FileProvider.getUriForFile(this, "com.example.financiallog.fileprovider", it)
@@ -454,7 +470,7 @@ class DiaryWriteAct : AppCompatActivity() {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val imageFile = File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
-        Log.d("DiaryWriteAct", "Image file created: ${imageFile.absolutePath}") // 로그 추가
+        Log.d("DiaryWriteAct", "Image file created: ${imageFile.absolutePath}")
         return imageFile
     }
 
