@@ -57,8 +57,8 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_marginTop="10dp">
 
                 <TextView
@@ -113,7 +113,7 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="10dp">
+                    android:layout_marginRight="20dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"
@@ -123,7 +123,7 @@
                             android:id="@+id/monthly_tv_emo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="60dp"
+                            android:layout_marginStart="40dp"
                             android:fontFamily="@font/gmarketsansttfmedium"
                             android:text="2024년 11월"
                             android:textSize="16sp"
@@ -150,7 +150,7 @@
                         android:id="@+id/diary_text3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="130dp"
+                        android:layout_marginStart="150dp"
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/gmarketsansttfmedium"
                         android:text="감정소비분석" />
@@ -165,13 +165,25 @@
                         android:layout_gravity="center" />
 
                 <TextView
-                        android:id="@+id/diary_emotion_result"
+                        android:id="@+id/diary_emotion_result1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
+                        android:textSize="12sp"
+                        android:background="#2EFF6A6A"
                         android:fontFamily="@font/gmarketsansttfmedium"
                         android:text="감정소비분석결과 : " />
+
+                <TextView
+                        android:id="@+id/diary_emotion_result"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/gmarketsansttfmedium"
+                        android:text="분석결과" />
 
 
             </LinearLayout>
@@ -180,7 +192,9 @@
                     android:orientation="vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="20dp">
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="wrap_content"

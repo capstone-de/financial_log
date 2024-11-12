@@ -525,7 +525,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
 
                 // View에 데이터를 설정합니다.
                 categoryView.text = categoryName // 카테고리 이름 설정
-                percentView.text = String.format("%.2f", ratio * 100) + "%" // 비율 설정 (소수점 2자리까지)
+                percentView.text = "${(ratio * 100).toInt()}%" // 비율 설정 (정수만)
             } else {
                 // 데이터가 부족한 경우 빈 문자열로 설정
                 val (categoryView, percentView) = rankingViews[i]
