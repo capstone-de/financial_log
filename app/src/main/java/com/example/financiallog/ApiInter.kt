@@ -99,7 +99,9 @@ interface ApiInter {
     fun signUp(@Body map: HashMap<String, Any>): Call<PostExpend>?
 
 
-    /*@Multipart
-    @POST("/clova-ocr/v1/ocr") // 클로바 OCR API 엔드포인트
-    fun uploadImage(@Part file: MultipartBody.Part): Call<ResponseBody>*/
+    @Multipart
+    @POST("/wallet_app/saveExpenseOCR") // 클로바 OCR API 엔드포인트
+    fun uploadImage(@Part("user") user: RequestBody,
+                    @Part("date") date: RequestBody,
+                    @Part file: MultipartBody.Part): Call<ResponseBody>?
 }

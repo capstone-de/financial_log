@@ -34,6 +34,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
+import android.app.Activity
+import android.os.Environment
+import androidx.core.content.FileProvider
+import com.google.gson.Gson
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.util.Locale
 
 
 class ExpendAct : AppCompatActivity() {
@@ -41,9 +55,9 @@ class ExpendAct : AppCompatActivity() {
     lateinit var btn_exsave : Button; lateinit var income_btn : Button; lateinit var expend_btn : Button; lateinit var x_btn :ImageButton;
     lateinit var pay_tv : TextView; lateinit var categ_tv:TextView; lateinit var shop_name :TextView; lateinit var toget_tv :TextView;
     lateinit var ed_pay:EditText; lateinit var ed_shop:EditText; lateinit var ed_toget:EditText; lateinit var tv_exsat:TextView;
-    lateinit var alone_chip: CheckBox; lateinit var seek_bar:SeekBar; lateinit var seek_zero : TextView;
-    lateinit var seek_per :TextView; val apiobject : ApiObject by lazy { ApiObject() };
-    lateinit var textView:TextView; lateinit var group_expend : ChipGroup;
+    lateinit var alone_chip: CheckBox; lateinit var seek_bar:SeekBar; lateinit var seek_zero : TextView;private val REQUEST_CODE_PERMISSIONS = 1001
+    lateinit var seek_per :TextView; val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1002
+    lateinit var textView:TextView; lateinit var group_expend : ChipGroup; private var currentPhotoPath: String? = null;
     //    var followers = listOf("User1", "User2", "User3", "User4");
     var followers: MutableList<String> = mutableListOf()
     var together = ArrayList<String>()
@@ -53,8 +67,8 @@ class ExpendAct : AppCompatActivity() {
     lateinit var educhip:Chip; lateinit var dueschip:Chip; lateinit var medicalchip:Chip; lateinit var shoppingchip:Chip;
     lateinit var trafficchip:Chip; lateinit var etcchip:Chip; lateinit var receiptbtn:Button;
 
-    private lateinit var getImageLauncher: ActivityResultLauncher<Intent>
-    private val REQUEST_CAMERA_PERMISSION = 101
+    private lateinit var getImageLauncher: ActivityResultLauncher<Intent> ; private val REQUEST_IMAGE_CAPTURE = 101;
+    private val REQUEST_CAMERA_PERMISSION = 101; private lateinit var imageUri: Uri
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,69 +126,24 @@ class ExpendAct : AppCompatActivity() {
             startActivity(intent)
         })
 
-        // ActivityResultLauncher 초기화
-        /*getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val data: Intent? = result.data
-                val selectedImageUri: Uri? = data?.data
-                if (selectedImageUri != null) {
-                    // URI에서 InputStream 가져오기 및 비트맵 생성
-                    contentResolver.openInputStream(selectedImageUri)?.use { inputStream ->
-                        val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
-                        // OCR 처리 메서드 호출
-                        uploadImageToCLOVA(bitmap) // 비트맵을 Clova OCR API로 업로드
-                    }
-                }
-            }
-        }*/
-
         // 카메라 권한 체크
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
         }
 
-        // ActivityResultLauncher 초기화
-        getImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val data: Intent? = result.data
-                val selectedImageUri: Uri? = data?.data
-
-                // 카메라에서 촬영한 경우
-                if (data?.extras?.get("data") != null) {
-                    val bitmap = data.extras?.get("data") as Bitmap
-                    // OCR 처리 메서드 호출
-                    uploadImageToCLOVA(bitmap) // 비트맵을 Clova OCR API로 업로드
-                }
-
-                // 갤러리에서 선택한 경우
-                else if (selectedImageUri != null) {
-                    // URI에서 InputStream 가져오기 및 비트맵 생성
-                    contentResolver.openInputStream(selectedImageUri)?.use { inputStream ->
-                        val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
-                        // OCR 처리 메서드 호출
-                        uploadImageToCLOVA(bitmap) // 비트맵을 Clova OCR API로 업로드
-                    }
-                }
-            }
-        }
-
         // 영수증 버튼 클릭
         receiptbtn.setOnClickListener {
-            // 갤러리와 카메라를 선택할 수 있는 Intent 생성
-            val galleryIntent = Intent(Intent.ACTION_PICK)
-            galleryIntent.type = "image/*"
+            // 갤러리 열기
+            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
+            // 카메라 인텐트
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            dispatchTakePictureIntent()
 
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                // 두 가지 Intent 실행
-                val chooser = Intent.createChooser(galleryIntent, "Select Image")
-                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
-                getImageLauncher.launch(chooser)
-            } else {
-                // 카메라 권한 요청
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
-            }
+            // 두 가지 Intent 실행
+            val chooser = Intent.createChooser(galleryIntent, "Select Image")
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
+            startActivityForResult(chooser, PICK_IMAGE_REQUEST)
         }
 
 
@@ -279,7 +248,7 @@ class ExpendAct : AppCompatActivity() {
             val Exsatis = textView.text.toString()
 
             var input = HashMap<String, Any>()
-            input.put("user","6")
+            input.put("user","1")
             input.put("price",Exmoney)
             input.put("date", date.toString())
             input.put("category", Excate.toString())
@@ -305,57 +274,36 @@ class ExpendAct : AppCompatActivity() {
                         Log.d("test", input.toString())
                     }
                 }
-
                 override fun onFailure(call: Call<PostExpend>, t: Throwable) {
                     Log.d("test", "지출 저장 실패$t")
                 }
-
             })
-
-            /*val responseListener: Response.Listener<String?> = Response.Listener<String?>{ response ->
-                try{
-                    val jsonObject = JSONObject(response)
-                    val success = jsonObject.getBoolean("success")
-                    if(success){
-                        Toast.makeText(applicationContext,"저장되었습니다.", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, SaveCheck::class.java)
-                        intent.putExtra("user", user)
-                        startActivity(intent)
-                    } else{
-                        Toast.makeText(applicationContext, "저장되지 않았습니다.", Toast.LENGTH_SHORT).show()
-                        return@Listener
-                    }
-                } catch (e: JSONException){
-                    e.printStackTrace()
-                    Toast.makeText(applicationContext,"예외 1", Toast.LENGTH_SHORT).show()
-                    return@Listener
-                }
-            }
-            val ExpendInsert = InsertRequestExpend(4,Exdate,Exmoney,Excate,Exshop,ExTogether,Exsatis, responseListener)
-            val queue: RequestQueue = Volley.newRequestQueue(applicationContext)
-            queue.add(ExpendInsert)*/
-
-            /*val exadapter = ExpendAdapter()
-             exadapter.addItem(ExpendAdapter.Exlist(Excate, Exshop, Exmoney, ExTogether,ExCheck,Exsatis))
-             val intent = Intent(this, SaveCheck::class.java)
-             intent.putExtra("user", user)
-             startActivity(intent)*/
-
         })
-
-
     }
+
     // 권한 요청 결과 처리
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "카메라 권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+
+        when (requestCode) {
+            REQUEST_CODE_PERMISSIONS -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    uploadImage(imageUri) // 권한이 허용된 경우, 이미지 업로드
+                } else {
+                    Toast.makeText(this, "권한이 필요합니다.", Toast.LENGTH_SHORT).show() // 권한 거부 처리
+                }
             }
+            REQUEST_CAMERA_PERMISSION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "카메라 권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            // 필요한 경우 추가적인 권한 요청을 여기에 추가할 수 있습니다.
         }
     }
+
     fun showFollowersDialog() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.followers_list)
@@ -387,100 +335,245 @@ class ExpendAct : AppCompatActivity() {
         dialog.show()
     }
 
-
-    // OCR 처리 메서드 초안
-    private fun uploadImageToCLOVA(bitmap: Bitmap) {
-        /*val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val imageBytes = baos.toByteArray()
-
-        // MultipartBody.Part로 변환
-        val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageBytes)
-        val body = MultipartBody.Part.createFormData("file", "image.jpg", requestFile)
-
-        // API 호출
-        apiobject.api.uploadImage(body).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    response.body()?.let { responseBody ->
-                        // JSON 문자열로 변환
-                        val jsonString = responseBody.string()
-
-                        // JSON 파싱
-                        val jsonObject = JSONObject(jsonString)
-                        val images = jsonObject.getJSONArray("images")
-
-                        if (images.length() > 0) {
-                            val fields = images.getJSONObject(0).getJSONArray("fields")
-                            val extractedData = mutableMapOf<String, String>()
-
-                            for (i in 0 until fields.length()) {
-                                val field = fields.getJSONObject(i)
-                                val fieldName = field.getString("name")
-                                val fieldValue = field.getString("inferText")
-
-                                // 필요한 필드만 저장 (예: 가격, 상호명, 날짜 등)
-                                when (fieldName) {
-                                    "거래일자" -> extractedData["date"] = fieldValue
-                                    "가게명" -> extractedData["shopName"] = fieldValue
-                                    "총액" -> extractedData["amount"] = fieldValue
-                                }
-                            }
-
-                            // UI 업데이트
-                            updateUIWithExtractedData(extractedData)
-                        }
+    // onActivityResult 메서드에서 이미지 처리
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                PICK_IMAGE_REQUEST -> {
+                    // 갤러리에서 선택한 경우
+                    if (data != null && data.data != null) {
+                        imageUri = data.data!! // 선택한 이미지의 URI 가져오기
+                        checkPermissions() // 권한 체크 후 업로드
+                    } else {
+                        Log.e("Gallery Error", "Data or data.uri is null")
                     }
-                } else {
-                    Log.e("OCR Error", "Response not successful: ${response.errorBody()?.string()}")
+                }
+                REQUEST_IMAGE_CAPTURE -> {
+                    // 카메라로 찍은 경우
+                    if (!currentPhotoPath.isNullOrEmpty()) {
+                        uploadImage(Uri.fromFile(File(currentPhotoPath)))
+                    } else {
+                        Log.e("Camera Error", "Current photo path is null or empty.")
+                    }
                 }
             }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e("OCR Error", "Failed to upload image", t)
-            }
-        })*/
+        } else {
+            Log.e("Activity Result Error", "Result was not OK: $resultCode")
+        }
     }
 
 
+    private fun checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_PERMISSIONS)
+        } else {
+            uploadImage(imageUri) // 권한이 허용된 경우, 이미지 업로드
+        }
+    }
 
-    // 클로바 OCR 응답을 처리하는 메서드
-    /*private fun handleOCRResponse(response: ResponseBody) {
-         val jsonString = response.string()
-         val jsonObject = JSONObject(jsonString)
+    // 카메라 인텐트 실행을 위한 메서드
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
+            // 파일 생성
+            val photoFile: File? = createImageFile()
+            photoFile?.also {
+                currentPhotoPath = it.absolutePath
+                val photoURI: Uri = FileProvider.getUriForFile(this, "com.example.financiallog.fileprovider", it)
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+    // 이미지 파일 생성 메서드
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imageFile = File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
+        Log.d("ExpendAct", "Image file created: ${imageFile.absolutePath}")
+        return imageFile
+    }
+    private fun uploadImage(imageUri: Uri?) {
+        Log.d("UploadImage", "uploadImage called with URI: $imageUri") // 로그 추가
+        if (imageUri != null) {
+            // URI가 file:// 형식인 경우
+            val filePath = if (imageUri.scheme == "file") {
+                imageUri.path // file:// URI에서 경로 가져오기
+            } else {
+                getRealPathFromURI(imageUri) // content:// URI 처리
+            }
 
-         // 영수증 데이터 추출
-         val images = jsonObject.getJSONArray("images")
-         if (images.length() > 0) {
-             val fields = images.getJSONObject(0).getJSONArray("fields")
-             val extractedData = mutableMapOf<String, String>()
+            if (filePath != null) {
+                val file = File(filePath)
+                val compressedFile = compressImage(file) // 이미지 압축
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val date = dateFormat.format(Date())
+                val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), compressedFile)
+                val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
-             for (i in 0 until fields.length()) {
-                 val field = fields.getJSONObject(i)
-                 val fieldName = field.getString("name")
-                 val fieldValue = field.getString("inferText")
+                // 사용자 정보와 날짜 정보
+                val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "1") // 사용자 ID
+                val datePart = RequestBody.create("text/plain".toMediaTypeOrNull(), date) // 현재 날짜
 
-                 // 필요한 필드만 저장 (예: 가격, 상호명, 날짜 등)
-                 when (fieldName) {
-                     "거래일자" -> extractedData["date"] = fieldValue
-                     "가게명" -> extractedData["shopName"] = fieldValue
-                     "총액" -> extractedData["amount"] = fieldValue
-                 }
-             }
+                apiobject.api.uploadImage(userPart, datePart, body)?.enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body()?.string()
+                            Log.d("Upload Data", "getdata: ${response}, data:${responseBody}")
 
-             // UI 업데이트 및 데이터 입력
-             updateUIWithExtractedData(extractedData)
-         }
-     }*/
+                            // JSON 파싱
+                            val jsonResponse = Gson().fromJson(responseBody, JsonResponse::class.java)
 
-    /*private fun updateUIWithExtractedData(data: Map<String, String>) {
-        // 예시: EditText에 데이터 자동 입력
-        //val dateEditText: EditText = findViewById(R.id.date_edit_text)
-        val shopNameEditText: EditText = findViewById(R.id.name_shop_ed)
-        val amountEditText: EditText = findViewById(R.id.money_ed)
+                            // 금액 설정
+                            ed_pay.setText(jsonResponse.amount) // EditText에 금액 설정
+                        } else {
+                            Log.e("OCR Error", "Response not successful: ${response.errorBody()?.string()}")
+                        }
+                    }
 
-        //dateEditText.setText(data["date"])
-        shopNameEditText.setText(data["shopName"])
-        amountEditText.setText(data["amount"])
-    }*/
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Log.e("OCR Error", "Failed to upload image", t)
+                    }
+                })
+            } else {
+                Log.e("OCR Error", "Failed to get file path from URI")
+            }
+        }
+    }
+
+    // JSON 응답을 매핑할 데이터 클래스
+    data class JsonResponse(
+        val amount: String // 서버에서 반환하는 금액의 타입에 맞게 수정
+    )
+
+    // URI에서 실제 파일 경로를 가져오는 메서드
+    private fun getRealPathFromURI(contentUri: Uri): String? {
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = contentResolver.query(contentUri, proj, null, null, null)
+        return cursor?.use {
+            val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            it.moveToFirst()
+            it.getString(columnIndex)
+        }
+    }
+    // 이미지 압축 메서드
+    private fun compressImage(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream) // 80% 품질로 압축
+        val byteArray = stream.toByteArray()
+        val compressedFile = File(file.parent, "compressed_${file.name}")
+        FileOutputStream(compressedFile).use { it.write(byteArray) }
+        return compressedFile
+    }
+
+
+//    // OCR 처리 메서드 초안
+//    private fun uploadImageToCLOVA(bitmap: Bitmap) {
+//        val baos = ByteArrayOutputStream()
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+//        val imageBytes = baos.toByteArray()
+//        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+//        val date = dateFormat.format(Date())
+//
+//        // MultipartBody.Part로 변환
+//        val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "1")
+//        val datePart = RequestBody.create("text/plain".toMediaTypeOrNull(), date)
+//        val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), imageBytes)
+//        val body = MultipartBody.Part.createFormData("file", "image_${System.currentTimeMillis()}.jpg", requestFile) // "file"은 서버에서 요구하는 파라미터 이름
+//
+//        // API 호출
+//        apiobject.api.uploadImage(userPart, datePart, body)!!.enqueue(object : Callback<ResponseBody> {
+//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+//                if (response.isSuccessful) {
+//                    Log.d("Upload Data", "User: ${userPart}, Date: ${datePart}, File: ${requestFile}")
+//
+//                    response.body()?.let { responseBody ->
+//                        handleOCRResponse(responseBody) // JSON 응답 처리 메서드 호출
+//                        Log.e("data", "data: ${responseBody}")
+//                    }
+//                } else {
+//                    Log.d("Upload Data", "User: ${userPart}, Date: ${datePart}, File: ${requestFile}")
+//                    Log.d("Upload Data", "User: ${userPart}, Date: ${date}, File: ${imageBytes}")
+//                    Log.e("OCR Error", "Response not successful: ${response.errorBody()?.string()}")
+//                    Log.e("APIERROR", "Error: ${response.code()}")
+//                    // 추가적인 에러 처리 로직
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                Log.e("OCR Error", "Failed to upload image", t)
+//            }
+//        })
+//    }
+//
+//    // 클로바 OCR 응답을 처리하는 메서드
+//    private fun handleOCRResponse(response: ResponseBody) {
+//        try {
+//            val jsonString = response.string()
+//            val jsonObject = JSONObject(jsonString)
+//
+//            // 영수증 데이터 추출
+//            val images = jsonObject.getJSONArray("images")
+//            if (images.length() > 0) {
+//                val fields = images.getJSONObject(0).getJSONArray("fields")
+//                val extractedData = mutableMapOf<String, String>()
+//
+//                for (i in 0 until fields.length()) {
+//                    val field = fields.getJSONObject(i)
+//                    val fieldName = field.getString("name")
+//                    val fieldValue = field.getString("inferText")
+//
+//                    // 필요한 필드만 저장 (예: 가격, 상호명, 날짜 등)
+//                    when (fieldName) {
+//                        "거래일자" -> extractedData["date"] = fieldValue
+//                        "가게명" -> extractedData["shopName"] = fieldValue
+//                        "총액" -> extractedData["amount"] = fieldValue
+//                    }
+//                }
+//
+//                // UI 업데이트 및 데이터 입력
+//                updateUIWithExtractedData(extractedData)
+//            }
+//        } catch (e: Exception) {
+//            Log.e("OCR Error", "Error parsing OCR response", e)
+//        }
+//    }
+//
+//    private fun updateUIWithExtractedData(data: Map<String, String>) {
+//        // 예시: EditText에 데이터 자동 입력
+//        val amountEditText: EditText = findViewById(R.id.money_ed)
+//        amountEditText.setText(data["amount"])
+//
+//        // 필요한 경우 다른 UI 요소 업데이트
+//        // val dateEditText: EditText = findViewById(R.id.date_edit_text)
+//        // val shopNameEditText: EditText = findViewById(R.id.name_shop_ed)
+//        // dateEditText.setText(data["date"])
+//        // shopNameEditText.setText(data["shopName"])
+//    }
+//
+//    // 카메라 인텐트 실행을 위한 메서드
+//    private fun dispatchTakePictureIntent() {
+//        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        if (takePictureIntent.resolveActivity(packageManager) != null) {
+//            // 파일 생성
+//            val photoFile: File? = createImageFile()
+//            photoFile?.also {
+//                currentPhotoPath = it.absolutePath
+//                val photoURI: Uri = FileProvider.getUriForFile(this, "com.example.financiallog.fileprovider", it)
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+//                startActivityForResult(takePictureIntent, 101)
+//            }
+//        }
+//    }
+//
+//    // 이미지 파일 생성 메서드
+//    private fun createImageFile(): File {
+//        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+//        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+//        val imageFile = File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
+//        Log.d("expend", "Image file created: ${imageFile.absolutePath}")
+//        return imageFile
+//    }
 }
