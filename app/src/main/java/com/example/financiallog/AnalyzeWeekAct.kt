@@ -311,7 +311,7 @@ class AnalyzeWeekAct : AppCompatActivity() {
         val startOfWeek = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
         //val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
 
-        apiobject.api.getStatisticsWeekly(6, startOfWeek).enqueue(object : Callback<ResponseStatWeek> {
+        apiobject.api.getStatisticsWeekly(3, startOfWeek).enqueue(object : Callback<ResponseStatWeek> {
             override fun onResponse(call: Call<ResponseStatWeek>, response: Response<ResponseStatWeek>) {
                 if (response.isSuccessful) {
                     response.body()?.let { data ->

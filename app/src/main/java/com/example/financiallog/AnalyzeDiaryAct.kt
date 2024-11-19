@@ -239,7 +239,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
     // 지도 준비가 완료되면 호출됨
     override fun onMapReady(map: GoogleMap) {
         mMap = map // mMap에 지도 객체 할당
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.5665, 126.978), 10f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.5665, 126.978), 11f))
 
         // 서울 중심 위치로 카메라 이동 후, API 데이터로 마커 추가
         val calendar = Calendar.getInstance()
@@ -272,7 +272,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
         val monthStr = month.toString().padStart(2, '0')
 
 
-        location_data.api.getLocationAnalysis(1, yearStr, monthStr).enqueue(object : Callback<List<ResponseLocation>> {
+        location_data.api.getLocationAnalysis(3, yearStr, monthStr).enqueue(object : Callback<List<ResponseLocation>> {
             override fun onResponse(call: Call<List<ResponseLocation>>, response: Response<List<ResponseLocation>>) {
                 if (response.isSuccessful) {
                     response.body()?.let { responseDataList ->
@@ -435,7 +435,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
         val yearStr = year.toString()
         val monthStr = month.toString().padStart(2, '0')
 
-        hashtag_data.api.getsentimentAnalysis(1, yearStr, monthStr).enqueue(object : Callback<ResponseSentiment> {
+        hashtag_data.api.getsentimentAnalysis(3, yearStr, monthStr).enqueue(object : Callback<ResponseSentiment> {
             override fun onResponse(call: Call<ResponseSentiment>, response: Response<ResponseSentiment>) {
                 if (response.isSuccessful) {
                     response.body()?.let { data ->

@@ -300,7 +300,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         val yearStr = year.toString()
         val monthStr = month.toString().padStart(2, '0')
 
-        apiobject.api.getStatisticsMonthly(1, yearStr, monthStr).enqueue(object : Callback<ResponseStatMonth> {
+        apiobject.api.getStatisticsMonthly(3, yearStr, monthStr).enqueue(object : Callback<ResponseStatMonth> {
             override fun onResponse(call: Call<ResponseStatMonth>, response: Response<ResponseStatMonth>) {
                 if (response.isSuccessful) {
                     response.body()?.let { data ->
@@ -500,7 +500,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
             "tax" to "세금",
             "food" to "음식",
             "housing/communication" to "주거/통신",
-            "tranportation/vehicle" to "교통/차량",
+            "transportation/vehicle" to "교통/차량",
             "education" to "교육",
             "personal event" to "경조사/회비",
             "medical" to "병원/약국",
@@ -539,7 +539,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         "tax" to "세금",
         "food" to "음식",
         "housing/communication" to "주거/통신",
-        "tranportation/vehicle" to "교통/차량",
+        "transportation/vehicle" to "교통/차량",
         "education" to "교육",
         "personal event" to "경조사/회비",
         "medical" to "병원/약국",
@@ -615,7 +615,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
                 "tax" to "세금",
                 "food" to "음식",
                 "housing/communication" to "주거/통신",
-                "tranportation/vehicle" to "교통/차량",
+                "transportation/vehicle" to "교통/차량",
                 "education" to "교육",
                 "personal event" to "경조사/회비",
                 "medical" to "병원/약국",

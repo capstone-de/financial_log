@@ -266,7 +266,7 @@ class AnalyzeDayAct : AppCompatActivity() {
     private fun IncomeForDate(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
-        apiobject.api.getStatisticsDaily(1, formattedDate).enqueue(object : Callback<ResponseStatDay> {
+        apiobject.api.getStatisticsDaily(3, formattedDate).enqueue(object : Callback<ResponseStatDay> {
             override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
                     val incometv = response.body()!!.total_income
@@ -294,7 +294,7 @@ class AnalyzeDayAct : AppCompatActivity() {
     private fun ExpensesForDate(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
-        apiobject.api.getStatisticsDaily(1, formattedDate).enqueue(object : Callback<ResponseStatDay> {
+        apiobject.api.getStatisticsDaily(3, formattedDate).enqueue(object : Callback<ResponseStatDay> {
             override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
                     val expendsetv = response.body()!!.total_expenses
@@ -322,7 +322,7 @@ class AnalyzeDayAct : AppCompatActivity() {
     private fun ExpenseListForDate(date: Date) {
         val formattedDate = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(date)
 
-        apiobject.api.getStatisticsDaily(1, formattedDate).enqueue(object : Callback<ResponseStatDay> {
+        apiobject.api.getStatisticsDaily(3, formattedDate).enqueue(object : Callback<ResponseStatDay> {
             override fun onResponse(call: Call<ResponseStatDay>, response: Response<ResponseStatDay>) {
                 if (response.isSuccessful) {
                     val expenselistdata = response.body()!!.expenses
