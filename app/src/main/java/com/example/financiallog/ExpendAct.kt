@@ -133,18 +133,52 @@ class ExpendAct : AppCompatActivity() {
 
         // 영수증 버튼 클릭
         receiptbtn.setOnClickListener {
+            // 갤러리 열기 인텐트 생성
+            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+            // 카메라 인텐트 생성 및 저장할 파일 설정
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val photoFile: File? = createImageFile() // 파일 생성
+            if (photoFile != null) {
+                currentPhotoPath = photoFile.absolutePath
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this,
+                    "com.example.financiallog.fileprovider",
+                    photoFile
+                )
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI) // 파일 저장 URI 전달
+            }
+
+            // 갤러리와 카메라 선택 창 생성
+            val chooser = Intent.createChooser(galleryIntent, "Select Image")
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
+
+            // 선택 창 실행
+            startActivityForResult(chooser, PICK_IMAGE_REQUEST)
+        }
+
+        /*receiptbtn.setOnClickListener {
             // 갤러리 열기
             val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
             // 카메라 인텐트
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            if( cameraIntent.resolveActivity(packageManager) != null){
+                val photoFile: File? = createImageFile()
+                photoFile?.also {
+                    currentPhotoPath = it.absolutePath
+                    val photoURI: Uri = FileProvider.getUriForFile(this, "com.example.financiallog.fileprovider", it)
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE)
+                }
+            }
             dispatchTakePictureIntent()
 
             // 두 가지 Intent 실행
             val chooser = Intent.createChooser(galleryIntent, "Select Image")
             chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
             startActivityForResult(chooser, PICK_IMAGE_REQUEST)
-        }
+        }*/
 
 
         //카테고리 선택 시
@@ -341,20 +375,21 @@ class ExpendAct : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 PICK_IMAGE_REQUEST -> {
-                    // 갤러리에서 선택한 경우
-                    if (data != null && data.data != null) {
-                        imageUri = data.data!! // 선택한 이미지의 URI 가져오기
-                        checkPermissions() // 권한 체크 후 업로드
+                    val isCamera = data == null || data.data == null // 카메라인지 확인
+                    if (isCamera) {
+                        if (!currentPhotoPath.isNullOrEmpty()) {
+                            val imageFile = File(currentPhotoPath)
+                            uploadImage(Uri.fromFile(imageFile))
+                        } else {
+                            Log.e("Camera Error", "Current photo path is null or empty.")
+                        }
                     } else {
-                        Log.e("Gallery Error", "Data or data.uri is null")
-                    }
-                }
-                REQUEST_IMAGE_CAPTURE -> {
-                    // 카메라로 찍은 경우
-                    if (!currentPhotoPath.isNullOrEmpty()) {
-                        uploadImage(Uri.fromFile(File(currentPhotoPath)))
-                    } else {
-                        Log.e("Camera Error", "Current photo path is null or empty.")
+                        val selectedImageUri = data!!.data
+                        if (selectedImageUri != null) {
+                            uploadImage(selectedImageUri)
+                        } else {
+                            Log.e("Gallery Error", "Selected image URI is null.")
+                        }
                     }
                 }
             }
@@ -397,7 +432,6 @@ class ExpendAct : AppCompatActivity() {
     private fun uploadImage(imageUri: Uri?) {
         Log.d("UploadImage", "uploadImage called with URI: $imageUri") // 로그 추가
         if (imageUri != null) {
-            // URI가 file:// 형식인 경우
             val filePath = if (imageUri.scheme == "file") {
                 imageUri.path // file:// URI에서 경로 가져오기
             } else {
@@ -412,35 +446,47 @@ class ExpendAct : AppCompatActivity() {
                 val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), compressedFile)
                 val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
-                // 사용자 정보와 날짜 정보
                 val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "1") // 사용자 ID
                 val datePart = RequestBody.create("text/plain".toMediaTypeOrNull(), date) // 현재 날짜
+
+                Log.d("UploadImage", "Uploading image with user ID: 1 and date: $date") // 로그 추가
 
                 apiobject.api.uploadImage(userPart, datePart, body)?.enqueue(object : Callback<ResponseBody> {
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         if (response.isSuccessful) {
-                            val responseBody = response.body()?.string()
-                            Log.d("Upload Data", "getdata: ${response}, data:${responseBody}")
-
-                            // JSON 파싱
-                            val jsonResponse = Gson().fromJson(responseBody, JsonResponse::class.java)
-
-                            // 금액 설정
-                            ed_pay.setText(jsonResponse.amount) // EditText에 금액 설정
+                            val contentType = response.headers()["Content-Type"]
+                            Log.d("Upload Data", "Response Content-Type: $contentType") // Content-Type 로그 추가
+                            if (contentType != null && contentType.contains("application/json")) {
+                                val responseBody = response.body()?.string()
+                                Log.d("Upload Data", "Response data: $responseBody")
+                                try {
+                                    val jsonResponse = Gson().fromJson(responseBody, JsonResponse::class.java)
+                                    ed_pay.setText(jsonResponse.amount) // EditText에 금액 설정
+                                } catch (e: Exception) {
+                                    Log.e("Parse Error", "Failed to parse JSON response", e)
+                                }
+                            } else {
+                                Log.e("OCR Error_1", "Unexpected response type: $contentType")
+                                Log.e("OCR Error_2", "Response Body: ${response.body()?.string()}")
+                            }
                         } else {
-                            Log.e("OCR Error", "Response not successful: ${response.errorBody()?.string()}")
+                            val errorBody = response.errorBody()?.string()
+                            Log.e("OCR Error_3", "Response not successful. Code: ${response.code()}, Body: $errorBody")
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                        Log.e("OCR Error", "Failed to upload image", t)
+                        Log.e("OCR Error_4", "Failed to upload image", t)
                     }
                 })
             } else {
-                Log.e("OCR Error", "Failed to get file path from URI")
+                Log.e("OCR Error_5", "Failed to get file path from URI")
             }
+        } else {
+            Log.e("OCR Error_6", "imageUri is null")
         }
     }
+
 
     // JSON 응답을 매핑할 데이터 클래스
     data class JsonResponse(
