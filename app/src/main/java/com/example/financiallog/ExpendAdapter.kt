@@ -23,7 +23,7 @@ class ExpendAdapter(private val data: ArrayList<ResponseExpend.DataEx>):Recycler
                 "tax" to "세금",
                 "food" to "음식",
                 "housing/communication" to "주거/통신",
-                "tranportation/vehicle" to "교통/차량",
+                "transportation/vehicle" to "교통/차량",
                 "education" to "교육",
                 "personal event" to "경조사/회비",
                 "medical" to "병원/약국",

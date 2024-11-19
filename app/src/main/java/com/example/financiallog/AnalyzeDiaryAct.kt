@@ -504,26 +504,15 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
 
 
     // 감정 소비 분석 차트 업데이트
+    // 감정 소비 분석 차트 업데이트
     private fun updateEmotionConsumptionChart(coordinates: List<List<Double>>) {
         val entries = ArrayList<Entry>()
 
         // 데이터 포인트 추가
         for (point in coordinates) {
-            // 포인트의 길이가 2인지 확인
-            if (point.size == 2) {
-                val xValue = point[0].toFloat()  // 감정 분석 결과 (x)
-                val yValue = point[1].toFloat()  // 금액 (y)
-                entries.add(Entry(xValue, yValue))
-            } else {
-                Log.e("Chart Error", "Invalid point size: ${point.size}")
-            }
-        }
-
-        // entries가 비어있는지 확인
-        if (entries.isEmpty()) {
-            Log.e("Chart Error", "No valid entries to display on the chart.")
-            // 여기에 차트를 업데이트하지 않도록 return
-            return
+            val xValue = point[0].toFloat()  // 감정 분석 결과 (x)
+            val yValue = point[1].toFloat()  // 금액 (y)
+            entries.add(Entry(xValue, yValue))
         }
 
         val dataSet = ScatterDataSet(entries, "감정 소비 분석")
