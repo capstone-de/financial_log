@@ -61,7 +61,7 @@ class HomeMain: AppCompatActivity() {
                 // 선택된 날짜 텍스트 뷰에 표시
                 datetext.setText(formatDate(date.date))
                 // 선택 시 내역 가져오기
-                data_ex.api.getExpendAll(1,getFormattedDate(date.date)).enqueue(object : Callback<ResponseExpend> {
+                data_ex.api.getExpendAll(3,getFormattedDate(date.date)).enqueue(object : Callback<ResponseExpend> {
                     override fun onResponse(
                         call: Call<ResponseExpend>,
                         response: Response<ResponseExpend>
@@ -80,7 +80,7 @@ class HomeMain: AppCompatActivity() {
                     }
 
                 })
-                data_in.api.getIncomeAll(1,getFormattedDate(date.date)).enqueue(object : Callback<ResponseIncome> {
+                data_in.api.getIncomeAll(3,getFormattedDate(date.date)).enqueue(object : Callback<ResponseIncome> {
                     override fun onResponse(
                         call: Call<ResponseIncome>,
                         response: Response<ResponseIncome>
@@ -107,7 +107,7 @@ class HomeMain: AppCompatActivity() {
         }*/
 
         // 점 표시
-        data_calender.api.getcalender(1,FormattedYear(),FormattedMonth()).enqueue(object : Callback<ResponseCalendar>{
+        data_calender.api.getcalender(3,FormattedYear(),FormattedMonth()).enqueue(object : Callback<ResponseCalendar>{
             @SuppressLint("SuspiciousIndentation")
             override fun onResponse(
                 call: Call<ResponseCalendar>,
@@ -147,7 +147,7 @@ class HomeMain: AppCompatActivity() {
             val year = date.year.toString()
             val month = date.month.toString()// `MaterialCalendarView`의 month는 0부터 시작하므로 +1 해줍니다.
 
-            data_calender.api.getcalender(1,year, month).enqueue(object : Callback<ResponseCalendar>{
+            data_calender.api.getcalender(3,year, month).enqueue(object : Callback<ResponseCalendar>{
                 @SuppressLint("SuspiciousIndentation")
                 override fun onResponse(
                     call: Call<ResponseCalendar>,
@@ -187,7 +187,7 @@ class HomeMain: AppCompatActivity() {
         // 지출 내역 화면에 보여주기
         re_expend = findViewById<RecyclerView>(R.id.expend_re)
         re_expend.layoutManager = LinearLayoutManager(this)
-        data_ex.api.getExpendAll(1, getCurrentFormattedDate()).enqueue(object : Callback<ResponseExpend> {
+        data_ex.api.getExpendAll(3, getCurrentFormattedDate()).enqueue(object : Callback<ResponseExpend> {
             override fun onResponse(
                 call: Call<ResponseExpend>,
                 response: Response<ResponseExpend>
@@ -209,7 +209,7 @@ class HomeMain: AppCompatActivity() {
         // 수입 내역 화면에 보여주기
         re_income = findViewById<RecyclerView>(R.id.income_re)
         re_income.layoutManager = LinearLayoutManager(this)
-        data_in.api.getIncomeAll(1,getCurrentFormattedDate()).enqueue(object : Callback<ResponseIncome> {
+        data_in.api.getIncomeAll(3,getCurrentFormattedDate()).enqueue(object : Callback<ResponseIncome> {
             override fun onResponse(
                 call: Call<ResponseIncome>,
                 response: Response<ResponseIncome>
@@ -299,7 +299,7 @@ class HomeMain: AppCompatActivity() {
                 }
                 R.id.add_diary -> {
                     // Retrofit 서비스 호출
-                    data_list.api.diarywriteEx(1,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
+                    data_list.api.diarywriteEx(3,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
                         override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
                             if (response.isSuccessful && response.body() != null) {
                                 // 네트워크 응답이 성공적이고 데이터가 있는 경우
