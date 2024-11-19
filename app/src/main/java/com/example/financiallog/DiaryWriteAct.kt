@@ -106,7 +106,7 @@ class DiaryWriteAct : AppCompatActivity() {
 
         // 지출 내역 불러오기
         re_expend.layoutManager = LinearLayoutManager(this)
-        list_ex.api.getExpendAll(1,getCurrentFormattedDate()).enqueue(object : Callback<ResponseExpend> {
+        list_ex.api.getExpendAll(3,getCurrentFormattedDate()).enqueue(object : Callback<ResponseExpend> {
             override fun onResponse(
                 call: Call<ResponseExpend>,
                 response: Response<ResponseExpend>
@@ -182,7 +182,16 @@ class DiaryWriteAct : AppCompatActivity() {
 
             // 카메라 열기
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            dispatchTakePictureIntent()  // 카메라 인텐트 실행을 위한 메서드 호출
+            val photoFile: File? = createImageFile() // 파일 생성
+            if (photoFile != null) {
+                currentPhotoPath = photoFile.absolutePath
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    this,
+                    "com.example.financiallog.fileprovider",
+                    photoFile
+                )
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI) // 파일 저장 URI 전달
+            }
 
             // 두 가지 Intent 실행
             val chooser = Intent.createChooser(galleryIntent, "Select Image")
@@ -200,7 +209,7 @@ class DiaryWriteAct : AppCompatActivity() {
             val gu = ed_loc.text.toString() // TextView의 텍스트를 location에 저장
 
             // RequestBody 생성
-            val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "1")
+            val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "3")
             val datePart = RequestBody.create("text/plain".toMediaTypeOrNull(), date)
             val contentsPart = RequestBody.create("text/plain".toMediaTypeOrNull(), content)
             val privacyPart = RequestBody.create("text/plain".toMediaTypeOrNull(), privacy)
@@ -263,65 +272,75 @@ class DiaryWriteAct : AppCompatActivity() {
     // 사진 촬영 후 ImageView에 설정하기 위한 메서드
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == PICK_IMAGE_REQUEST) {
-                // 갤러리에서 이미지를 가져온 경우
-                if (data?.clipData != null) {
-                    val count = data.clipData!!.itemCount
-                    for (i in 0 until count) {
-                        val imageUri = data.clipData!!.getItemAt(i).uri
-                        when (i) {
-                            0 -> {
-                                val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv.width, photo_tv.height)
-                                photo_tv.setImageBitmap(bitmap)
-                                photo_tv.tag = imageUri
-                            }
-                            1 -> {
-                                val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv1.width, photo_tv1.height)
-                                photo_tv1.setImageBitmap(bitmap)
-                                photo_tv1.tag = imageUri
-                            }
-                            2 -> {
-                                val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv2.width, photo_tv2.height)
-                                photo_tv2.setImageBitmap(bitmap)
-                                photo_tv2.tag = imageUri
-                            }
-                            else -> {
-                                Toast.makeText(this, "최대 3장까지만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    }
-                } else if (data != null) {
-                    // 단일 이미지 선택
-                    val imageUri = data.data
-                    imageUri?.let {
-                        val bitmap = decodeSampledBitmapFromUri(it, photo_tv.width, photo_tv.height)
-                        photo_tv.setImageBitmap(bitmap)
-                        photo_tv.tag = it
-                    }
-                }
-            } else if (requestCode == 101) { // 카메라에서 촬영한 경우
-                currentPhotoPath?.let {
-                    // 파일 경로에서 원하는 크기로 이미지 로드
-                    val imageBitmap = decodeSampledBitmapFromFile(it, photo_tv.width, photo_tv.height)
-                    if (imageBitmap != null) {
-                        photo_tv.setImageBitmap(imageBitmap)
-                        photo_tv.tag = Uri.fromFile(File(it))
+            when (requestCode) {
+                PICK_IMAGE_REQUEST -> {
+                    val isCamera = data == null || data.data == null // 카메라인지 확인
+                    if (isCamera) {
+                        if (!currentPhotoPath.isNullOrEmpty()) {
+                            val imageFile = File(currentPhotoPath!!)
+                            // 카메라 촬영 후 이미지 뷰에 표시
+                            val imageBitmap = decodeSampledBitmapFromFile(currentPhotoPath!!, photo_tv.width, photo_tv.height)
+                            if (imageBitmap != null) {
+                                photo_tv.setImageBitmap(imageBitmap)
+                                photo_tv.tag = Uri.fromFile(imageFile)
 
-                        // 갤러리에 이미지 추가
-                        MediaScannerConnection.scanFile(this, arrayOf(it), null) { path, uri ->
-                            Log.d("DiaryWriteAct", "Image scanned into gallery: $path")
+                                // 갤러리에 이미지 추가
+                                MediaScannerConnection.scanFile(this, arrayOf(currentPhotoPath), null) { path, uri ->
+                                    Log.d("DiaryWriteAct", "Image scanned into gallery: $path")
+                                }
+                            } else {
+                                Log.e("DiaryWriteAct", "Image bitmap is null")
+                            }
+                        } else {
+                            Log.e("Camera Error", "Current photo path is null or empty.")
                         }
                     } else {
-                        Log.e("DiaryWriteAct", "Image bitmap is null")
+                        // 갤러리에서 이미지를 가져온 경우
+                        if (data?.clipData != null) {
+                            val count = data.clipData!!.itemCount
+                            for (i in 0 until count) {
+                                if (i < 3) { // 최대 3장까지만 처리
+                                    val imageUri = data.clipData!!.getItemAt(i).uri
+                                    when (i) {
+                                        0 -> {
+                                            val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv.width, photo_tv.height)
+                                            photo_tv.setImageBitmap(bitmap)
+                                            photo_tv.tag = imageUri
+                                        }
+                                        1 -> {
+                                            val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv1.width, photo_tv1.height)
+                                            photo_tv1.setImageBitmap(bitmap)
+                                            photo_tv1.tag = imageUri
+                                        }
+                                        2 -> {
+                                            val bitmap = decodeSampledBitmapFromUri(imageUri, photo_tv2.width, photo_tv2.height)
+                                            photo_tv2.setImageBitmap(bitmap)
+                                            photo_tv2.tag = imageUri
+                                        }
+                                    }
+                                } else {
+                                    Toast.makeText(this, "최대 3장까지만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        } else if (data != null) {
+                            // 단일 이미지 선택
+                            val selectedImageUri = data.data
+                            selectedImageUri?.let {
+                                val bitmap = decodeSampledBitmapFromUri(it, photo_tv.width, photo_tv.height)
+                                photo_tv.setImageBitmap(bitmap)
+                                photo_tv.tag = it
+                            }
+                        }
                     }
-                } ?: Log.e("DiaryWriteAct", "currentPhotoPath is null or empty")
+                }
             }
         } else {
-            Log.e("DiaryWriteAct", "Result not OK: $resultCode")
+            Log.e("Activity Result Error", "Result was not OK: $resultCode")
         }
     }
+
+
 
 
     fun removeHashTag(chip: Chip) {

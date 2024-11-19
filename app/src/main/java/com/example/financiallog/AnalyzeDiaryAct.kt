@@ -371,7 +371,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
                 }
                 R.id.add_diary -> {
                     // Retrofit 서비스 호출
-                    hashtag_data.api.diarywriteEx(1,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
+                    hashtag_data.api.diarywriteEx(3,getCurrentFormattedDate()).enqueue(object : Callback<List<DataEx>> {
                         override fun onResponse(call: Call<List<DataEx>>, response: Response<List<DataEx>>) {
                             if (response.isSuccessful && response.body() != null) {
                                 // 네트워크 응답이 성공적이고 데이터가 있는 경우
@@ -440,6 +440,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
                 if (response.isSuccessful) {
                     response.body()?.let { data ->
                         Log.d("데이터 받기", data.toString())
+                        Log.d("Chart Data", "Coordinates: ${data.coordinate}") // 로그 추가
 
                         // Coordinate를 List로 가져오기
                         val coordinates = data.coordinate // 이미 List<List<Double>> 형태로 되어 있음
@@ -508,9 +509,21 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
 
         // 데이터 포인트 추가
         for (point in coordinates) {
-            val xValue = point[0].toFloat()  // 감정 분석 결과 (x)
-            val yValue = point[1].toFloat()  // 금액 (y)
-            entries.add(Entry(xValue, yValue))
+            // 포인트의 길이가 2인지 확인
+            if (point.size == 2) {
+                val xValue = point[0].toFloat()  // 감정 분석 결과 (x)
+                val yValue = point[1].toFloat()  // 금액 (y)
+                entries.add(Entry(xValue, yValue))
+            } else {
+                Log.e("Chart Error", "Invalid point size: ${point.size}")
+            }
+        }
+
+        // entries가 비어있는지 확인
+        if (entries.isEmpty()) {
+            Log.e("Chart Error", "No valid entries to display on the chart.")
+            // 여기에 차트를 업데이트하지 않도록 return
+            return
         }
 
         val dataSet = ScatterDataSet(entries, "감정 소비 분석")

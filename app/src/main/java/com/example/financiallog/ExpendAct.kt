@@ -157,30 +157,6 @@ class ExpendAct : AppCompatActivity() {
             startActivityForResult(chooser, PICK_IMAGE_REQUEST)
         }
 
-        /*receiptbtn.setOnClickListener {
-            // 갤러리 열기
-            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-
-            // 카메라 인텐트
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if( cameraIntent.resolveActivity(packageManager) != null){
-                val photoFile: File? = createImageFile()
-                photoFile?.also {
-                    currentPhotoPath = it.absolutePath
-                    val photoURI: Uri = FileProvider.getUriForFile(this, "com.example.financiallog.fileprovider", it)
-                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE)
-                }
-            }
-            dispatchTakePictureIntent()
-
-            // 두 가지 Intent 실행
-            val chooser = Intent.createChooser(galleryIntent, "Select Image")
-            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(cameraIntent))
-            startActivityForResult(chooser, PICK_IMAGE_REQUEST)
-        }*/
-
-
         //카테고리 선택 시
         var Chipchoose: String? = null
         group_expend.setOnCheckedStateChangeListener { group, checkedIds ->
@@ -282,7 +258,7 @@ class ExpendAct : AppCompatActivity() {
             val Exsatis = textView.text.toString()
 
             var input = HashMap<String, Any>()
-            input.put("user","1")
+            input.put("user","3")
             input.put("price",Exmoney)
             input.put("date", date.toString())
             input.put("category", Excate.toString())
@@ -446,7 +422,7 @@ class ExpendAct : AppCompatActivity() {
                 val requestFile = RequestBody.create("image/jpeg".toMediaTypeOrNull(), compressedFile)
                 val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
-                val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "1") // 사용자 ID
+                val userPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "3") // 사용자 ID
                 val datePart = RequestBody.create("text/plain".toMediaTypeOrNull(), date) // 현재 날짜
 
                 Log.d("UploadImage", "Uploading image with user ID: 1 and date: $date") // 로그 추가
