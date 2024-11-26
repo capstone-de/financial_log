@@ -239,7 +239,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
     // 지도 준비가 완료되면 호출됨
     override fun onMapReady(map: GoogleMap) {
         mMap = map // mMap에 지도 객체 할당
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.5665, 126.978), 11f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.5665, 126.978), 10f))
 
         // 서울 중심 위치로 카메라 이동 후, API 데이터로 마커 추가
         val calendar = Calendar.getInstance()
@@ -442,12 +442,19 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
                         Log.d("데이터 받기", data.toString())
                         Log.d("Chart Data", "Coordinates: ${data.coordinate}") // 로그 추가
 
+                        // 데이터 검증 로그 추가
+                        data.coordinate.forEach {
+                            if (it.size != 2 || it[0] < 0 || it[1] < 0) {
+                                Log.e("ScatterChart", "유효하지 않은 데이터 발견: $it")
+                            }
+                        }
+
                         // Coordinate를 List로 가져오기
                         val coordinates = data.coordinate // 이미 List<List<Double>> 형태로 되어 있음
                         val correlation = data.correlation
 
                         // 차트를 업데이트
-                        updateEmotionConsumptionChart(coordinates)
+                        updateEmotionConsumptionChart(data.coordinate)
 
                         // 상관계수에 따라 코멘트 설정
                         val comment = when {
@@ -503,27 +510,136 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    // 감정 소비 분석 차트 업데이트
-    // 감정 소비 분석 차트 업데이트
-    private fun updateEmotionConsumptionChart(coordinates: List<List<Double>>) {
-        val entries = ArrayList<Entry>()
+//       // 감정 소비 분석 차트 업데이트
+//    private fun updateEmotionConsumptionChart(coordinates: List<List<Double>>) {
+//        val entries = ArrayList<Entry>()
+//
+//        // 데이터 포인트 추가
+//        for (point in coordinates) {
+//            val xValue = point[0].toFloat()  // 감정 분석 결과 (x)
+//            val yValue = point[1].toFloat()  // 금액 (y)
+//            entries.add(Entry(xValue, yValue))
+//        }
+//
+//        val dataSet = ScatterDataSet(entries, "감정 소비 분석")
+//        dataSet.color = ColorTemplate.COLORFUL_COLORS[0]
+//        dataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE)
+//        dataSet.scatterShapeSize = 10f
+//
+//        val scatterData = ScatterData(dataSet)
+//        diary_chat1.data = scatterData
+//        diary_chat1.invalidate() // 차트 업데이트
+//    }
 
-        // 데이터 포인트 추가
-        for (point in coordinates) {
-            val xValue = point[0].toFloat()  // 감정 분석 결과 (x)
-            val yValue = point[1].toFloat()  // 금액 (y)
-            entries.add(Entry(xValue, yValue))
+//    private fun updateEmotionConsumptionChart(coordinates: List<List<Double>>) {
+//        val entries = ArrayList<Entry>()
+//
+//        // 데이터 검증 및 추가
+//        for (point in coordinates) {
+//            val xValue = point[0].toFloat()
+//            val yValue = point[1].toFloat()
+//
+//            // 유효성 검사
+//            if (xValue.isNaN() || yValue.isNaN() || xValue < -5 || xValue > 5 || yValue < 0 || yValue > 100000) {
+//                Log.e("Chart Data Error", "Invalid point values: x=$xValue, y=$yValue")
+//                continue
+//            }
+//
+//            entries.add(Entry(xValue, yValue))
+//        }
+//
+//        // 데이터가 없으면 차트 업데이트 중단
+//        if (entries.isEmpty()) {
+//            Log.e("Chart Error", "No valid entries to display on the chart.")
+//            return
+//        }
+//
+//        // 데이터 세트 생성
+//        val dataSet = ScatterDataSet(entries, "감정 소비 분석")
+//        dataSet.color = ColorTemplate.COLORFUL_COLORS[0]
+//        dataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE)
+//        dataSet.scatterShapeSize = 10f
+//        dataSet.setDrawValues(false) // 데이터 레이블 비활성화
+//
+//        val scatterData = ScatterData(dataSet)
+//        diary_chat1.data = scatterData
+//
+//        // x축과 y축 범위 설정
+//        val xAxis = diary_chat1.xAxis
+//        xAxis.axisMinimum = -5f
+//        xAxis.axisMaximum = 5f
+//
+//        val yAxis = diary_chat1.axisLeft
+//        yAxis.axisMinimum = 0f
+//        yAxis.axisMaximum = 100000f
+//
+//        // 차트 업데이트
+//        diary_chat1.invalidate()
+//    }
+
+    private fun updateEmotionConsumptionChart(coordinates: List<List<Double>>) {
+        // 유효한 데이터만 필터링
+        val validCoordinates = coordinates.filter {
+            it.size == 2 && it[0] >= 0 && it[1] >= 0 // x, y가 0 이상이어야 함
         }
 
-        val dataSet = ScatterDataSet(entries, "감정 소비 분석")
-        dataSet.color = ColorTemplate.COLORFUL_COLORS[0]
-        dataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE)
-        dataSet.scatterShapeSize = 10f
+        if (validCoordinates.isEmpty()) {
+            Log.e("ScatterChart", "유효한 데이터가 없습니다.")
+            Toast.makeText(this, "유효한 데이터가 없어 차트를 표시할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            diary_chat1.clear() // 차트 초기화
+            diary_chat1.invalidate()
+            return
+        }
 
-        val scatterData = ScatterData(dataSet)
+        // 데이터 분할: 한 번에 10개씩 처리
+        val batchSize = 10
+        val entryBatches = validCoordinates.chunked(batchSize).map { batch ->
+            batch.map { Entry(it[0].toFloat(), it[1].toFloat()) }
+        }
+
+        // ScatterData 초기화
+        val scatterData = ScatterData()
+
+        // 동일한 색상 및 라벨 제거
+        val commonColor = ColorTemplate.COLORFUL_COLORS[0] // 원하는 색상으로 변경 가능
+
+        entryBatches.forEach { entries ->
+            val dataSet = ScatterDataSet(entries, "") // 빈 문자열로 라벨 제거
+            dataSet.color = commonColor // 모든 데이터셋에 동일한 색상 적용
+            dataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE)
+            dataSet.scatterShapeSize = 10f
+            scatterData.addDataSet(dataSet)
+        }
+
+        // ScatterChart에 데이터 설정
         diary_chat1.data = scatterData
-        diary_chat1.invalidate() // 차트 업데이트
+
+        // 축 범위 설정
+        val allEntries = entryBatches.flatten()
+        diary_chat1.xAxis.axisMinimum = allEntries.minOf { it.x } - 1f
+        diary_chat1.xAxis.axisMaximum = allEntries.maxOf { it.x } + 1f
+        diary_chat1.axisLeft.axisMinimum = allEntries.minOf { it.y } - 1000f
+        diary_chat1.axisLeft.axisMaximum = allEntries.maxOf { it.y } + 1000f
+
+        // 범례(차트 아래 이름과 색상 표시) 숨기기
+        diary_chat1.legend.isEnabled = false
+
+        // 차트 설명 및 설정
+        //diary_chat1.description.text = "" // 차트 이름 제거
+        diary_chat1.axisRight.isEnabled = false
+        diary_chat1.xAxis.granularity = 0.5f
+
+        // 차트 새로고침
+        diary_chat1.invalidate()
     }
+
+
+
+
+
+
+
+
 
 
 }
