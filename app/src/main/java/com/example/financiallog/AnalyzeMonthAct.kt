@@ -357,18 +357,22 @@ class AnalyzeMonthAct: AppCompatActivity() {
     }*/
 
     //4개월간의 수입지출 표시 함수
-    private fun getMonthStatistics(data: List<ResponseStatMonth>?) {
+    private fun getMonthStatistics(data: List<ResponseStatMonth>?, selectedMonth: Int? = null) {
         val calendar = Calendar.getInstance()
-        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentMonth = selectedMonth?.let { it - 1 } ?: calendar.get(Calendar.MONTH) // 선택한 달이 없으면 현재 달 사용
         val currentYear = calendar.get(Calendar.YEAR)
+
         val monthStatisticsList = mutableListOf<ResponseStatMonth.MonthStatistics>()
 
+        // 데이터가 있을 경우 처리
         data?.firstOrNull()?.let {
             for (i in 0 until 4) {
-                val monthIndex = (currentMonth - i + 12) % 12
-                val yearOffset = (currentMonth - i) / 12
-                val relevantYear = currentYear + yearOffset
+                // i만큼 이전 달 계산
+                val monthIndex = (currentMonth - i + 12) % 12 // 이전 월 인덱스 계산
+                val yearOffset = (currentMonth - i) / 12 // 년도 오프셋
+                val relevantYear = currentYear + yearOffset // 해당 년도
 
+                // 해당 월 데이터 가져오기
                 val monthData = when (monthIndex) {
                     0 -> it.Jan
                     1 -> it.Feb
@@ -383,54 +387,54 @@ class AnalyzeMonthAct: AppCompatActivity() {
                     10 -> it.Nov
                     11 -> it.Dec
                     else -> null
-                } ?: ResponseStatMonth.MonthStatistics(0, 0)
+                } ?: ResponseStatMonth.MonthStatistics(0, 0) // 기본값 설정 (수입/지출 0)
 
-                monthStatisticsList.add(0, monthData) // 최근 데이터가 먼저 오도록 리스트 앞에 추가
+                // 최근 데이터가 마지막에 오도록 추가
+                monthStatisticsList.add(monthData) // 최근 데이터가 마지막에 추가됨
             }
         }
 
+        // BarEntry 데이터 설정
         val expenseEntries = monthStatisticsList.mapIndexed { index, monthData ->
-            BarEntry(index.toFloat() * 2, monthData.total_expense?.toFloat() ?: 0f) // 지출 데이터
+            BarEntry(index.toFloat() * 2, monthData.total_expense!!.toFloat()) // 지출 데이터
         }
-
         val incomeEntries = monthStatisticsList.mapIndexed { index, monthData ->
-            BarEntry(index.toFloat() * 2 + 1, monthData.total_income?.toFloat() ?: 0f) // 수입 데이터
+            BarEntry(index.toFloat() * 2 + 1, monthData.total_income!!.toFloat()) // 수입 데이터
         }
 
-        val expenseDataSet = BarDataSet(expenseEntries, "지출")
-        expenseDataSet.color = Color.parseColor("#F998B5") // 지출 색상 설정
-        expenseDataSet.valueTextColor = Color.BLACK
-        expenseDataSet.valueTextSize = 10f
+        // 데이터셋 설정
+        val expenseDataSet = BarDataSet(expenseEntries, "지출").apply {
+            color = Color.parseColor("#F998B5")
+            valueTextColor = Color.BLACK
+            valueTextSize = 10f
+        }
+        val incomeDataSet = BarDataSet(incomeEntries, "수입").apply {
+            color = Color.parseColor("#2F8FFF")
+            valueTextColor = Color.BLACK
+            valueTextSize = 10f
+        }
 
-        val incomeDataSet = BarDataSet(incomeEntries, "수입")
-        incomeDataSet.color = Color.parseColor("#2F8FFF") // 수입 색상 설정
-        incomeDataSet.valueTextColor = Color.BLACK
-        incomeDataSet.valueTextSize = 10f
-
-        val barData = BarData(expenseDataSet, incomeDataSet)
-        barData.barWidth = 0.4f // 막대 너비 설정
-
+        // 바 데이터 설정
+        val barData = BarData(expenseDataSet, incomeDataSet).apply {
+            barWidth = 0.4f // 막대 너비 설정
+        }
         monthChart.data = barData
 
         // X축 설정
         val xAxis = monthChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)
-        xAxis.granularity = 2f
-        xAxis.axisMinimum = 0f
-        xAxis.axisMaximum = barData.xMax + 1f
-        monthChart.axisRight.isEnabled = false
-        //monthChart.axisLeft.isEnabled = false
-        monthChart.legend.isEnabled = false //범례 지우기
+        xAxis.granularity = 1f
+        xAxis.axisMinimum = -1f
+        xAxis.axisMaximum = expenseEntries.size.toFloat() // 데이터 크기에 맞춰 설정
 
-        // 월 이름 배열 생성
+        // 최근 4개월 이름 배열 생성
         val months = listOf("1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
         val recentMonths = (0 until 4).map { (currentMonth - it + 12) % 12 }.map { months[it] }.reversed()
         xAxis.valueFormatter = IndexAxisValueFormatter(recentMonths)
 
-        monthChart.groupBars(0f, 1f, 0.1f) // 그룹 간격 설정
-
-        monthChart.invalidate() // 그래프 새로고침
+        // 차트 업데이트
+        monthChart.invalidate()
     }
 
     // 월별 수입 지출 표시
