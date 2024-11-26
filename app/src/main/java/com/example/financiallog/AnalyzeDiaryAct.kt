@@ -558,18 +558,20 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
 
         try {
             // 데이터 10개씩 묶기
-            val dataSet = ScatterDataSet(validEntries, "감정소비분석").apply {
-                color = ColorTemplate.COLORFUL_COLORS[0] // 동일한 색상 설정
-                setScatterShape(ScatterChart.ScatterShape.CIRCLE)
-                scatterShapeSize = 10f
-                setDrawValues(false) // 값 렌더링 비활성화
+            val dataSets = validEntries.chunked(10).map { chunk ->
+                val dataSet = ScatterDataSet(chunk, "감정소비분석")
+                dataSet.color = ColorTemplate.COLORFUL_COLORS[0] // 동일한 색상 설정
+                dataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE)
+                dataSet.scatterShapeSize = 15f
+                dataSet.setDrawValues(false) // 값 렌더링 비활성화
+                dataSet
             }
 
-            val scatterData = ScatterData(dataSet)
+            val scatterData = ScatterData(dataSets)
 
             // 축 범위 설정
             val xMin = validEntries.minOfOrNull { it.x }?.minus(1f) ?: 0f
-            val xMax = validEntries.maxOfOrNull { it.x }?.plus(1f) ?: 6f
+            val xMax = validEntries.maxOfOrNull { it.x }?.plus(1f) ?: 5f
             val yMin = maxOf(validEntries.minOfOrNull { it.y }?.minus(5000f) ?: 0f, 0f)
             val yMax = maxOf(validEntries.maxOfOrNull { it.y }?.plus(5000f) ?: 100000f, 0f)
 
@@ -585,9 +587,11 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
 
             diary_chat1.xAxis.axisMinimum = xMin
             diary_chat1.xAxis.axisMaximum = xMax
+            diary_chat1.xAxis.granularity = 1f
             diary_chat1.axisLeft.axisMinimum = yMin
             diary_chat1.axisLeft.axisMaximum = yMax
             diary_chat1.axisRight.isEnabled = false
+            diary_chat1.legend.isEnabled = false
 
             // 차트 업데이트
             diary_chat1.clear() // 기존 데이터 제거
