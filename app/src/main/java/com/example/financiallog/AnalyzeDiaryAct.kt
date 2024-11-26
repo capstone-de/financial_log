@@ -49,6 +49,10 @@ import java.util.Locale
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 
@@ -271,7 +275,6 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
         val yearStr = year.toString()
         val monthStr = month.toString().padStart(2, '0')
 
-
         location_data.api.getLocationAnalysis(3, yearStr, monthStr).enqueue(object : Callback<List<ResponseLocation>> {
             override fun onResponse(call: Call<List<ResponseLocation>>, response: Response<List<ResponseLocation>>) {
                 if (response.isSuccessful) {
@@ -300,8 +303,6 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
         })
 
     }
-
-
 
     //버블마커 추가 함수
     private fun addBubbleMarker(location: LatLng, spendingAmount: Int, gu: String) {
@@ -430,6 +431,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
             }
             .show()
     }
+
     // 데이터 가져오기
     private fun getDataForSentiment(year: Int, month: Int) {
         val yearStr = year.toString()
@@ -440,90 +442,160 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
                 if (response.isSuccessful) {
                     response.body()?.let { data ->
                         Log.d("데이터 받기", data.toString())
-                        Log.d("Chart Data", "Coordinates: ${data.coordinate}") // 로그 추가
+                        Log.d("Chart Data", "Coordinates: ${data.coordinate}")
 
                         // Coordinate를 List로 가져오기
-                        val coordinates = data.coordinate // 이미 List<List<Double>> 형태로 되어 있음
+                        val coordinates = data.coordinate
                         val correlation = data.correlation
 
                         // 차트를 업데이트
                         updateEmotionConsumptionChart(coordinates)
 
                         // 상관계수에 따라 코멘트 설정
-                        val comment = when {
-                            correlation >= 0.5 -> {
-                                "분석 결과, 일기에서 긍정적인 감정을 많이 표현할 때 \n" +
-                                        " 소비가 증가하는 경향이 나타납니다.\n" +
-                                        "당신은 기분이 좋을 때 스스로에게 보상하는 \n"+
-                                        "소비 패턴을 보일 수 있습니다.\n" +
-                                        "이 패턴을 인식하고, 기분이 좋을 때 꼭 필요한 소비인지 \n"+
-                                        "한 번 더 생각해보는 것도 좋습니다.\n" +
-                                        "자신의 감정을 보상하는 다른 방법(예: 취미 활동)을\n "+
-                                        "찾아보는 것도 추천드립니다."
-                            }
-                            correlation <= -0.5 -> {
-                                "분석 결과, 일기에서 부정적인 감정이 많이 표현될 때\n"+
-                                        "소비가 증가하는 경향이 있습니다.\n" +
-                                        "스트레스나 불안감이 클 때 충동적인 소비를 하거나,\n" +
-                                        "기분을 달래기 위한 소비 패턴을 보일 수 있습니다.\n" +
-                                        "이 패턴을 인식하고, 스트레스를 해소하는 \n" +
-                                        "다른 방법(예: 운동, 취미 활동)을 찾아보는 것이 좋습니다.\n" +
-                                        "부정적인 감정에 휩쓸리지 않도록\n " +
-                                        "소비 계획을 세워 두는 것도 추천드립니다."
-                            }
-                            else -> {
-                                "분석 결과, 일기에서 긍정적인 감정을 표현하는 빈도와 \n"+
-                                        "소비 금액 간에 뚜렷한 상관관계는 발견되지 않았습니다.\n\n" +
-                                        "이는 감정에 관계없이 계획적인 소비를 하고 있을 가능성이 \n높습니다. " +
-                                        "감정에 의한 소비보다는 생활 패턴이나 \n"+
-                                        "경제적 목표에 더 큰 영향을 받을 수 있습니다.\n" +
-                                        "자신의 지출 패턴을 꾸준히 관찰하고, "+
-                                        "소비 습관을\n점검하면서 재정 계획을 세워보세요."
-                            }
-                        }
+                        val comment = generateComment(correlation)
 
                         // 최종 결과 설정
-                        val resultText = "$comment"
-
-                        // TextView에 결과 설정
-                        emotion_result.text = resultText
+                        runOnUiThread {
+                            emotion_result.text = comment
+                        }
 
                     } ?: run {
                         Log.e("응답 오류", "응답 본문이 null입니다.")
+                        runOnUiThread {
+                            emotion_result.text = "데이터를 가져오는 데 실패했습니다."
+                        }
                     }
                 } else {
                     Log.e("sentiment API 오류", "응답 실패: ${response.errorBody()?.string()}")
+                    runOnUiThread {
+                        emotion_result.text = "API 호출에 실패했습니다."
+                    }
                 }
             }
 
             override fun onFailure(call: Call<ResponseSentiment>, t: Throwable) {
                 Log.e("sentiment API 호출 실패", t.message.toString())
+                runOnUiThread {
+                    emotion_result.text = "네트워크 오류: ${t.message}"
+                }
             }
         })
     }
 
+    // 상관계수에 따른 코멘트 생성
+    private fun generateComment(correlation: Double): String {
+        return when {
+            correlation >= 0.5 -> {
+                        "분석 결과, 일기에서 긍정적인 감정을 많이 표현할 때 \n" +
+                        "소비가 증가하는 경향이 나타납니다.\n" +
+                        "당신은 기분이 좋을 때 스스로에게 보상하는 \n"+
+                        "소비 패턴을 보일 수 있습니다.\n" +
+                        "이 패턴을 인식하고, 기분이 좋을 때 꼭 필요한 소비인지 \n"+
+                        "한 번 더 생각해보는 것도 좋습니다.\n" +
+                        "자신의 감정을 보상하는 다른 방법(예: 취미 활동)을\n "+
+                        "찾아보는 것도 추천드립니다."
+            }
+            correlation <= -0.5 -> {
+                        "분석 결과, 일기에서 부정적인 감정이 많이 표현될 때\n"+
+                        "소비가 증가하는 경향이 있습니다.\n" +
+                        "스트레스나 불안감이 클 때 충동적인 소비를 하거나,\n" +
+                        "기분을 달래기 위한 소비 패턴을 보일 수 있습니다.\n" +
+                        "이 패턴을 인식하고, 스트레스를 해소하는 \n" +
+                        "다른 방법(예: 운동, 취미 활동)을 찾아보는 것이 좋습니다.\n" +
+                        "부정적인 감정에 휩쓸리지 않도록\n " +
+                        "소비 계획을 세워 두는 것도 추천드립니다."
+            }
+            else -> {
+                        "분석 결과, 일기에서 긍정적인 감정을 표현하는 빈도와 \n"+
+                        "소비 금액 간에 뚜렷한 상관관계는 발견되지 않았습니다.\n" +
+                        "이는 감정에 관계없이 계획적인 소비를 하고 있을 가능성이 \n높습니다. " +
+                        "감정에 의한 소비보다는 생활 패턴이나 \n"+
+                        "경제적 목표에 더 큰 영향을 받을 수 있습니다.\n" +
+                        "자신의 지출 패턴을 꾸준히 관찰하고, "+
+                        "소비 습관을\n점검하면서 재정 계획을 세워보세요."
+            }
+        }
+    }
 
-    // 감정 소비 분석 차트 업데이트
     // 감정 소비 분석 차트 업데이트
     private fun updateEmotionConsumptionChart(coordinates: List<List<Double>>) {
         val entries = ArrayList<Entry>()
 
-        // 데이터 포인트 추가
-        for (point in coordinates) {
-            val xValue = point[0].toFloat()  // 감정 분석 결과 (x)
-            val yValue = point[1].toFloat()  // 금액 (y)
-            entries.add(Entry(xValue, yValue))
+        // 데이터 유효성 검사
+        if (coordinates.isEmpty()) {
+            Log.e("Chart Error", "Received empty coordinates.")
+            diary_chat1.clear()
+            diary_chat1.invalidate()
+            return
         }
 
-        val dataSet = ScatterDataSet(entries, "감정 소비 분석")
-        dataSet.color = ColorTemplate.COLORFUL_COLORS[0]
-        dataSet.setScatterShape(ScatterChart.ScatterShape.CIRCLE)
-        dataSet.scatterShapeSize = 10f
+        for (point in coordinates) {
+            if (point.size == 2) {
+                val xValue = point[0].toFloat()
+                val yValue = point[1].toFloat()
+                if (xValue.isNaN() || yValue.isNaN() || xValue < 0 || yValue < 0) {
+                    Log.e("Chart Error", "Invalid point: x=$xValue, y=$yValue")
+                    continue
+                }
+                entries.add(Entry(xValue, yValue))
+            } else {
+                Log.e("Chart Error", "Invalid point size: ${point.size}")
+            }
+        }
 
-        val scatterData = ScatterData(dataSet)
-        diary_chat1.data = scatterData
-        diary_chat1.invalidate() // 차트 업데이트
+        Log.d("Chart Debug", "Entries: $entries")
+        val validEntries = entries.filter { entry ->
+            entry.x >= 0f && entry.x <= 6f && entry.y >= 0f
+        }
+
+        Log.d("Chart Debug", "Filtered Valid Entries: $validEntries")
+        if (validEntries.isEmpty()) {
+            Log.e("Chart Error", "No valid entries after validation.")
+            diary_chat1.clear()
+            diary_chat1.invalidate()
+            return
+        }
+
+        try {
+            // 데이터 10개씩 묶기
+            val dataSet = ScatterDataSet(validEntries, "감정소비분석").apply {
+                color = ColorTemplate.COLORFUL_COLORS[0] // 동일한 색상 설정
+                setScatterShape(ScatterChart.ScatterShape.CIRCLE)
+                scatterShapeSize = 10f
+                setDrawValues(false) // 값 렌더링 비활성화
+            }
+
+            val scatterData = ScatterData(dataSet)
+
+            // 축 범위 설정
+            val xMin = validEntries.minOfOrNull { it.x }?.minus(1f) ?: 0f
+            val xMax = validEntries.maxOfOrNull { it.x }?.plus(1f) ?: 6f
+            val yMin = maxOf(validEntries.minOfOrNull { it.y }?.minus(5000f) ?: 0f, 0f)
+            val yMax = maxOf(validEntries.maxOfOrNull { it.y }?.plus(5000f) ?: 100000f, 0f)
+
+            // 유효성 확인
+            if (xMin >= xMax) {
+                Log.e("Chart Error", "Invalid X Axis range: Min=$xMin, Max=$xMax")
+                return
+            }
+            if (yMin >= yMax) {
+                Log.e("Chart Error", "Invalid Y Axis range: Min=$yMin, Max=$yMax")
+                return
+            }
+
+            diary_chat1.xAxis.axisMinimum = xMin
+            diary_chat1.xAxis.axisMaximum = xMax
+            diary_chat1.axisLeft.axisMinimum = yMin
+            diary_chat1.axisLeft.axisMaximum = yMax
+            diary_chat1.axisRight.isEnabled = false
+
+            // 차트 업데이트
+            diary_chat1.clear() // 기존 데이터 제거
+            diary_chat1.data = scatterData
+            diary_chat1.invalidate()
+        } catch (e: Exception) {
+            Log.e("Chart Error", "Error while creating or updating the chart.", e)
+        }
     }
-
 
 }

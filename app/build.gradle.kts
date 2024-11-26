@@ -54,6 +54,8 @@ dependencies {
     implementation ("com.github.PhilJay:MpAndroidChart:v3.1.0") //chart
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation ("com.google.android.gms:play-services-maps:18.1.0")// Google Maps
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0") // 코루틴 코어
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0") // 안드로이드 코루틴
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
