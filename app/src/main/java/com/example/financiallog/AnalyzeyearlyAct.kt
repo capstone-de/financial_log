@@ -378,7 +378,7 @@ class AnalyzeyearlyAct: AppCompatActivity() {
         barData.barWidth = barWidth
 
         // 그룹화 설정
-        year_barChart.barData.groupBars(0f, 0.4f, 0.1f)
+        year_barChart.barData.groupBars(0f, 0.35f, 0.1f)
 
         // 차트 다시 그리기
         year_barChart.notifyDataSetChanged()
