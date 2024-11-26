@@ -395,6 +395,9 @@ class AnalyzeMonthAct: AppCompatActivity() {
         }
 
         // BarEntry 데이터 설정
+        // 현재 달의 인덱스 계산
+        val currentIndex = monthStatisticsList.size - 1 // 마지막 인덱스
+
         val expenseEntries = monthStatisticsList.mapIndexed { index, monthData ->
             BarEntry(index.toFloat(), monthData.total_expense!!.toFloat()) // 지출 데이터
         }
