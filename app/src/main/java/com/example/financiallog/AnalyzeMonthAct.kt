@@ -396,10 +396,10 @@ class AnalyzeMonthAct: AppCompatActivity() {
 
         // BarEntry 데이터 설정
         val expenseEntries = monthStatisticsList.mapIndexed { index, monthData ->
-            BarEntry(index.toFloat() * 2, monthData.total_expense!!.toFloat()) // 지출 데이터
+            BarEntry(index.toFloat(), monthData.total_expense!!.toFloat()) // 지출 데이터
         }
         val incomeEntries = monthStatisticsList.mapIndexed { index, monthData ->
-            BarEntry(index.toFloat() * 2 + 1, monthData.total_income!!.toFloat()) // 수입 데이터
+            BarEntry(index.toFloat() + 0.4f, monthData.total_income!!.toFloat()) // 수입 데이터 (지출 바 오른쪽에 위치)
         }
 
         // 데이터셋 설정
@@ -426,7 +426,10 @@ class AnalyzeMonthAct: AppCompatActivity() {
         xAxis.setDrawGridLines(false)
         xAxis.granularity = 1f
         xAxis.axisMinimum = -1f
-        xAxis.axisMaximum = expenseEntries.size.toFloat() // 데이터 크기에 맞춰 설정
+        xAxis.axisMaximum = expenseEntries.size.toFloat() + 0.4f // 데이터 크기에 맞춰 설정
+
+        // Y축 오른쪽 라벨 비활성화
+        monthChart.axisRight.isEnabled = false // 오른쪽 Y축 비활성화
 
         // 최근 4개월 이름 배열 생성
         val months = listOf("1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월")
@@ -436,6 +439,7 @@ class AnalyzeMonthAct: AppCompatActivity() {
         // 차트 업데이트
         monthChart.invalidate()
     }
+
 
     // 월별 수입 지출 표시
     private fun updateIncomeAndExpense(data: List<ResponseStatMonth>?, selectedMonth: Int) {
