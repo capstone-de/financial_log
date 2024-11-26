@@ -486,7 +486,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
     private fun generateComment(correlation: Double): String {
         return when {
             correlation >= 0.5 -> {
-                        "분석 결과, 일기에서 긍정적인 감정을 많이 표현할 때 \n" +
+                "분석 결과, 일기에서 긍정적인 감정을 많이 표현할 때 \n" +
                         "소비가 증가하는 경향이 나타납니다.\n" +
                         "당신은 기분이 좋을 때 스스로에게 보상하는 \n"+
                         "소비 패턴을 보일 수 있습니다.\n" +
@@ -496,7 +496,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
                         "찾아보는 것도 추천드립니다."
             }
             correlation <= -0.5 -> {
-                        "분석 결과, 일기에서 부정적인 감정이 많이 표현될 때\n"+
+                "분석 결과, 일기에서 부정적인 감정이 많이 표현될 때\n"+
                         "소비가 증가하는 경향이 있습니다.\n" +
                         "스트레스나 불안감이 클 때 충동적인 소비를 하거나,\n" +
                         "기분을 달래기 위한 소비 패턴을 보일 수 있습니다.\n" +
@@ -506,7 +506,7 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
                         "소비 계획을 세워 두는 것도 추천드립니다."
             }
             else -> {
-                        "분석 결과, 일기에서 긍정적인 감정을 표현하는 빈도와 \n"+
+                "분석 결과, 일기에서 긍정적인 감정을 표현하는 빈도와 \n"+
                         "소비 금액 간에 뚜렷한 상관관계는 발견되지 않았습니다.\n" +
                         "이는 감정에 관계없이 계획적인 소비를 하고 있을 가능성이 \n높습니다. " +
                         "감정에 의한 소비보다는 생활 패턴이나 \n"+
