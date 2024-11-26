@@ -54,6 +54,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLngBounds
 
 
 class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
@@ -238,106 +239,6 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
             }
         })
 
-    }
-
-    // 지도 준비가 완료되면 호출됨
-    override fun onMapReady(map: GoogleMap) {
-        mMap = map // mMap에 지도 객체 할당
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.5665, 126.978), 10f))
-
-        // 서울 중심 위치로 카메라 이동 후, API 데이터로 마커 추가
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH) + 1
-
-        getDataForLocation(year, month) // API 데이터 사용해서 마커 추가
-
-    }
-
-    /*private fun setupMap() {
-        // 서울 중심 위치로 카메라 이동
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.5665, 126.978), 10f))
-
-        // 예시 소비 데이터 (위치와 소비 금액)
-        /*val spendingData = listOf(
-            Pair(LatLng(37.5665, 126.978), 10000), // 서울시청
-            Pair(LatLng(37.4873, 126.8526), 20000), // 강서구
-            Pair(LatLng(37.5326, 127.0292), 30000)  // 성남시
-        )*/
-
-        // 소비 데이터에 따라 마커 추가
-        for ((location, amount) in spendingData) {
-            addBubbleMarker(location, amount)
-        }
-    }*/
-
-    private fun getDataForLocation( year: Int, month: Int) {
-        val yearStr = year.toString()
-        val monthStr = month.toString().padStart(2, '0')
-
-        location_data.api.getLocationAnalysis(3, yearStr, monthStr).enqueue(object : Callback<List<ResponseLocation>> {
-            override fun onResponse(call: Call<List<ResponseLocation>>, response: Response<List<ResponseLocation>>) {
-                if (response.isSuccessful) {
-                    response.body()?.let { responseDataList ->
-                        // 여러 구 데이터를 반복문으로 처리
-                        for (responseData in responseDataList) {
-                            // total_expenditure가 0이 아닌 경우에만 마커 추가
-                            if (responseData.total_expenditure > 0) {
-                                val location = districtCoordinates[responseData.gu]
-                                if (location != null) {
-                                    // 지역 이름과 소비 금액을 함께 전달
-                                    addBubbleMarker(location, responseData.total_expenditure, responseData.gu)
-
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    Log.e("API 에러", "Response code: ${response.code()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<ResponseLocation>>, t: Throwable) {
-                Log.e("API 에러", "네트워크 요청 실패: ${t.message}")
-            }
-        })
-
-    }
-
-    //버블마커 추가 함수
-    private fun addBubbleMarker(location: LatLng, spendingAmount: Int, gu: String) {
-        val icon = BitmapDescriptorFactory.fromBitmap(createCircleMarker(spendingAmount))
-
-        val markerOptions = MarkerOptions()
-            .position(location)
-            .icon(icon)
-            .title("위치: $gu, 소비금액: $spendingAmount 원")
-
-        mMap.addMarker(markerOptions) // mMap에 마커 추가
-    }
-
-    //마커스타일링
-    private fun createCircleMarker(spendingAmount: Int): Bitmap {
-        // 소비 금액에 따라 동적으로 크기 조절 (예시: 최소 50, 최대 200 사이 크기 설정)
-        val minSize = 50
-        val maxSize = 200
-        val size = ((spendingAmount / 10000f).coerceIn(1f, 4f) * minSize).toInt().coerceAtMost(maxSize)
-
-        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        val paint = Paint()
-
-        // 마커 색상 설정
-        paint.color = Color.parseColor("#FF6A6A");
-        canvas.drawCircle((size / 2).toFloat(), (size / 2).toFloat(), (size / 2).toFloat(), paint) // 동그란 마커 그리기
-
-        // 소비금액을 텍스트로 추가
-        paint.color = Color.BLACK
-        paint.textAlign = Paint.Align.CENTER
-        paint.textSize = size / 5f // 크기에 따라 텍스트 사이즈 조정
-        canvas.drawText(spendingAmount.toString(), (size / 2).toFloat(), (size / 2 + size / 8).toFloat(), paint)
-
-        return bitmap
     }
 
 
@@ -601,5 +502,107 @@ class AnalyzeDiaryAct: AppCompatActivity(), OnMapReadyCallback {
             Log.e("Chart Error", "Error while creating or updating the chart.", e)
         }
     }
+
+    //위치소비분석
+    // 지도 준비가 완료되면 호출됨
+    override fun onMapReady(map: GoogleMap) {
+        mMap = map // mMap에 지도 객체 할당
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(37.5665, 126.978), 10f))
+
+        // 서울 중심 위치로 카메라 이동 후, API 데이터로 마커 추가
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
+
+        getDataForLocation(year, month) // API 데이터 사용해서 마커 추가
+
+    }
+
+    private fun createCircleMarker(spendingAmount: Int, minSpending: Int, maxSpending: Int): Bitmap {
+        val minSize = 50
+        val maxSize = 200
+
+        // 소비 금액을 범위로 정규화
+        val normalizedAmount = ((spendingAmount - minSpending) / (maxSpending - minSpending).toFloat()).coerceIn(0f, 1f)
+        val size = (minSize + (maxSize - minSize) * normalizedAmount).toInt()
+
+        val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val paint = Paint()
+
+        // 마커 색상 설정
+        paint.color = Color.parseColor("#FF6A6A")
+        canvas.drawCircle((size / 2).toFloat(), (size / 2).toFloat(), (size / 2).toFloat(), paint)
+
+        // 소비 금액을 텍스트로 추가
+        paint.color = Color.BLACK
+        paint.textAlign = Paint.Align.CENTER
+        paint.textSize = size / 5f
+        canvas.drawText(spendingAmount.toString(), (size / 2).toFloat(), (size / 2 + size / 8).toFloat(), paint)
+
+        return bitmap
+    }
+
+    private fun getDataForLocation(year: Int, month: Int) {
+        val yearStr = year.toString()
+        val monthStr = month.toString().padStart(2, '0')
+
+        location_data.api.getLocationAnalysis(3, yearStr, monthStr).enqueue(object : Callback<List<ResponseLocation>> {
+            override fun onResponse(call: Call<List<ResponseLocation>>, response: Response<List<ResponseLocation>>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { responseDataList ->
+                        val spendingAmounts = responseDataList.map { it.total_expenditure }
+                        val minSpending = spendingAmounts.minOrNull() ?: 0
+                        val maxSpending = spendingAmounts.maxOrNull() ?: 1
+                        val markerLocations = mutableListOf<LatLng>()
+
+                        for (responseData in responseDataList) {
+                            if (responseData.total_expenditure > 0) {
+                                val location = districtCoordinates[responseData.gu]
+                                if (location != null) {
+                                    markerLocations.add(location)
+                                    addBubbleMarker(location, responseData.total_expenditure, responseData.gu, minSpending, maxSpending)
+                                }
+                            }
+                        }
+
+                        // 모든 마커가 화면에 표시되도록 카메라 이동
+                        adjustCameraToMarkers(markerLocations)
+                    }
+                } else {
+                    Log.e("API 에러", "Response code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<ResponseLocation>>, t: Throwable) {
+                Log.e("API 에러", "네트워크 요청 실패: ${t.message}")
+            }
+        })
+    }
+
+    private fun adjustCameraToMarkers(markerLocations: List<LatLng>) {
+        if (markerLocations.isEmpty()) return
+
+        val boundsBuilder = LatLngBounds.builder()
+        markerLocations.forEach { boundsBuilder.include(it) }
+
+        val bounds = boundsBuilder.build()
+        val padding = 100 // 지도 가장자리 여유 공간 (픽셀 단위)
+
+        // 지도 카메라를 마커 중심으로 이동
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+    }
+
+    private fun addBubbleMarker(location: LatLng, spendingAmount: Int, gu: String, minSpending: Int, maxSpending: Int) {
+        val icon = BitmapDescriptorFactory.fromBitmap(createCircleMarker(spendingAmount, minSpending, maxSpending))
+
+        val markerOptions = MarkerOptions()
+            .position(location)
+            .icon(icon)
+            .title("위치: $gu, 소비금액: $spendingAmount 원")
+
+        mMap.addMarker(markerOptions) // mMap에 마커 추가
+    }
+
 
 }
