@@ -35,6 +35,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.app.Activity
+import android.content.Context
+import android.os.Build
 import android.os.Environment
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
@@ -56,6 +58,7 @@ class ExpendAct : AppCompatActivity() {
     lateinit var pay_tv : TextView; lateinit var categ_tv:TextView; lateinit var shop_name :TextView; lateinit var toget_tv :TextView;
     lateinit var ed_pay:EditText; lateinit var ed_shop:EditText; lateinit var ed_toget:EditText; lateinit var tv_exsat:TextView;
     lateinit var alone_chip: CheckBox; lateinit var seek_bar:SeekBar; lateinit var seek_zero : TextView;private val REQUEST_CODE_PERMISSIONS = 1001
+    val REQUEST_STORAGE_PERMISSION = 1001
     lateinit var seek_per :TextView; val apiobject : ApiObject by lazy { ApiObject() }; val PICK_IMAGE_REQUEST = 1002
     lateinit var textView:TextView; lateinit var group_expend : ChipGroup; private var currentPhotoPath: String? = null;
     //    var followers = listOf("User1", "User2", "User3", "User4");
@@ -126,15 +129,17 @@ class ExpendAct : AppCompatActivity() {
             startActivity(intent)
         })
 
-        // 카메라 권한 체크
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_STORAGE_PERMISSION)
+            }
         }
 
         // 영수증 버튼 클릭
         receiptbtn.setOnClickListener {
             // 갤러리 열기 인텐트 생성
             val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
 
             // 카메라 인텐트 생성 및 저장할 파일 설정
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -305,6 +310,7 @@ class ExpendAct : AppCompatActivity() {
             }
             REQUEST_CAMERA_PERMISSION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    uploadImage(imageUri)
                     Toast.makeText(this, "카메라 권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
@@ -353,6 +359,7 @@ class ExpendAct : AppCompatActivity() {
                 PICK_IMAGE_REQUEST -> {
                     val isCamera = data == null || data.data == null // 카메라인지 확인
                     if (isCamera) {
+                        // 카메라로 촬영한 이미지 처리
                         if (!currentPhotoPath.isNullOrEmpty()) {
                             val imageFile = File(currentPhotoPath)
                             uploadImage(Uri.fromFile(imageFile))
@@ -360,9 +367,16 @@ class ExpendAct : AppCompatActivity() {
                             Log.e("Camera Error", "Current photo path is null or empty.")
                         }
                     } else {
-                        val selectedImageUri = data!!.data
+                        // 갤러리에서 선택한 이미지 처리
+                        val selectedImageUri = data?.data
                         if (selectedImageUri != null) {
-                            uploadImage(selectedImageUri)
+                            // getFileFromUri 사용
+                            val selectedFile = getFileFromUri(this, selectedImageUri)
+                            if (selectedFile != null && selectedFile.exists()) {
+                                uploadImage(Uri.fromFile(selectedFile)) // 파일의 URI로 업로드
+                            } else {
+                                Log.e("Gallery Error", "Failed to get File from URI: $selectedImageUri")
+                            }
                         } else {
                             Log.e("Gallery Error", "Selected image URI is null.")
                         }
@@ -374,29 +388,6 @@ class ExpendAct : AppCompatActivity() {
         }
     }
 
-
-    private fun checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_PERMISSIONS)
-        } else {
-            uploadImage(imageUri) // 권한이 허용된 경우, 이미지 업로드
-        }
-    }
-
-    // 카메라 인텐트 실행을 위한 메서드
-    private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(packageManager) != null) {
-            // 파일 생성
-            val photoFile: File? = createImageFile()
-            photoFile?.also {
-                currentPhotoPath = it.absolutePath
-                val photoURI: Uri = FileProvider.getUriForFile(this, "com.example.financiallog.fileprovider", it)
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-            }
-        }
-    }
     // 이미지 파일 생성 메서드
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -404,6 +395,15 @@ class ExpendAct : AppCompatActivity() {
         val imageFile = File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
         Log.d("ExpendAct", "Image file created: ${imageFile.absolutePath}")
         return imageFile
+    }
+    fun getFileFromUri(context: Context, uri: Uri): File? {
+        val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, filePathColumn, null, null, null)
+        cursor?.moveToFirst()
+        val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
+        val filePath = columnIndex?.let { cursor.getString(it) }
+        cursor?.close()
+        return if (filePath != null) File(filePath) else null
     }
     private fun uploadImage(imageUri: Uri?) {
         Log.d("UploadImage", "uploadImage called with URI: $imageUri") // 로그 추가
@@ -481,14 +481,19 @@ class ExpendAct : AppCompatActivity() {
     }
     // 이미지 압축 메서드
     private fun compressImage(file: File): File {
-        val bitmap = BitmapFactory.decodeFile(file.path)
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream) // 80% 품질로 압축
-        val byteArray = stream.toByteArray()
-        val compressedFile = File(file.parent, "compressed_${file.name}")
-        FileOutputStream(compressedFile).use { it.write(byteArray) }
+        val bitmap: Bitmap? = BitmapFactory.decodeFile(file.absolutePath)
+
+        if (bitmap == null) {
+            throw IllegalArgumentException("Failed to decode file to Bitmap. File path: ${file.absolutePath}")
+        }
+
+        val compressedFile = File.createTempFile("compressed_", ".jpg", cacheDir)
+        FileOutputStream(compressedFile).use { outputStream ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
+        }
         return compressedFile
     }
+
 
 
 //    // OCR 처리 메서드 초안
